@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.HISM.backfront.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.HISM.backfront.domain.User">
+        <id property="userId" column="userId" />
+        <result property="password" column="password" />
+        <result property="userName" column="userName" />
+        <result property="userAddress" column="userAddress" />
+        <result property="userOld" column="userOld" />
+        <result property="userSex" column="userSex" />
+        <result property="userDescription" column="userDescription" />
+    </resultMap>
+
+    <insert id="insertUser">
+    insert into user(userId,password,userName,userAddress,userOld,userSex,userDescription) values (#{userId},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription})
+    </insert>
+
+
+</mapper>
