@@ -19,6 +19,4 @@ public class DynamicController {
         return name;
     }
 
-
-
 }
