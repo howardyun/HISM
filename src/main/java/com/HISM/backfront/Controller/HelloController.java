@@ -5,13 +5,24 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+//必填
 @Api(tags = "用户管理相关接口")
 @RequestMapping("/hello")
 public class HelloController {
     @PostMapping("/test")
+    //必填
     @ApiOperation("添加用户的接口")
     public String hello(@RequestParam String name) {
         return name;
     }
+    @PostMapping("/test1")
+    //必填
+    @ApiOperation("添加用户的接口123")
+    public String hello1(@RequestParam String name) {
+        return name;
+    }
+
+
+
 
 }

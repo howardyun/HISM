@@ -17,7 +17,6 @@ class DemoApplicationTests {
     @Test
     void testMybatis(){
         User user=new User("123456","123","123","123",12,"man","test,test");
-
         userMapper.insertUser(user);
 
     }
