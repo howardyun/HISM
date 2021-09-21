@@ -23,8 +23,7 @@ public class User {
     //用户性别
     private String userSex;
     //用户描述
-    private String userDes;
-
+    private String userDescription;
 
 
 }
