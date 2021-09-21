@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.HISM.backfront.mapper.ChatMapper">
+
+    <select id="queryChatRecording" resultType="com.HISM.backfront.domain.Chat">
+        selet * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId}
+    </select>
+
+    <select id="queryChatRecordingt" resultType="com.HISM.backfront.domain.Chat">
+        selet * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId} and chatTime = #{chatTime}
+    </select>
+
+    <insert id="insertChat">
+        insert into user value (#{sendUserId}, #{receiveUserId}, #{chatTime}, #{chatContent})
+    </insert>
+
+
+</mapper>

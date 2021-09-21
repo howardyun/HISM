@@ -12,8 +12,21 @@
     </resultMap>
 
     <insert id="insertUser">
-    insert into user(userId,password,userName,userAddress,userOld,userSex,userDescription) values (#{userId},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription})
+        insert into user(userId,password,userName,userAddress,userOld,userSex,userDescription) values (#{userId},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription})
     </insert>
+    
+    <update id="updateUser">
+        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}
+        where userid = #{userId}
+    </update>
+
+    <select id="queryUserbyName" resultMap="userMap">
+        select * from user where username = #{userName}
+    </select>
+
+    <select id="queryUserbyId" resultMap="userMap">
+        select * from user where userid = #{userId}
+    </select>
 
 
 </mapper>
