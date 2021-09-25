@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.HISM.backfront.mapper.FollowerMapper">
+    <resultMap id="followerMap" type="com.HISM.backfront.domain.Follower">
+        <result column="followTime" jdbcType="TIMESTAMP" property="followTime" javaType="java.util.Date" />
+    </resultMap>
+
+    <insert id="insertFollower">
+        insert into follower value (#{followerId}, #{userId}, #{followTime})
+    </insert>
+
+    <delete id="deleteFollower">
+        delete from follower where followerId = #{followerId} and userId = #{userId}
+    </delete>
+</mapper>

@@ -1,63 +1,57 @@
 package com.HISM.backfront;
 
-import com.HISM.backfront.domain.User;
+import com.HISM.backfront.Service.*;
+import com.HISM.backfront.domain.*;
 import com.HISM.backfront.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.List;
+
+import static java.sql.JDBCType.NULL;
 
 @SpringBootTest
 class DemoApplicationTests {
 
+
+
     @Autowired
-    UserMapper userMapper;
+    DynamicSerive dynamicSerive;
+
+    @Autowired
+    ThumbSerive thumbSerive;
+
+    @Autowired
+    FollowerSerive followerSerive;
+
+
     @Test
     void contextLoads() {
     }
 
 
     @Test
-    void insertUserTest(){
-        try{
-            User user=new User("16","123","123","123",12,"man","test,test");
-            userMapper.insertUser(user);
-        }catch (Exception e){
-            System.out.println("该用户已注册");
-        }
-    }
+    void Test(){
+        Date date = new Date(System.currentTimeMillis());
+        Comment comment = new Comment(date, "What's up，你这瓜皮子是金子做的, 还是瓜粒子是金子做的？", 311, "16");
+        Dynamic dynamic = new Dynamic("鬼畜", "全明星", 1, "大家都来说C语言", date, 666, 46, 0, "1", "fox");
+        // Chat chat = new Chat("123", "16", new Date(System.currentTimeMillis()), "blbl");
+        // userService.updateUser(user);
+        // System.out.println(chatSerive.queryChatRecording("123", "16"));
+        // dynamicSerive.insertDynamic(dynamic);
+        // dynamicSerive.deleteDynamic(312);
 
-    @Test
-    void updateUserTest(){
-        try{
-            User user=new User("99","123","bbc","123",19,"man","test,test");
-            userMapper.updateUser(user);
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("该用户不存在,无法更新数据");
-        }
-    }
+//        dynamic = dynamicSerive.selectDynamicByDynamicId(313);
+//        System.out.println(dynamic.toString());
+//        dynamic.setCommentNum(99);
+//        dynamicSerive.updateDynamic(dynamic);
 
-    @Test
-    void queryUserbyNameTest(){
-        List<User> userList = userMapper.queryUserbyName("bbc");
-        if(userList.isEmpty()){
-            System.out.println("该用户不存在");
-        }else{
-            userList.forEach(System.out::println);
-        }
-    }
+        // thumbSerive.deleteThumb(313, "16");
 
-    @Test
-    void queryUserbyIdTest(){
-        List<User> userList = userMapper.queryUserbyId("16");
-        if(userList.isEmpty()){
-            System.out.println("该用户不存在");
-        }else{
-            User user = userList.get(0);
-            System.out.println(user.toString());
-        }
-    }
+        Follower follower = new Follower("123", "16", date);
+        followerSerive.deleteFollower("123", "16");
 
+    }
 }

@@ -22,4 +22,7 @@ public interface UserMapper {
     // 通过Id查询用户
     List<User> queryUserbyId(String userId);
 
+    // 获取用户数量
+    int getUserNum();
+
 }

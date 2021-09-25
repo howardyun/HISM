@@ -2,16 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.HISM.backfront.mapper.ChatMapper">
 
-    <select id="queryChatRecording" resultType="com.HISM.backfront.domain.Chat">
-        selet * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId}
+    <resultMap id="chatMap" type="com.HISM.backfront.domain.Chat">
+        <result column="sendUserId" property="sendUserId"></result>
+        <result column="receiveUserId" property="receiveUserId"></result>
+        <result column="chatTime" jdbcType="TIMESTAMP" property="chatTime" javaType="java.util.Date" />
+        <result column="chatContent" property="chatContent"></result>
+    </resultMap>
+
+
+    <select id="queryChatRecording" resultMap="chatMap">
+        select * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId}
     </select>
 
-    <select id="queryChatRecordingt" resultType="com.HISM.backfront.domain.Chat">
-        selet * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId} and chatTime = #{chatTime}
+    <select id="queryChatRecordingt" resultMap="chatMap">
+        select * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId} and chatTime = #{chatTime}
     </select>
 
     <insert id="insertChat">
-        insert into user value (#{sendUserId}, #{receiveUserId}, #{chatTime}, #{chatContent})
+        insert into chat value (#{sendUserId}, #{receiveUserId}, #{chatTime, jdbcType=DATE}, #{chatContent})
     </insert>
 
 

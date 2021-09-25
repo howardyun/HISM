@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.HISM.backfront.mapper.CommentMapper">
+    <resultMap id="commentMap" type="com.HISM.backfront.domain.Comment">
+        <id property="commentId" column="commentId" />
+        <result column="commentTime" jdbcType="TIMESTAMP" property="commentTime" javaType="java.util.Date" />
+        <result column="commentContent" property="commentContent"></result>
+        <result column="dynamicId" property="dynamicId"></result>
+        <result column="userName" property="userName"></result>
+    </resultMap>
+
+    <insert id="insertComment">
+        insert into comment (commentTime, commentContent, dynamicId, userName) values (#{commentTime, jdbcType=DATE}, #{commentContent}, #{dynamicId}, #{userName})
+    </insert>
+
+    <delete id="deleteComment">
+        delete from comment where commentId = #{commentId}
+    </delete>
+
+    <select id="selectCommentByD" resultMap="commentMap">
+        select * from comment where dynamicId = #{dynamicId}
+    </select>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.HISM.backfront.mapper.DynamicMapper">
+    <resultMap id="dynamicMap" type="com.HISM.backfront.domain.Dynamic">
+        <result column="dynamicTime" jdbcType="TIMESTAMP" property="dynamicTime" javaType="java.util.Date" />
+    </resultMap>
+
+    <insert id="insertDynamic">
+        insert into dynamic (dynamicIndex1, dynamicIndex2, dynamicAccess, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userName)
+        values (#{dynamicIndex1}, #{dynamicIndex2}, #{dynamicAccess}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userName})
+    </insert>
+
+    <delete id="deleteDynamic">
+        delete from dynamic where dynamicId = #{dynamicId}
+    </delete>
+
+    <select id="selectDynamicByUserName" resultMap="dynamicMap">
+        select * from dynamic where userName = #{userName}
+    </select>
+
+    <select id="selectDynamicByDynamicId" resultMap="dynamicMap">
+        select * from dynamic where dynamicId = #{dynamicId}
+    </select>
+
+    <update id="updateDynamic">
+        update dynamic set dynamicIndex1 = #{dynamicIndex1}, dynamicIndex2 = #{dynamicIndex2}, dynamicAccess = #{dynamicAccess}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userName = #{userName}
+        where dynamicId = #{dynamicId}
+    </update>
+
+</mapper>
