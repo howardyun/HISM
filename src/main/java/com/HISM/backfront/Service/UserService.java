@@ -1,6 +1,5 @@
 package com.HISM.backfront.Service;
 
-<<<<<<< HEAD
 import com.HISM.backfront.domain.User;
 import com.HISM.backfront.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +53,6 @@ public class UserService {
         }
         return userList;
     }
-=======
-import org.springframework.stereotype.Component;
-
-@Component
-public class UserService {
-
-public int test (int t){
-
-    return t;
-}
 
 
->>>>>>> a58c1540c42624b9278e61009228d03650dd770c
 }
