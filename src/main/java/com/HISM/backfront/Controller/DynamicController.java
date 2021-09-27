@@ -9,13 +9,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 //必填
-@Api(tags = "用户管理相关接口")
-@RequestMapping("/dynamic")
+@Api(tags = "动态管理接口")
+@RequestMapping("/moments")
 public class DynamicController {
-    @PostMapping("/getMoments")
+    @PostMapping("/createMomentWithPhotos")
     //必填
-    @ApiOperation("添加用户的接口")
-    public String hello(@RequestParam String name) {
+    @ApiOperation("用户上传照片")
+    public String createMomentWithPhotos(@RequestParam String name) {
+        return name;
+    }
+
+
+    @PostMapping("/createMomentWithVideo")
+    //必填
+    @ApiOperation("用户上传视频")
+    public String createMomentWithVideo(@RequestParam String name) {
+        return name;
+    }
+
+    @PostMapping("/createMomentWithCode")
+    //必填
+    @ApiOperation("用户上传代码")
+    public String createMomentWithCode(@RequestParam String name) {
+        return name;
+    }
+
+    @PostMapping("/createMomentOnlyText")
+    //必填
+    @ApiOperation("用户上传文本")
+    public String createMomentOnlyText(@RequestParam String name) {
         return name;
     }
 
