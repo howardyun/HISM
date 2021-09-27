@@ -28,6 +28,7 @@ public class UserController {
     //必填
     @ApiOperation("添加用户的接口")
     public Map<String, Object> logIn(@RequestParam String userId,@RequestParam String password) {
+
         Map<String, Object> map = new HashMap<>(3);
         //判断用户id或者密码是否为空
         if ("".equals(userId) || "".equals(password)) {
@@ -55,5 +56,10 @@ public class UserController {
         }
         return map;
     }
+
+
+
+
+
 
 }
