@@ -64,9 +64,9 @@ public class UserController {
     public Map<String, Object> register(@RequestParam String userId,@RequestParam String password) {
         Map<String, Object> map = new HashMap<>(3);
 
-        if(userId.equals("")||password.equals("")){
-            map.put("error","账号/密码不能为空");
+        if("".equals(userId)||"".equals(password)){
             map.put("success", false);
+            map.put("message","账号/密码不能为空");
             return map;
         }
         //判断userId是否已存在
@@ -76,9 +76,11 @@ public class UserController {
             user.setUserId(userId);
             user.setPassword(password);
             userService.insertUser(user);
-            //注册成功>>跳转
-            //map.setViewName("/logIn");
-
+            map.put("success", true);
+            map.put("message","注册成功");
+        }else {
+            map.put("success", false);
+            map.put("message","账户已经存在");
         }
         return map;
     }
