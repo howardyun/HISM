@@ -6,6 +6,7 @@
         <result column="followTime" jdbcType="TIMESTAMP" property="followTime" javaType="java.util.Date" />
     </resultMap>
 
+
     <insert id="insertFollower">
         insert into follower value (#{followerId}, #{userId}, #{followTime})
     </insert>
@@ -13,4 +14,5 @@
     <delete id="deleteFollower">
         delete from follower where followerId = #{followerId} and userId = #{userId}
     </delete>
+
 </mapper>

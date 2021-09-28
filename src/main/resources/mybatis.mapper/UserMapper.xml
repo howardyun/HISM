@@ -32,5 +32,9 @@
         select count(*) from user
     </select>
 
+    <select id="queryUserListByFollowerId" resultMap="userMap">
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
+    </select>
+
 
 </mapper>

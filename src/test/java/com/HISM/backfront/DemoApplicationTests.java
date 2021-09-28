@@ -2,15 +2,12 @@ package com.HISM.backfront;
 
 import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.*;
-import com.HISM.backfront.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 import java.util.List;
-
-import static java.sql.JDBCType.NULL;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -26,6 +23,12 @@ class DemoApplicationTests {
     @Autowired
     FollowerSerive followerSerive;
 
+    @Autowired
+    AdministratorSerive administratorSerive;
+
+
+    @Autowired
+    UserService userService;
 
     @Test
     void contextLoads() {
@@ -50,8 +53,11 @@ class DemoApplicationTests {
 
         // thumbSerive.deleteThumb(313, "16");
 
-        Follower follower = new Follower("123", "16", date);
-        followerSerive.deleteFollower("123", "16");
+        List<User> userList = userService.queryUserListByFollowerId("123");
+        for (int i = 0; i < userList.size(); i++) {
+            System.out.println(userList.get(i).toString());
+        }
+
 
     }
 }

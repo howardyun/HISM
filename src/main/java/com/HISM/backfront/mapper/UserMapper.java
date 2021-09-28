@@ -25,4 +25,7 @@ public interface UserMapper {
     // 获取用户数量
     int getUserNum();
 
+
+    // 通过id查询某一粉丝关注的用户列表
+    public List<User> queryUserListByFollowerId(String followerId);
 }

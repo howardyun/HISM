@@ -12,7 +12,7 @@ public class User {
     //用户Id
     private String userId;
     //用户密码
-    private String password;
+    private String password = "****";
     //用户姓名
     private String userName;
     //用户地址
@@ -26,6 +26,15 @@ public class User {
     //用户状态
     private Integer userState;
 
+    public User(String userId, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userAddress = userAddress;
+        this.userOld = userOld;
+        this.userSex = userSex;
+        this.userDescription = userDescription;
+        this.userState = userState;
+    }
 
     public String getUserId() {
         return userId;

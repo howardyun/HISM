@@ -41,6 +41,7 @@ public class UserService {
         List<User> userList = userMapper.queryUserbyName(name);
         if(userList.isEmpty()) {
             System.out.println("该用户不存在");
+            return null;
         }
         return userList;
     }
@@ -50,6 +51,17 @@ public class UserService {
         List<User> userList = userMapper.queryUserbyId(userId);
         if(userList.isEmpty()) {
             System.out.println("该用户id不存在");
+            return null;
+        }
+        return userList;
+    }
+
+    // 通过id查询某一粉丝关注的用户列表
+    public List<User> queryUserListByFollowerId(String followerId){
+        List<User> userList = userMapper.queryUserListByFollowerId(followerId);
+        if(userList.isEmpty()) {
+            System.out.println("该粉丝id不存在");
+            return null;
         }
         return userList;
     }
