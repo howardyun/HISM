@@ -1,5 +1,6 @@
 package com.HISM.backfront;
 
+import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.*;
 import org.junit.jupiter.api.Test;
@@ -59,5 +60,15 @@ class DemoApplicationTests {
         }
 
 
+    }
+
+    @Test
+    void Testresult(){
+
+        MyResult myResult=new MyResult();
+        myResult.add("test","test1234");
+        myResult.add("test21","test34");
+
+        System.out.print(myResult.getResult());
     }
 }

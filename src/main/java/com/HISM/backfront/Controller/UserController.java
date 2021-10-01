@@ -1,5 +1,6 @@
 package com.HISM.backfront.Controller;
 
+import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.UserService;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ public class UserController {
     @PostMapping("/logIn")
     //必填
     @ApiOperation("用户登陆")
-    public Map<String, Object> logIn(@RequestParam String userId,@RequestParam String password) {
+    public Map<String, Object> logIn(@RequestParam String userId, @RequestParam String password) {
 
         Map<String, Object> map = new HashMap<>(3);
         //判断用户id或者密码是否为空
@@ -36,21 +37,20 @@ public class UserController {
             map.put("message", "用户id或用户密码为空");
             return map;
         }
-        List<User> userList =userService.queryUserbyId(userId);
-        if (userList.size()==0){
+        List<User> userList = userService.queryUserbyId(userId);
+        if (userList.size() == 0) {
             map.put("success", false);
             map.put("message", "没有该用户信息");
-        }else if(userList.size()==1){
-            User user=userList.get(0);
-            if(password.equals(user.getPassword())){
+        } else if (userList.size() == 1) {
+            User user = userList.get(0);
+            if (password.equals(user.getPassword())) {
                 map.put("success", true);
                 map.put("message", "成功登录");
-            }
-            else {
+            } else {
                 map.put("success", false);
                 map.put("message", "密码错误");
             }
-        }else {
+        } else {
             map.put("success", false);
             map.put("message", "用户信息多于一个");
         }
@@ -61,31 +61,29 @@ public class UserController {
 
     @ApiOperation("用户注册")
 
-    public Map<String, Object> register(@RequestParam String userId,@RequestParam String password) {
-        Map<String, Object> map = new HashMap<>(3);
+    public MyResult register(@RequestParam String userId, @RequestParam String password) {
+        MyResult myResult=new MyResult();
 
-        if("".equals(userId)||"".equals(password)){
-            map.put("success", false);
-            map.put("message","账号/密码不能为空");
-            return map;
+        if ("".equals(userId) || "".equals(password)) {
+            myResult.add("success", false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
         }
         //判断userId是否已存在
-        List<User> userList =userService.queryUserbyId(userId);
-        if(userList.isEmpty()){
-            User user=new User();
+        List<User> userList = userService.queryUserbyId(userId);
+        if (userList.isEmpty()) {
+            User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
             userService.insertUser(user);
-            map.put("success", true);
-            map.put("message","注册成功");
-        }else {
-            map.put("success", false);
-            map.put("message","账户已经存在");
+            myResult.add("status", true);
+            myResult.add("message", "注册成功");
+        } else {
+            myResult.add("success", false);
+            myResult.add("message", "账户已经存在");
         }
-        return map;
+        return myResult;
     }
-
-
 
 
 }

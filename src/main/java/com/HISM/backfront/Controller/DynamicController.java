@@ -38,6 +38,10 @@ public class DynamicController {
     //必填
     @ApiOperation("用户上传文本")
     public String createMomentOnlyText(@RequestParam String userId,@RequestParam String text,@RequestParam String tag) {
+
+
+
+
         return userId;
     }
 
