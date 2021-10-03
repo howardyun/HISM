@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.spring.web.json.Json;
-
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.Map;
 @RestController
 //必填
 @Api(tags = "用户管理相关接口")
-@RequestMapping("/User")
+@RequestMapping("/user")
 public class UserController {
 
     @Resource
@@ -28,33 +26,33 @@ public class UserController {
     @PostMapping("/logIn")
     //必填
     @ApiOperation("用户登陆")
-    public Map<String, Object> logIn(@RequestParam String userId, @RequestParam String password) {
+    public MyResult logIn(@RequestParam String userId, @RequestParam String password) {
 
-        Map<String, Object> map = new HashMap<>(3);
+        MyResult myResult=new MyResult();
         //判断用户id或者密码是否为空
         if ("".equals(userId) || "".equals(password)) {
-            map.put("success", false);
-            map.put("message", "用户id或用户密码为空");
-            return map;
+            myResult.add("status", false);
+            myResult.add("message", "用户id或用户密码为空");
+            return myResult;
         }
         List<User> userList = userService.queryUserbyId(userId);
         if (userList.size() == 0) {
-            map.put("success", false);
-            map.put("message", "没有该用户信息");
+            myResult.add("status", false);
+            myResult.add("message", "没有该用户信息");
         } else if (userList.size() == 1) {
             User user = userList.get(0);
             if (password.equals(user.getPassword())) {
-                map.put("success", true);
-                map.put("message", "成功登录");
+                myResult.add("status", true);
+                myResult.add("message", "成功登录");
             } else {
-                map.put("success", false);
-                map.put("message", "密码错误");
+                myResult.add("status", false);
+                myResult.add("message", "密码错误");
             }
         } else {
-            map.put("success", false);
-            map.put("message", "用户信息多于一个");
+            myResult.add("status", false);
+            myResult.add("message", "用户信息多于一个");
         }
-        return map;
+        return  myResult;
     }
 
     @PostMapping("/register")
@@ -65,7 +63,7 @@ public class UserController {
         MyResult myResult=new MyResult();
 
         if ("".equals(userId) || "".equals(password)) {
-            myResult.add("success", false);
+            myResult.add("status", false);
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
@@ -79,7 +77,7 @@ public class UserController {
             myResult.add("status", true);
             myResult.add("message", "注册成功");
         } else {
-            myResult.add("success", false);
+            myResult.add("status", false);
             myResult.add("message", "账户已经存在");
         }
         return myResult;
