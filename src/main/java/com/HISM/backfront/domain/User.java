@@ -15,6 +15,8 @@ public class User {
     private String password = "****";
     //用户姓名
     private String userName;
+    // 用户头像URL
+    private String avatarURL;
     //用户地址
     private String userAddress;
     //用户年龄
@@ -100,6 +102,7 @@ public class User {
         this.userState = userState;
     }
 
+    public String getAvatarURL() { return avatarURL; }
 
-
+    public void setAvatarURL(String avatarURL) { this.avatarURL = avatarURL; }
 }

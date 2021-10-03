@@ -54,10 +54,20 @@ class DemoApplicationTests {
 
         // thumbSerive.deleteThumb(313, "16");
 
-        List<User> userList = userService.queryUserListByFollowerId("123");
-        for (int i = 0; i < userList.size(); i++) {
-            System.out.println(userList.get(i).toString());
-        }
+//        List<User> userList = userService.queryUserListByFollowerId("123");
+//        for (int i = 0; i < userList.size(); i++) {
+//            System.out.println(userList.get(i).toString());
+//        }
+
+        User user =  userService.queryUserbyName("yun").get(0);
+        user.setAvatarURL("localhost:8080");
+        System.out.println(user.toString());
+
+
+        userService.updateUser(user);
+
+
+
 
 
     }

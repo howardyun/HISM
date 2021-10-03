@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.HISM.backfront.mapper.UserMapper">
     <resultMap id="userMap" type="com.HISM.backfront.domain.User">
-        <id property="userName" column="userName" />
-        <id property="userName" column="userName" />
+        <id property="userId" column="userId" />
         <result property="password" column="password" />
         <result property="userAddress" column="userAddress" />
         <result property="userOld" column="userOld" />
@@ -12,12 +11,12 @@
     </resultMap>
 
     <insert id="insertUser">
-        insert into user(userName,password,userName,userAddress,userOld,userSex,userDescription) values (#{userName},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription})
+        insert into user(userName,password,userName,userAddress,userOld,userSex,userDescription) values (#{userName},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription}, #{userState}, #{avatarURL})
     </insert>
     
     <update id="updateUser">
-        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}
-        where userid = #{userName}
+        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}
+        where userId = #{userId}
     </update>
 
     <select id="queryUserbyName" resultMap="userMap">
@@ -25,7 +24,7 @@
     </select>
 
     <select id="queryUserbyId" resultMap="userMap">
-        select * from user where userid = #{userName}
+        select * from user where userId = #{userName}
     </select>
 
     <select id="getUserNum" resultType="java.lang.Integer">
@@ -35,6 +34,5 @@
     <select id="queryUserListByFollowerId" resultMap="userMap">
         select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
-
 
 </mapper>
