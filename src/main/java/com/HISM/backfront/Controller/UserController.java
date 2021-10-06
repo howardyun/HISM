@@ -2,6 +2,7 @@ package com.HISM.backfront.Controller;
 
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.FollowerSerive;
+import com.HISM.backfront.Service.GeneralService;
 import com.HISM.backfront.Service.UserService;
 import com.HISM.backfront.domain.Follower;
 import com.HISM.backfront.domain.User;
@@ -28,6 +29,9 @@ public class UserController {
     UserService userService;
     @Resource
     FollowerSerive followerSerive;
+
+    @Resource
+    GeneralService generalService;
 
     @PostMapping("/logIn")
     //必填
@@ -147,6 +151,9 @@ public class UserController {
     public MyResult changeAvatar(@RequestParam String userId, @RequestParam MultiFileChooserUI img) {
         MyResult myResult = new MyResult();
 
+
+
+
         return myResult;
 
     }
@@ -198,24 +205,24 @@ public class UserController {
 
     @ApiOperation("举报用户")
 
-    public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId,@RequestParam String message){
-            MyResult myResult=new MyResult();
-            return myResult;
+    public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam String message) {
+        MyResult myResult = new MyResult();
+        return myResult;
     }
 
     @PostMapping("/followUser")
 
     @ApiOperation("关注用户")
 
-    public MyResult followUser(@RequestParam String userId, @RequestParam String targetUserId){
-        MyResult myResult=new MyResult();
+    public MyResult followUser(@RequestParam String userId, @RequestParam String targetUserId) {
+        MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(targetUserId)) {
             myResult.changeStatus(false);
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
         //这里需要加入查询
-        Follower follower=new Follower();
+        Follower follower = new Follower();
         follower.setUserId(userId);
         follower.setFollowerId(targetUserId);
         followerSerive.insertFollower(follower);
@@ -227,20 +234,20 @@ public class UserController {
 
     @ApiOperation("搜索用户")
 
-    public MyResult searchUser(@RequestParam String userId, @RequestParam String queryUserName){
-        MyResult myResult=new MyResult();
+    public MyResult searchUser(@RequestParam String userId, @RequestParam String queryUserName) {
+        MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(queryUserName)) {
             myResult.changeStatus(false);
             myResult.add("message", "源用户id，搜索名字不能为空");
             return myResult;
         }
-        List<User> users=userService.queryUserbyName(queryUserName);
-        if(users==null){
+        List<User> users = userService.queryUserbyName(queryUserName);
+        if (users == null) {
             myResult.changeStatus(false);
-        }else{
+        } else {
             myResult.changeStatus(true);
-            for (int i=0;i<users.size();i++) {
-                myResult.add(i+"",users.get(i));
+            for (int i = 0; i < users.size(); i++) {
+                myResult.add(i + "", users.get(i));
             }
         }
         return myResult;
