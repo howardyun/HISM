@@ -185,10 +185,9 @@ public class UserController {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
                 user.setAvatarURL(filePath + "/" + root_fileName);
                 userService.insertUser(user);
-
             } catch (IOException e) {
                 myResult.changeStatus(false);
-                myResult.add("message", e.getCause());
+                myResult.add("message", "test");
                 return myResult;
             }
         }
@@ -297,7 +296,7 @@ public class UserController {
                 map.put("relationship", null);
                 tmp.add(map);
             }
-
+            myResult.add("message",tmp);
         }
         return myResult;
     }
