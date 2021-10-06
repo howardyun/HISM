@@ -1,5 +1,6 @@
 package com.HISM.backfront.Controller;
 
+import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.FollowerSerive;
 import com.HISM.backfront.Service.GeneralService;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.swing.plaf.multi.MultiFileChooserUI;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,9 @@ public class UserController {
 
     @Resource
     GeneralService generalService;
+
+    @Resource
+    WebAppConfig webAppConfig;
 
     @PostMapping("/logIn")
     //必填
@@ -69,7 +75,8 @@ public class UserController {
 
     @ApiOperation("用户注册")
 
-    public MyResult register(@RequestParam String userId, @RequestParam String password) {
+    public MyResult register(@RequestParam("等同于手机号") String userId, @RequestParam String password,
+                             @RequestParam String isMale,@RequestParam String userName) {
         MyResult myResult = new MyResult();
 
         if ("".equals(userId) || "".equals(password)) {
@@ -83,6 +90,8 @@ public class UserController {
             User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
+            user.setUserName(userName);
+            user.setUserSex(isMale);
             userService.insertUser(user);
             myResult.changeStatus(true);
             myResult.add("userID", userId);
@@ -148,12 +157,38 @@ public class UserController {
 
     @ApiOperation("修改头像")
 
-    public MyResult changeAvatar(@RequestParam String userId, @RequestParam MultiFileChooserUI img) {
+    public MyResult changeAvatar(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile multipartFile) {
         MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "userId为空");
+            return myResult;
+        }
+        List<User> users=userService.queryUserbyId(userId);
+        if(users==null){
+            myResult.changeStatus(false);
+            myResult.add("message", "找不到该用户");
+        }else{
+            User user=users.get(0);
+            //获取源文件名称
+            String root_fileName = "userAvatar.png";
+            //获取地址
+            String filePath = webAppConfig.location+"/";
+            filePath+=user.getUserId();
+            filePath+=("/"+"Avatar");
+            String file_name = null;
+            try {
+                file_name = generalService.saveImg(multipartFile, filePath,root_fileName);
+                user.setAvatarURL(filePath+"/"+root_fileName);
+                userService.insertUser(user);
 
-
-
-
+            } catch (IOException e) {
+                myResult.changeStatus(false);
+                myResult.add("message", e.getCause());
+                return myResult;
+            }
+        }
+        myResult.changeStatus(true);
         return myResult;
 
     }
@@ -198,6 +233,10 @@ public class UserController {
 
     public MyResult getFans(@RequestParam String userId, @RequestParam String targetUserId) {
         MyResult myResult = new MyResult();
+
+
+
+
         return myResult;
     }
 

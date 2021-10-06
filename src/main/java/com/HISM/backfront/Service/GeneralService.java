@@ -14,13 +14,12 @@ public class GeneralService {
      * @return 返回文件名
      * @throws IOException
      */
-    public static String saveImg(MultipartFile multipartFile, String path) throws IOException {
+    public String saveImg(MultipartFile multipartFile, String path,String fileName) throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
         FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-        String fileName = "test" + ".png";
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path + File.separator + fileName));
         byte[] bs = new byte[1024];
         int len;
