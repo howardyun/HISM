@@ -15,13 +15,14 @@ public interface DynamicMapper {
     // 删除动态
     public void deleteDynamic(int dynamicId);
 
-    // 查看动态
-    public List<Dynamic> selectDynamicByUserName(String userName);
-
     // 更新动态
     public void updateDynamic(Dynamic dynamic);
 
-    // 通过动态id
+    // 通过动态id查找动态
     public Dynamic selectDynamicByDynamicId(int DynamicId);
+
+    // 通过动态发布者的姓名查找动态
+    public List<Dynamic> selectDynamicByUserName(String userName);
+
 
 }
