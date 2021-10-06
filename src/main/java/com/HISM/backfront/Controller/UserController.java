@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.swing.plaf.multi.MultiFileChooserUI;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 //必填
@@ -59,7 +57,10 @@ public class UserController {
             User user = userList.get(0);
             if (password.equals(user.getPassword())) {
                 myResult.changeStatus(true);
-                myResult.add("userID", userId);
+                HashMap<String,Object> tmp=new HashMap<>();
+                tmp.put("userID", userId);
+                myResult.add("message",tmp);
+
             } else {
                 myResult.changeStatus(false);
                 myResult.add("message", "密码错误");
@@ -76,7 +77,7 @@ public class UserController {
     @ApiOperation("用户注册")
 
     public MyResult register(@RequestParam("等同于手机号") String userId, @RequestParam String password,
-                             @RequestParam String isMale,@RequestParam String userName) {
+                             @RequestParam String isMale, @RequestParam String userName) {
         MyResult myResult = new MyResult();
 
         if ("".equals(userId) || "".equals(password)) {
@@ -94,7 +95,9 @@ public class UserController {
             user.setUserSex(isMale);
             userService.insertUser(user);
             myResult.changeStatus(true);
-            myResult.add("userID", userId);
+            HashMap<String,Object> tmp=new HashMap<>();
+            tmp.put("userID", userId);
+            myResult.add("message",tmp);
         } else {
             myResult.changeStatus(false);
             myResult.add("message", "账户已经存在");
@@ -135,10 +138,10 @@ public class UserController {
         List<User> users = userService.queryUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
-            myResult.add("reason", "没有该用户");
+            myResult.add("message", "没有该用户");
         } else if (users.size() > 1) {
             myResult.changeStatus(false);
-            myResult.add("reason", "用户信息重复");
+            myResult.add("message", "用户信息重复");
         } else {
             User user = users.get(0);
             user.setUserSex(isMale);
@@ -148,6 +151,7 @@ public class UserController {
             userService.updateUser(user);
 
             myResult.changeStatus(true);
+
         }
 
         return myResult;
@@ -164,22 +168,22 @@ public class UserController {
             myResult.add("message", "userId为空");
             return myResult;
         }
-        List<User> users=userService.queryUserbyId(userId);
-        if(users==null){
+        List<User> users = userService.queryUserbyId(userId);
+        if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "找不到该用户");
-        }else{
-            User user=users.get(0);
+        } else {
+            User user = users.get(0);
             //获取源文件名称
             String root_fileName = "userAvatar.png";
             //获取地址
-            String filePath = webAppConfig.location+"/";
-            filePath+=user.getUserId();
-            filePath+=("/"+"Avatar");
+            String filePath = webAppConfig.location + "/";
+            filePath += user.getUserId();
+            filePath += ("/" + "Avatar");
             String file_name = null;
             try {
-                file_name = generalService.saveImg(multipartFile, filePath,root_fileName);
-                user.setAvatarURL(filePath+"/"+root_fileName);
+                file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
+                user.setAvatarURL(filePath + "/" + root_fileName);
                 userService.insertUser(user);
 
             } catch (IOException e) {
@@ -207,10 +211,10 @@ public class UserController {
         List<User> users = userService.queryUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
-            myResult.add("reason", "没有该用户");
+            myResult.add("message", "没有该用户");
         } else if (users.size() > 1) {
             myResult.changeStatus(false);
-            myResult.add("reason", "用户信息冗余");
+            myResult.add("message", "用户信息冗余");
         } else {
             User user = users.get(0);
             if (passwordOld.equals(user.getPassword())) {
@@ -219,7 +223,7 @@ public class UserController {
                 myResult.changeStatus(true);
             } else {
                 myResult.changeStatus(false);
-                myResult.add("reason", "原密码不正确");
+                myResult.add("message", "原密码不正确");
             }
 
         }
@@ -233,8 +237,6 @@ public class UserController {
 
     public MyResult getFans(@RequestParam String userId, @RequestParam String targetUserId) {
         MyResult myResult = new MyResult();
-
-
 
 
         return myResult;
@@ -265,6 +267,7 @@ public class UserController {
         follower.setUserId(userId);
         follower.setFollowerId(targetUserId);
         followerSerive.insertFollower(follower);
+        myResult.changeStatus(true);
         return myResult;
 
     }
@@ -285,8 +288,13 @@ public class UserController {
             myResult.changeStatus(false);
         } else {
             myResult.changeStatus(true);
+            List<Map<String, Object>> tmp = new ArrayList<>();
             for (int i = 0; i < users.size(); i++) {
-                myResult.add(i + "", users.get(i));
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("userId", users.get(i).getUserId());
+                map.put("userName", users.get(i).getUserName());
+                map.put("userAvatar", users.get(i).getAvatarURL());
+                map.put("relationship", null);
             }
         }
         return myResult;
