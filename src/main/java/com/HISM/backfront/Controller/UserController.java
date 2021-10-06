@@ -181,7 +181,7 @@ public class UserController {
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
                 user.setAvatarURL(filePath + "/" + root_fileName);
-                userService.insertUser(user);
+                userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
                 myResult.add("message", "test");
