@@ -1,7 +1,9 @@
 package com.HISM.backfront.Controller;
 
 import com.HISM.backfront.Result.MyResult;
+import com.HISM.backfront.Service.FollowerSerive;
 import com.HISM.backfront.Service.UserService;
+import com.HISM.backfront.domain.Follower;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,8 @@ public class UserController {
 
     @Resource
     UserService userService;
+    @Resource
+    FollowerSerive followerSerive;
 
     @PostMapping("/logIn")
     //必填
@@ -162,22 +166,84 @@ public class UserController {
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("reason", "没有该用户");
-        }else if(users.size()>1){
+        } else if (users.size() > 1) {
             myResult.changeStatus(false);
             myResult.add("reason", "用户信息冗余");
-        }else{
-            User user=users.get(0);
-            if(passwordOld.equals(user.getPassword())){
-
-
+        } else {
+            User user = users.get(0);
+            if (passwordOld.equals(user.getPassword())) {
+                user.setPassword(passwordNew);
+                userService.updateUser(user);
+                myResult.changeStatus(true);
+            } else {
+                myResult.changeStatus(false);
+                myResult.add("reason", "原密码不正确");
             }
 
-
         }
-
         return myResult;
 
     }
 
+    @PostMapping("/getFans")
+
+    @ApiOperation("获取粉丝列表")
+
+    public MyResult getFans(@RequestParam String userId, @RequestParam String targetUserId) {
+        MyResult myResult = new MyResult();
+        return myResult;
+    }
+
+    @PostMapping("/reportUser")
+
+    @ApiOperation("举报用户")
+
+    public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId,@RequestParam String message){
+            MyResult myResult=new MyResult();
+            return myResult;
+    }
+
+    @PostMapping("/followUser")
+
+    @ApiOperation("关注用户")
+
+    public MyResult followUser(@RequestParam String userId, @RequestParam String targetUserId){
+        MyResult myResult=new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+        //这里需要加入查询
+        Follower follower=new Follower();
+        follower.setUserId(userId);
+        follower.setFollowerId(targetUserId);
+        followerSerive.insertFollower(follower);
+        return myResult;
+
+    }
+
+    @PostMapping("/searchUser")
+
+    @ApiOperation("搜索用户")
+
+    public MyResult searchUser(@RequestParam String userId, @RequestParam String queryUserName){
+        MyResult myResult=new MyResult();
+        if ("".equals(userId) || "".equals(queryUserName)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "源用户id，搜索名字不能为空");
+            return myResult;
+        }
+        List<User> users=userService.queryUserbyName(queryUserName);
+        if(users==null){
+            myResult.changeStatus(false);
+        }else{
+            myResult.changeStatus(true);
+            for (int i=0;i<users.size();i++) {
+                myResult.add(i+"",users.get(i));
+            }
+        }
+        return myResult;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.HISM.backfront;
 
+import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.*;
@@ -75,10 +76,8 @@ class DemoApplicationTests {
     @Test
     void Testresult(){
 
-        MyResult myResult=new MyResult();
-        myResult.add("test","test1234");
-        myResult.add("test21","test34");
-
-        System.out.print(myResult.getResult());
+        WebAppConfig webAppConfig =new WebAppConfig();
+        System.out.print(webAppConfig.location);
     }
+
 }
