@@ -295,7 +295,9 @@ public class UserController {
                 map.put("userName", users.get(i).getUserName());
                 map.put("userAvatar", users.get(i).getAvatarURL());
                 map.put("relationship", null);
+                tmp.add(map);
             }
+
         }
         return myResult;
     }
