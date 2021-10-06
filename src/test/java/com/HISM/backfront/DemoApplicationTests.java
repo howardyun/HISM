@@ -31,6 +31,9 @@ class DemoApplicationTests {
     @Autowired
     UserService userService;
 
+    @Autowired
+    AppSerive appSerive;
+
     @Test
     void contextLoads() {
     }
@@ -59,16 +62,8 @@ class DemoApplicationTests {
 //            System.out.println(userList.get(i).toString());
 //        }
 
-        User user =  userService.queryUserbyName("yun").get(0);
-        user.setAvatarURL("localhost:8080");
-        System.out.println(user.toString());
-
-
-        userService.updateUser(user);
-
-
-
-
+        App app = new App(1, "java", "gggg", "hhhh", "123213", "fsdf","999");
+        appSerive.deleteApp(1);
 
     }
 

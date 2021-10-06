@@ -30,7 +30,7 @@ public class Dynamic {
     int tipOffNum;
     // 动态类型: 图片, 小程序, 视频
     String dynamicType;
-    // 该动态发出者的id
+    // 该动态发出者的名字
     String userName;
 
 
