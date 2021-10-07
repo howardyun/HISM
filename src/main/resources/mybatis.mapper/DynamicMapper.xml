@@ -8,16 +8,16 @@
     </resultMap>
 
     <insert id="insertDynamic">
-        insert into dynamic (dynamicIndex1, dynamicIndex2, dynamicAccess, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userName)
-        values (#{dynamicIndex1}, #{dynamicIndex2}, #{dynamicAccess}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userName})
+        insert into dynamic (dynamicIndex1, dynamicIndex2, dynamicAccess, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userId)
+        values (#{dynamicIndex1}, #{dynamicIndex2}, #{dynamicAccess}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userId})
     </insert>
 
     <delete id="deleteDynamic">
         delete from dynamic where dynamicId = #{dynamicId}
     </delete>
 
-    <select id="selectDynamicByUserName" resultMap="dynamicMap">
-        select * from dynamic where userName = #{userName}
+    <select id="selectDynamicByUserId" resultMap="dynamicMap">
+        select * from dynamic where userId = #{userId}
     </select>
 
     <select id="selectDynamicByDynamicId" resultMap="dynamicMap">
@@ -25,7 +25,7 @@
     </select>
 
     <update id="updateDynamic">
-        update dynamic set dynamicIndex1 = #{dynamicIndex1}, dynamicIndex2 = #{dynamicIndex2}, dynamicAccess = #{dynamicAccess}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userName = #{userName}
+        update dynamic set dynamicIndex1 = #{dynamicIndex1}, dynamicIndex2 = #{dynamicIndex2}, dynamicAccess = #{dynamicAccess}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId}
         where dynamicId = #{dynamicId}
     </update>
 

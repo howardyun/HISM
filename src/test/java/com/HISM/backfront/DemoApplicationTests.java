@@ -42,7 +42,7 @@ class DemoApplicationTests {
 
     @Test
     void Test(){
-        System.out.println(followerSerive.getFollowState("16", "123"));
+        System.out.println(dynamicSerive.selectDynamicByUserId("123456").get(0).toString());;
     }
 
     @Test

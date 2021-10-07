@@ -11,20 +11,20 @@
     </resultMap>
 
     <insert id="insertUser">
-        insert into user(userName,password,userName,userAddress,userOld,userSex,userDescription) values (#{userName},#{password},#{userName},#{userAddress},#{userOld},#{userSex},#{userDescription}, #{userState}, #{avatarURL})
+        insert into user(userId,password,userId,userAddress,userOld,userSex,userDescription) values (#{userId},#{password},#{userId},#{userAddress},#{userOld},#{userSex},#{userDescription}, #{userState}, #{avatarURL})
     </insert>
     
     <update id="updateUser">
-        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}
+        update user set username = #{userId}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}
         where userId = #{userId}
     </update>
 
     <select id="queryUserbyName" resultMap="userMap">
-        select * from user where username = #{userName}
+        select * from user where username = #{userId}
     </select>
 
     <select id="queryUserbyId" resultMap="userMap">
-        select * from user where userId = #{userName}
+        select * from user where userId = #{userId}
     </select>
 
     <select id="getUserNum" resultType="java.lang.Integer">
@@ -32,11 +32,11 @@
     </select>
 
     <select id="getSubscriberByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
+        select userId, userId, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
 
     <select id="getFanByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select followerId from follower where userId = #{userId})
+        select userId, userId, userAddress, userOld, userSex, userDescription, userState from user where userId in (select followerId from follower where userId = #{userId})
     </select>
 
 

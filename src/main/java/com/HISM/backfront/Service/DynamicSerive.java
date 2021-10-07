@@ -1,6 +1,5 @@
 package com.HISM.backfront.Service;
 
-import com.HISM.backfront.domain.Comment;
 import com.HISM.backfront.domain.Dynamic;
 import com.HISM.backfront.mapper.DynamicMapper;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,8 @@ public class DynamicSerive {
 
 
     // 通过发送者名称查看动态
-    public List<Dynamic> selectDynamicByUserName(String userName){
-        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserName(userName);
+    public List<Dynamic> selectDynamicByUserId(String userId){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserId(userId);
         if(dynamicList.isEmpty()){
             System.out.println("error, 无法查到该用户的动态");
         }

@@ -31,7 +31,7 @@ public class Dynamic {
     // 动态类型: 图片, 小程序, 视频
     String dynamicType;
     // 该动态发出者的名字
-    String userName;
+    String userId;
 
 
     public Dynamic(String dynamicIndex1, String dynamicIndex2, int dynamicAccess, String dynamicContent, Date dynamicTime, int thumbNum, int commentNum, int tipOffNum, String dynamicType, String userName) {
@@ -44,7 +44,7 @@ public class Dynamic {
         this.commentNum = commentNum;
         this.tipOffNum = tipOffNum;
         this.dynamicType = dynamicType;
-        this.userName = userName;
+        this.userId = userName;
     }
 
     public int getDynamicId() {
@@ -127,11 +127,11 @@ public class Dynamic {
         this.dynamicType = dynamicType;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

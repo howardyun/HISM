@@ -22,7 +22,7 @@ public interface DynamicMapper {
     public Dynamic selectDynamicByDynamicId(int DynamicId);
 
     // 通过动态发布者的姓名查找动态
-    public List<Dynamic> selectDynamicByUserName(String userName);
+    public List<Dynamic> selectDynamicByUserId(String userId);
 
 
 }

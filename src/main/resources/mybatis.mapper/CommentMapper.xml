@@ -8,11 +8,11 @@
         <result column="commentTime" jdbcType="TIMESTAMP" property="commentTime" javaType="java.util.Date" />
         <result column="commentContent" property="commentContent"></result>
         <result column="dynamicId" property="dynamicId"></result>
-        <result column="userName" property="userName"></result>
+        <result column="userId" property="userId"></result>
     </resultMap>
 
     <insert id="insertComment">
-        insert into comment (commentTime, commentContent, dynamicId, userName) values (#{commentTime, jdbcType=DATE}, #{commentContent}, #{dynamicId}, #{userName})
+        insert into comment (commentTime, commentContent, dynamicId, userId) values (#{commentTime, jdbcType=DATE}, #{commentContent}, #{dynamicId}, #{userId})
     </insert>
 
     <delete id="deleteComment">
