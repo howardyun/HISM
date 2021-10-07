@@ -34,6 +34,33 @@ public class FollowerSerive {
         }
     }
 
+    // 获取粉丝关注情况
+    public String getFollowState(String userId1, String userId2){
+        Boolean user1FollowUser2 = false;
+        Boolean user2FollowUser1 = false;
 
+        List<Follower> followers = followerMapper.getSubscriber(userId1);
+        for(Follower follower: followers){
+            if(follower.getUserId().equals(userId2)){
+                user1FollowUser2 = true;
+            }
+        }
+
+        List<Follower> followerList = followerMapper.getSubscriber(userId2);
+        for(Follower follower: followerList){
+            if(follower.getUserId().equals(userId1)){
+                user2FollowUser1 = true;
+            }
+        }
+
+        if(user1FollowUser2 && user2FollowUser1){
+            return "相互关注";
+        }else if(user1FollowUser2 && (!user2FollowUser1)){
+            return "用户1仅关注用户2";
+        }else if (!user1FollowUser2 && user2FollowUser1){
+            return "用户2仅关注用户1";
+        }
+        return "谁也不关注谁";
+    }
 
 }

@@ -2,7 +2,6 @@ package com.HISM.backfront.Service;
 
 import com.HISM.backfront.domain.User;
 import com.HISM.backfront.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,13 +55,27 @@ public class UserService {
         return userList;
     }
 
-    // 通过id查询某一粉丝关注的用户列表
-    public List<User> queryUserListByFollowerId(String followerId){
-        List<User> userList = userMapper.queryUserListByFollowerId(followerId);
+    // 通过用户(粉丝)id获取他的所关注的人
+    public List<User> getSubscriberByUserId(String followerId){
+        List<User> userList = userMapper.getSubscriberByUserId(followerId);
         if(userList.isEmpty()) {
             System.out.println("该粉丝id不存在");
             return null;
         }
         return userList;
     }
+
+
+    // 通过用户id获取所有他的粉丝.
+    public List<User> getFanByUserId(String userId){
+        List<User> fanList = userMapper.getFanByUserId(userId);
+        if(fanList.isEmpty()) {
+            System.out.println("该用户id不存在");
+            return null;
+        }
+        return fanList;
+    }
+
+
+
 }

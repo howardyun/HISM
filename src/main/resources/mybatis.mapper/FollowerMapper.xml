@@ -15,4 +15,13 @@
         delete from follower where followerId = #{followerId} and userId = #{userId}
     </delete>
 
+    <select id="getFan" resultMap="followerMap">
+        select followerId from follower where userId = #{userId1}
+    </select>
+
+    <select id="getSubscriber" resultMap="followerMap">
+        select userId from follower where followerId = #{userId2}
+    </select>
+
+
 </mapper>

@@ -26,6 +26,9 @@ public interface UserMapper {
     int getUserNum();
 
 
-    // 通过id查询某一粉丝关注的用户列表
-    public List<User> queryUserListByFollowerId(String followerId);
+    // 通过用户(粉丝)id获取他的所关注的人
+    public List<User> getSubscriberByUserId(String followerId);
+
+    // 通过用户id获取所有他的粉丝.
+    public List<User> getFanByUserId(String userId);
 }

@@ -15,4 +15,8 @@ public interface FollowerMapper {
     // 取消关注某一用户
     public void deleteFollower(String followerId, String userId);
 
+    public List<Follower> getFan(String userId);
+
+    public List<Follower> getSubscriber(String userId);
+
 }
