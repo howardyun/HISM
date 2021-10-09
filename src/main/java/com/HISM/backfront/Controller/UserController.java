@@ -233,6 +233,40 @@ public class UserController {
 
     public MyResult getFans(@RequestParam String userId, @RequestParam String targetUserId) {
         MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+
+       List<User> users =userService.queryUserbyId(targetUserId);
+        List<User> users1=userService.queryUserbyId(userId);
+        if(users==null){
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        }
+        else if (users.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
+
+        }else {
+            if(users1==null){
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            }
+            else if (users1.size()>1){
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            }else{
+
+                List<User> userList= userService.getFanByUserId(targetUserId);
+                followerSerive.getFollowState(userId,targetUserId);
+
+            }
+
+        }
+
+
 
 
         return myResult;

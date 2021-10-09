@@ -57,11 +57,38 @@ public class AdminController {
         return myResult;
     }
 
+    @PostMapping("/getData")
+    @ApiOperation("获取数据")
+    public MyResult getData(@RequestParam String adminId){
+        MyResult myResult=new MyResult();
+
+        if("".equals(adminId)){
+            myResult.changeStatus(false);
+            myResult.add("message","adminId不能为空");
+        }
+
+
+
+
+
+
+        return myResult;
+    }
+
+
     @PostMapping("/findBlockUser")
     //必填
     @ApiOperation("")
     public Map<String, Object> findBlockUser() {
         Map<String, Object> map = new HashMap<>(3);
+
+
+
+
+
+
+
+
 
         return map;
     }
