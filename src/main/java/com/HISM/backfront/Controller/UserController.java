@@ -54,9 +54,9 @@ public class UserController {
             User user = userList.get(0);
             if (password.equals(user.getPassword())) {
                 myResult.changeStatus(true);
-                HashMap<String,Object> tmp=new HashMap<>();
+                HashMap<String, Object> tmp = new HashMap<>();
                 tmp.put("userID", userId);
-                myResult.add("message",tmp);
+                myResult.add("message", tmp);
 
             } else {
                 myResult.changeStatus(false);
@@ -92,9 +92,9 @@ public class UserController {
             user.setUserSex(isMale);
             userService.insertUser(user);
             myResult.changeStatus(true);
-            HashMap<String,Object> tmp=new HashMap<>();
+            HashMap<String, Object> tmp = new HashMap<>();
             tmp.put("userID", userId);
-            myResult.add("message",tmp);
+            myResult.add("message", tmp);
         } else {
             myResult.changeStatus(false);
             myResult.add("message", "账户已经存在");
@@ -239,36 +239,38 @@ public class UserController {
             return myResult;
         }
 
-       List<User> users =userService.queryUserbyId(targetUserId);
-        List<User> users1=userService.queryUserbyId(userId);
-        if(users==null){
+        List<User> users = userService.queryUserbyId(targetUserId);
+        List<User> users1 = userService.queryUserbyId(userId);
+        if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
-        }
-        else if (users.size()>1){
+        } else if (users.size() > 1) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id不唯一");
 
-        }else {
-            if(users1==null){
+        } else {
+            if (users1 == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "查询者id为空");
-            }
-            else if (users1.size()>1){
+            } else if (users1.size() > 1) {
                 myResult.changeStatus(false);
                 myResult.add("message", "查询者id不唯一");
-            }else{
+            } else {
 
-                List<User> userList= userService.getFanByUserId(targetUserId);
-                followerSerive.getFollowState(userId,targetUserId);
+                List<User> userList = userService.getFanByUserId(targetUserId);
+                List<Map<String, Object>> tmp = new ArrayList<>();
 
+                for (int i = 0; i < userList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>(4);
+                    map.put("userId", userList.get(i).getUserId());
+                    map.put("userName", userList.get(i).getUserName());
+                    map.put("userAvatar", userList.get(i).getAvatarURL());
+                    map.put("relationship", followerSerive.getFollowState(userId, targetUserId));
+                    tmp.add(map);
+                }
+                myResult.add("message", tmp);
             }
-
         }
-
-
-
-
         return myResult;
     }
 
@@ -327,7 +329,7 @@ public class UserController {
                 map.put("relationship", null);
                 tmp.add(map);
             }
-            myResult.add("message",tmp);
+            myResult.add("message", tmp);
         }
         return myResult;
     }
