@@ -1,7 +1,10 @@
 package com.HISM.backfront.Controller;
 
 
+import com.HISM.backfront.Result.MyResult;
+import com.HISM.backfront.Service.AdministratorSerive;
 import com.HISM.backfront.Service.UserService;
+import com.HISM.backfront.domain.Administrator;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,10 +25,41 @@ import java.util.Map;
 public class AdminController {
     @Resource
     UserService userService;
+    @Resource
+    AdministratorSerive administratorSerive;
+
+    @PostMapping("/adminLogin")
+    @ApiOperation("管理员登陆")
+    public MyResult adminLogin(@RequestParam String adminId, @RequestParam String adminPassword) {
+        MyResult myResult = new MyResult();
+        if ("".equals(adminId) || "".equals(adminPassword)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "userId或为空");
+            return myResult;
+        }
+
+        Administrator administrator = administratorSerive.queryUserbyId(adminId);
+        if (administrator == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该管理员不存在");
+        } else {
+
+            if (adminPassword.equals(administrator.getPassword())) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("adminId", adminId);
+                myResult.changeStatus(true);
+                myResult.add("message", map);
+            } else {
+                myResult.changeStatus(false);
+                myResult.add("message", "密码错误");
+            }
+        }
+        return myResult;
+    }
 
     @PostMapping("/findBlockUser")
     //必填
-    @ApiOperation("添加用户的接口")
+    @ApiOperation("")
     public Map<String, Object> findBlockUser() {
         Map<String, Object> map = new HashMap<>(3);
 

@@ -83,9 +83,14 @@ public class DynamicController {
             dynamic.setThumbNum(0);
             //设置类型
             dynamic.setDynamicType("Text only");
+            //设置时间
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamep = new Timestamp(date.getTime());
             dynamic.setDynamicTime(timeStamep);
+
+
+
+
             dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
             myResult.add("message","");
