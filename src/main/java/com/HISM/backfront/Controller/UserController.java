@@ -102,7 +102,6 @@ public class UserController {
         return myResult;
     }
 
-
     //to be done
     @PostMapping("/getUsersInfo")
 
@@ -114,6 +113,41 @@ public class UserController {
             myResult.changeStatus(false);
             myResult.add("message", "账号/密码不能为空");
             return myResult;
+        }
+        List<User> users = userService.queryUserbyId(userId);
+
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "申请者id不存在");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "申请者id多于一个");
+        } else {
+            List<User> userList = userService.queryUserbyId(targetUserId);
+            if (userList == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "目标id不存在");
+
+            } else if (userList.size() > 1) {
+
+                myResult.changeStatus(false);
+                myResult.add("message", "目标id多于一个");
+            } else {
+                User user = userList.get(0);
+                myResult.changeStatus(true);
+                List<User> tmp_FansList = userService.getFanByUserId(targetUserId);
+                List<User> tmp_SubsList = userService.getFanByUserId(targetUserId);
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("userId", user.getUserId());
+                map.put("userName", user.getUserName());
+                map.put("userAvatar", user.getAvatarURL());
+                map.put("follower", tmp_FansList.size());
+                map.put("following", tmp_SubsList.size());
+                map.put("isMale", user.getUserSex());
+                map.put("description", user.getUserDescription());
+                map.put("relationship", followerSerive.getFollowState(userId, targetUserId));
+                myResult.add("message", map);
+            }
         }
 
 
@@ -274,12 +308,37 @@ public class UserController {
         return myResult;
     }
 
+    @PostMapping("/getFollowers")
+
+    @ApiOperation("获取粉丝列表")
+
+    public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId){
+        MyResult myResult=new MyResult();
+
+
+
+
+
+
+        return myResult;
+    }
+
+
+
+
+
     @PostMapping("/reportUser")
 
     @ApiOperation("举报用户")
 
     public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam String message) {
         MyResult myResult = new MyResult();
+
+
+
+
+
+
         return myResult;
     }
 
@@ -295,11 +354,36 @@ public class UserController {
             return myResult;
         }
         //这里需要加入查询
-        Follower follower = new Follower();
-        follower.setUserId(userId);
-        follower.setFollowerId(targetUserId);
-        followerSerive.insertFollower(follower);
-        myResult.changeStatus(true);
+        List<User> users = userService.queryUserbyId(targetUserId);
+        List<User> users1 = userService.queryUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            } else {
+
+                int i=followerSerive.getFollowState(userId,targetUserId);
+                if(i==1||i==3){
+                    myResult.changeStatus(false);
+                    myResult.add("message", "已经关注，无需重新关注");
+                }else {
+                    Follower follower = new Follower();
+                    follower.setUserId(userId);
+                    follower.setFollowerId(targetUserId);
+                    followerSerive.insertFollower(follower);
+                    myResult.changeStatus(true);
+                }
+            }
+        }
         return myResult;
 
     }
@@ -326,7 +410,7 @@ public class UserController {
                 map.put("userId", users.get(i).getUserId());
                 map.put("userName", users.get(i).getUserName());
                 map.put("userAvatar", users.get(i).getAvatarURL());
-                map.put("relationship", null);
+                map.put("relationship", followerSerive.getFollowState(userId, users.get(i).getUserId()));
                 tmp.add(map);
             }
             myResult.add("message", tmp);
