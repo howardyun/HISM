@@ -314,18 +314,44 @@ public class UserController {
 
     public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId){
         MyResult myResult=new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+        List<User> users = userService.queryUserbyId(targetUserId);
+        List<User> users1 = userService.queryUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
 
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            } else {
 
-
-
-
-
+                List<User> userList = userService.getSubscriberByUserId(targetUserId);
+                List<Map<String, Object>> tmp = new ArrayList<>();
+                for (int i = 0; i < userList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>(4);
+                    map.put("userId", userList.get(i).getUserId());
+                    map.put("userName", userList.get(i).getUserName());
+                    map.put("userAvatar", userList.get(i).getAvatarURL());
+                    map.put("relationship", followerSerive.getFollowState(userId, targetUserId));
+                    tmp.add(map);
+                }
+                myResult.add("message", tmp);
+            }
+        }
         return myResult;
     }
-
-
-
-
 
     @PostMapping("/reportUser")
 
