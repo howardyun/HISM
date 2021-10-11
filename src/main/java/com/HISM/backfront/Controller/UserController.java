@@ -21,6 +21,7 @@ import java.util.*;
 //必填
 @Api(tags = "用户管理相关接口")
 @RequestMapping("/user")
+@CrossOrigin("http://39.106.25.203")
 public class UserController {
 
     @Resource
