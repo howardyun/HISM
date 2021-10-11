@@ -84,7 +84,7 @@ public class UserController {
         }
         //判断userId是否已存在
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList.isEmpty()) {
+        if (userList==null) {
             User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
