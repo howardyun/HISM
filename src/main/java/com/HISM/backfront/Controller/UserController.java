@@ -137,7 +137,7 @@ public class UserController {
                 myResult.changeStatus(true);
                 List<User> tmp_FansList = userService.getFanByUserId(targetUserId);
                 List<User> tmp_SubsList = userService.getFanByUserId(targetUserId);
-                Map<String, Object> map = new HashMap<>(4);
+                Map<String, Object> map = new HashMap<>();
                 map.put("userId", user.getUserId());
                 map.put("userName", user.getUserName());
                 map.put("userAvatar", user.getAvatarURL());

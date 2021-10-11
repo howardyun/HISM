@@ -53,26 +53,8 @@ public class DynamicController {
         }else{
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return myResult;
     }
-
 
     @PostMapping("/createMomentWithVideo")
     //必填
@@ -139,8 +121,12 @@ public class DynamicController {
     @PostMapping("/likeComment")
     //必填
     @ApiOperation("点赞评论")
-    public String likeComment(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
-        return userId;
+    public MyResult likeComment(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
+        MyResult myResult=new MyResult();
+
+
+
+        return myResult;
     }
 
     @PostMapping("/delMoment")
@@ -155,7 +141,7 @@ public class DynamicController {
     @ApiOperation("获取用户动态")
     public String getUsersMoments(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
 
-
+//        if()
 
 
 
