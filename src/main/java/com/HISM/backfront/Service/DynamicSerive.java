@@ -66,4 +66,23 @@ public class DynamicSerive {
         return true;
     }
 
+
+    // 通过举报次数查询动态
+    public List<Dynamic> selectDynamicByTipOffNum(int tipOffNum){
+        if(0 > tipOffNum){
+            System.out.println("err, 被举报次数为负数");
+            return null;
+        }
+        return dynamicMapper.selectDynamicByTipOffNum(tipOffNum);
+    }
+
+    // 获取所有动态
+    public List<Dynamic> selectDynamicAll(){
+        return dynamicMapper.selectDynamicAll();
+    }
+
+    public List<Dynamic> selectDynamicByState(int dynamicState){
+        return dynamicMapper.selectDynamicByState(dynamicState);
+    }
+
 }
