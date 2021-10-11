@@ -8,8 +8,8 @@
     </resultMap>
 
     <insert id="insertDynamic">
-        insert into dynamic (dynamicIndex1, dynamicIndex2, dynamicAccess, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userId)
-        values (#{dynamicIndex1}, #{dynamicIndex2}, #{dynamicAccess}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userId})
+        insert into dynamic (dynamicIndex1, dynamicIndex2, dynamicState, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userId)
+        values (#{dynamicIndex1}, #{dynamicIndex2}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userId})
     </insert>
 
     <delete id="deleteDynamic">
@@ -24,9 +24,21 @@
         select * from dynamic where dynamicId = #{dynamicId}
     </select>
 
+    <select id="selectDynamicByTipOffNum" resultMap="dynamicMap">
+        select * from dynamic where tipOffNum = #{tipOffNum}
+    </select>
+
     <update id="updateDynamic">
-        update dynamic set dynamicIndex1 = #{dynamicIndex1}, dynamicIndex2 = #{dynamicIndex2}, dynamicAccess = #{dynamicAccess}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId}
+        update dynamic set dynamicIndex1 = #{dynamicIndex1}, dynamicIndex2 = #{dynamicIndex2}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId}
         where dynamicId = #{dynamicId}
     </update>
+
+    <select id="selectDynamicAll" resultMap="dynamicMap">
+        select * from dynamic
+    </select>
+
+    <select id="selectDynamicByState" resultMap="dynamicMap">
+        select * from dynamic where dynamicState = #{dynamicState}
+    </select>
 
 </mapper>

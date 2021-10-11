@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.swing.plaf.multi.MultiFileChooserUI;
 import java.io.IOException;
 import java.util.*;
 
@@ -21,6 +20,7 @@ import java.util.*;
 //必填
 @Api(tags = "用户管理相关接口")
 @RequestMapping("/user")
+@CrossOrigin("http://39.106.25.203")
 public class UserController {
 
     @Resource
@@ -46,8 +46,8 @@ public class UserController {
             myResult.add("message", "用户id或用户密码为空");
             return myResult;
         }
-        List<User> userList = userService.queryUserbyId(userId);
-        if (userList.size() == 0) {
+        List<User> userList = userService.selectUserbyId(userId);
+        if (userList==null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户信息");
         } else if (userList.size() == 1) {
@@ -73,7 +73,7 @@ public class UserController {
 
     @ApiOperation("用户注册")
 
-    public MyResult register(@RequestParam("等同于手机号") String userId, @RequestParam String password,
+    public MyResult register(@RequestParam String userId, @RequestParam String password,
                              @RequestParam String isMale, @RequestParam String userName) {
         MyResult myResult = new MyResult();
 
@@ -83,8 +83,8 @@ public class UserController {
             return myResult;
         }
         //判断userId是否已存在
-        List<User> userList = userService.queryUserbyId(userId);
-        if (userList.isEmpty()) {
+        List<User> userList = userService.selectUserbyId(userId);
+        if (userList==null) {
             User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
@@ -114,7 +114,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
 
         if (users == null) {
             myResult.changeStatus(false);
@@ -123,7 +123,7 @@ public class UserController {
             myResult.changeStatus(false);
             myResult.add("message", "申请者id多于一个");
         } else {
-            List<User> userList = userService.queryUserbyId(targetUserId);
+            List<User> userList = userService.selectUserbyId(targetUserId);
             if (userList == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "目标id不存在");
@@ -137,7 +137,7 @@ public class UserController {
                 myResult.changeStatus(true);
                 List<User> tmp_FansList = userService.getFanByUserId(targetUserId);
                 List<User> tmp_SubsList = userService.getFanByUserId(targetUserId);
-                Map<String, Object> map = new HashMap<>(4);
+                Map<String, Object> map = new HashMap<>();
                 map.put("userId", user.getUserId());
                 map.put("userName", user.getUserName());
                 map.put("userAvatar", user.getAvatarURL());
@@ -166,7 +166,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户");
@@ -199,7 +199,7 @@ public class UserController {
             myResult.add("message", "userId为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "找不到该用户");
@@ -238,7 +238,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户");
@@ -273,8 +273,8 @@ public class UserController {
             return myResult;
         }
 
-        List<User> users = userService.queryUserbyId(targetUserId);
-        List<User> users1 = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
@@ -314,17 +314,44 @@ public class UserController {
 
     public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId){
         MyResult myResult=new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
 
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            } else {
 
-
-
-
+                List<User> userList = userService.getSubscriberByUserId(targetUserId);
+                List<Map<String, Object>> tmp = new ArrayList<>();
+                for (int i = 0; i < userList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>(4);
+                    map.put("userId", userList.get(i).getUserId());
+                    map.put("userName", userList.get(i).getUserName());
+                    map.put("userAvatar", userList.get(i).getAvatarURL());
+                    map.put("relationship", followerSerive.getFollowState(userId, targetUserId));
+                    tmp.add(map);
+                }
+                myResult.add("message", tmp);
+            }
+        }
         return myResult;
     }
-
-
-
-
 
     @PostMapping("/reportUser")
 
@@ -353,8 +380,8 @@ public class UserController {
             return myResult;
         }
         //这里需要加入查询
-        List<User> users = userService.queryUserbyId(targetUserId);
-        List<User> users1 = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
@@ -398,7 +425,7 @@ public class UserController {
             myResult.add("message", "源用户id，搜索名字不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyName(queryUserName);
+        List<User> users = userService.selectUserbyName(queryUserName);
         if (users == null) {
             myResult.changeStatus(false);
         } else {

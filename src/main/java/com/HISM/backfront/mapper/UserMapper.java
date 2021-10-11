@@ -1,5 +1,6 @@
 package com.HISM.backfront.mapper;
 
+import com.HISM.backfront.domain.Dynamic;
 import com.HISM.backfront.domain.User;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
@@ -17,18 +18,24 @@ public interface UserMapper {
     void updateUser(User user);
 
     // 通过名字查询用户
-    List<User> queryUserbyName(String name);
+    List<User> selectUserbyName(String name);
 
     // 通过Id查询用户
-    List<User> queryUserbyId(String userId);
+    List<User> selectUserbyId(String userId);
 
-    // 获取用户数量
-    int getUserNum();
-
+    // 获取被举报指定次数的用户信息
+    public List<User> selectUserByTipOffNum(int tipOffNum);
 
     // 通过用户(粉丝)id获取他的所关注的人
     public List<User> getSubscriberByUserId(String followerId);
 
     // 通过用户id获取所有他的粉丝.
     public List<User> getFanByUserId(String userId);
+
+    // 获取所有用户
+    public List<User> selectUserAll();
+
+    // 获取指定状态的用户
+    public List<User> selectUserByState(int userState);
+
 }

@@ -36,8 +36,8 @@ public class UserService {
 
 
     // 通过名字查询用户
-    public List<User> queryUserbyName(String name){
-        List<User> userList = userMapper.queryUserbyName(name);
+    public List<User> selectUserbyName(String name){
+        List<User> userList = userMapper.selectUserbyName(name);
         if(userList.isEmpty()) {
             System.out.println("该用户不存在");
             return null;
@@ -46,8 +46,8 @@ public class UserService {
     }
 
     // 通过Id查询用户
-    public List<User> queryUserbyId(String userId){
-        List<User> userList = userMapper.queryUserbyId(userId);
+    public List<User> selectUserbyId(String userId){
+        List<User> userList = userMapper.selectUserbyId(userId);
         if(userList.isEmpty()) {
             System.out.println("该用户id不存在");
             return null;
@@ -77,5 +77,23 @@ public class UserService {
     }
 
 
+    // 获取被举报指定次数的用户信息
+    public List<User> selectUserByTipOffNum(int tipOffNum){
+        if(0 > tipOffNum){
+            System.out.println("err, 被举报次数为负数");
+            return null;
+        }
+        return userMapper.selectUserByTipOffNum(tipOffNum);
+    }
+
+    // 获取所有用户
+    public List<User> selectUserAll(){
+        return userMapper.selectUserAll();
+    }
+
+    // 获取指定状态的用户
+    public List<User> selectUserByState(int userState){
+        return userMapper.selectUserByState(userState);
+    }
 
 }
