@@ -43,7 +43,7 @@ public class DynamicController {
             myResult.add("message","userId或text或tag为空");
             return myResult;
         }
-        List<User> users=userService.queryUserbyId(userId);
+        List<User> users=userService.selectUserbyId(userId);
         if(users==null){
             myResult.changeStatus(false);
             myResult.add("message","无该用户信息");
