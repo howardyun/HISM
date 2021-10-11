@@ -81,6 +81,8 @@ public class DynamicSerive {
         return dynamicMapper.selectDynamicAll();
     }
 
+
+    // 通过动态的状态，获取动态。
     public List<Dynamic> selectDynamicByState(int dynamicState){
         return dynamicMapper.selectDynamicByState(dynamicState);
     }

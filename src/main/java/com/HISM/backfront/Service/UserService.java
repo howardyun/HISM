@@ -60,7 +60,7 @@ public class UserService {
         List<User> userList = userMapper.getSubscriberByUserId(followerId);
         if(userList.isEmpty()) {
             System.out.println("该粉丝id不存在");
-            return null;
+            return userList;
         }
         return userList;
     }
@@ -70,8 +70,8 @@ public class UserService {
     public List<User> getFanByUserId(String userId){
         List<User> fanList = userMapper.getFanByUserId(userId);
         if(fanList.isEmpty()) {
-            System.out.println("该用户id不存在");
-            return null;
+            System.out.println("该用户没有粉丝");
+            return fanList;
         }
         return fanList;
     }

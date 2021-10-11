@@ -2,10 +2,13 @@ package com.HISM.backfront;
 
 import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Service.*;
-import com.HISM.backfront.domain.User;
+import com.HISM.backfront.domain.TipOffDynamic;
+import com.HISM.backfront.domain.TipOffUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Date;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -31,6 +34,13 @@ class DemoApplicationTests {
     @Autowired
     AppSerive appSerive;
 
+    @Autowired
+    TipOffDynamicSerive tipOffDynamicSerive;
+
+    @Autowired
+    TipOffUserSerive tipOffUserSerive;
+
+
     @Test
     void contextLoads() {
     }
@@ -38,9 +48,8 @@ class DemoApplicationTests {
 
     @Test
     void Test(){
-        User user = userService.selectUserbyId("123").get(0);
-        user.setTipOffNum(6);
-        userService.updateUser(user);
+        TipOffUser tipOffuser = new TipOffUser("16", "188", new Date(), "无用举报", 1);
+        System.out.println(tipOffUserSerive.invalidateTipOff("16"));
 
 
 
