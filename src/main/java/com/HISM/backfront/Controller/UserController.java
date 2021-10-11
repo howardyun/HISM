@@ -73,7 +73,7 @@ public class UserController {
 
     @ApiOperation("用户注册")
 
-    public MyResult register(@RequestParam("等同于手机号") String userId, @RequestParam String password,
+    public MyResult register(@RequestParam String userId, @RequestParam String password,
                              @RequestParam String isMale, @RequestParam String userName) {
         MyResult myResult = new MyResult();
 
