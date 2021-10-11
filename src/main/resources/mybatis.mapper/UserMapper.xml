@@ -11,19 +11,20 @@
     </resultMap>
 
     <insert id="insertUser">
-        insert into user(userId,password,userId,userAddress,userOld,userSex,userDescription) values (#{userId},#{password},#{userId},#{userAddress},#{userOld},#{userSex},#{userDescription}, #{userState}, #{avatarURL})
+        insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum})
     </insert>
     
     <update id="updateUser">
-        update user set username = #{userId}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}
+        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}, tipOffNum = #{tipOffNum}
         where userId = #{userId}
     </update>
 
-    <select id="queryUserbyName" resultMap="userMap">
+
+    <select id="selectUserbyName" resultMap="userMap">
         select * from user where username = #{userId}
     </select>
 
-    <select id="queryUserbyId" resultMap="userMap">
+    <select id="selectUserbyId" resultMap="userMap">
         select * from user where userId = #{userId}
     </select>
 
@@ -32,13 +33,23 @@
     </select>
 
     <select id="getSubscriberByUserId" resultMap="userMap">
-        select userId, userId, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
 
     <select id="getFanByUserId" resultMap="userMap">
-        select userId, userId, userAddress, userOld, userSex, userDescription, userState from user where userId in (select followerId from follower where userId = #{userId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select followerId from follower where userId = #{userId})
     </select>
 
+    <select id="selectUserByTipOffNum" resultMap="userMap">
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where tipOffNum = #{tipOffNum}
+    </select>
 
+    <select id="selectUserAll" resultMap="userMap">
+        select * from user
+    </select>
+
+    <select id="selectUserByState" resultMap="userMap">
+        select * from user where userState = #{userState}
+    </select>
 
 </mapper>

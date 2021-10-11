@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.swing.plaf.multi.MultiFileChooserUI;
 import java.io.IOException;
 import java.util.*;
 
@@ -47,7 +46,7 @@ public class UserController {
             myResult.add("message", "用户id或用户密码为空");
             return myResult;
         }
-        List<User> userList = userService.queryUserbyId(userId);
+        List<User> userList = userService.selectUserbyId(userId);
         if (userList.size() == 0) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户信息");
@@ -84,7 +83,7 @@ public class UserController {
             return myResult;
         }
         //判断userId是否已存在
-        List<User> userList = userService.queryUserbyId(userId);
+        List<User> userList = userService.selectUserbyId(userId);
         if (userList.isEmpty()) {
             User user = new User();
             user.setUserId(userId);
@@ -115,7 +114,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
 
         if (users == null) {
             myResult.changeStatus(false);
@@ -124,7 +123,7 @@ public class UserController {
             myResult.changeStatus(false);
             myResult.add("message", "申请者id多于一个");
         } else {
-            List<User> userList = userService.queryUserbyId(targetUserId);
+            List<User> userList = userService.selectUserbyId(targetUserId);
             if (userList == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "目标id不存在");
@@ -167,7 +166,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户");
@@ -200,7 +199,7 @@ public class UserController {
             myResult.add("message", "userId为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "找不到该用户");
@@ -239,7 +238,7 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户");
@@ -274,8 +273,8 @@ public class UserController {
             return myResult;
         }
 
-        List<User> users = userService.queryUserbyId(targetUserId);
-        List<User> users1 = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
@@ -320,8 +319,8 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyId(targetUserId);
-        List<User> users1 = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
@@ -381,8 +380,8 @@ public class UserController {
             return myResult;
         }
         //这里需要加入查询
-        List<User> users = userService.queryUserbyId(targetUserId);
-        List<User> users1 = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
             myResult.add("message", "目标id为空");
@@ -426,7 +425,7 @@ public class UserController {
             myResult.add("message", "源用户id，搜索名字不能为空");
             return myResult;
         }
-        List<User> users = userService.queryUserbyName(queryUserName);
+        List<User> users = userService.selectUserbyName(queryUserName);
         if (users == null) {
             myResult.changeStatus(false);
         } else {

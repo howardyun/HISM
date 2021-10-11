@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -104,7 +102,7 @@ public class DynamicController {
             return myResult;
         }
 
-        List<User> users = userService.queryUserbyId(userId);
+        List<User> users = userService.selectUserbyId(userId);
         if(users==null){
             myResult.changeStatus(false);
             myResult.add("message", "无该用户");
@@ -116,7 +114,7 @@ public class DynamicController {
             //初始设置为0
             dynamic.setCommentNum(0);
             //公开
-            dynamic.setDynamicAccess(1);
+            dynamic.setDynamicState(1);
             //设置内容
             dynamic.setDynamicContent(text);
             //设置点赞数量

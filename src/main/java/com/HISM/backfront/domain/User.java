@@ -27,6 +27,18 @@ public class User {
     private String userDescription;
     //用户状态
     private Integer userState;
+    //举报次数
+    private Integer tipOffNum = 0;
+
+    public Integer getTipOffNum() {
+        return tipOffNum;
+    }
+
+    public void setTipOffNum(Integer tipOffNum) {
+        this.tipOffNum = tipOffNum;
+    }
+
+
 
     public User(String userId, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState) {
         this.userId = userId;

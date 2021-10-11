@@ -16,8 +16,8 @@ public class Dynamic {
     // 动态标签, ex: 美食, 金融
     String dynamicIndex1;
     String dynamicIndex2;
-    // 动态访问限制
-    int dynamicAccess;
+    // 动态状态， 仅自己可看， 所有人都可看， 被拉入黑名单
+    int dynamicState;
     // 动态内容
     String dynamicContent;
     // 发布动态时间
@@ -37,7 +37,7 @@ public class Dynamic {
     public Dynamic(String dynamicIndex1, String dynamicIndex2, int dynamicAccess, String dynamicContent, Date dynamicTime, int thumbNum, int commentNum, int tipOffNum, String dynamicType, String userName) {
         this.dynamicIndex1 = dynamicIndex1;
         this.dynamicIndex2 = dynamicIndex2;
-        this.dynamicAccess = dynamicAccess;
+        this.dynamicState = dynamicAccess;
         this.dynamicContent = dynamicContent;
         this.dynamicTime = dynamicTime;
         this.thumbNum = thumbNum;
@@ -71,12 +71,12 @@ public class Dynamic {
         this.dynamicIndex2 = dynamicIndex2;
     }
 
-    public int getDynamicAccess() {
-        return dynamicAccess;
+    public int getDynamicState() {
+        return dynamicState;
     }
 
-    public void setDynamicAccess(int dynamicAccess) {
-        this.dynamicAccess = dynamicAccess;
+    public void setDynamicState(int dynamicState) {
+        this.dynamicState = dynamicState;
     }
 
     public String getDynamicContent() {
