@@ -47,7 +47,7 @@ public class UserController {
             return myResult;
         }
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList.size() == 0) {
+        if (userList==null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户信息");
         } else if (userList.size() == 1) {
