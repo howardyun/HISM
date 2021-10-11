@@ -34,13 +34,13 @@ public class TipOffUserSerive {
 
         // 举报次数 >= 5 动态被封；
         if (user.getTipOffNum() >= 5) {
-            user.setUserState(-1);
+            user.setUserState(0);
         }
         // 更新动态
         userMapper.updateUser(user);
 
         if (-1 == user.getUserState()) {
-            // 返回1 用户被封.
+            // 返回1 用户暂时被封.
             return 1;
         }
         // 返回0 正常举报

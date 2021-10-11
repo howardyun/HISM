@@ -25,7 +25,7 @@ public class User {
     private String userSex;
     //用户描述
     private String userDescription;
-    //用户状态
+    //用户状态 -1用户账号被封；0用户账号暂时被封；1用户账号正常
     private Integer userState;
     //举报次数
     private Integer tipOffNum = 0;

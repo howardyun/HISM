@@ -31,15 +31,15 @@ public class TipOffDynamicSerive {
         }
         dynamic.setTipOffNum(dynamic.getTipOffNum() + 1);
 
-        // 举报次数 >= 5 动态被封；
+        // 举报次数 >= 5 动态暂时被封；
         if (dynamic.getTipOffNum() >= 5) {
-            dynamic.setDynamicState(-1);
+            dynamic.setDynamicState(0);
         }
         // 更新动态
         dynamicMapper.updateDynamic(dynamic);
 
-        if (-1 == dynamic.getDynamicState()) {
-            // 返回1 动态被封.
+        if (0 == dynamic.getDynamicState()) {
+            // 返回1 动态暂时被封.
             return 1;
         }
         // 返回0 正常举报

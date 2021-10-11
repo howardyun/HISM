@@ -55,11 +55,11 @@ public class UserService {
         return userList;
     }
 
-    // 通过用户(粉丝)id获取他的所关注的人
+    // 通过用户(粉丝)id获取他关注的所有人
     public List<User> getSubscriberByUserId(String followerId){
         List<User> userList = userMapper.getSubscriberByUserId(followerId);
         if(userList.isEmpty()) {
-            System.out.println("该粉丝id不存在");
+            System.out.println("该用户不关注任何人");
             return userList;
         }
         return userList;
