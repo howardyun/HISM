@@ -156,7 +156,6 @@ public class UserController {
             }
         }
 
-
         return myResult;
     }
 
@@ -451,8 +450,11 @@ public class UserController {
                     myResult.add("message", "已经关注，无需重新关注");
                 } else {
                     Follower follower = new Follower();
-                    follower.setUserId(userId);
-                    follower.setFollowerId(targetUserId);
+                    follower.setUserId(targetUserId);
+                    follower.setFollowerId(userId);
+                    Date date = new Date(System.currentTimeMillis());
+                    Timestamp timeStamep = new Timestamp(date.getTime());
+                    follower.setFollowTime(timeStamep);
                     followerSerive.insertFollower(follower);
                     myResult.changeStatus(true);
                 }
@@ -462,6 +464,53 @@ public class UserController {
 
     }
 
+    @PostMapping("/cancelFollowUser")
+    @ApiOperation("取消关注用户")
+    public MyResult cancelFollowUser(@RequestParam String userId, @RequestParam String targetUserId){
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+        //这里需要加入查询
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            } else {
+
+                int i = followerSerive.getFollowState(userId, targetUserId);
+                if (i == 0 || i == 2) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "没有关注，无需重复关注");
+                } else {
+                    Follower follower = new Follower();
+                    follower.setUserId(userId);
+                    follower.setFollowerId(targetUserId);
+                    Date date = new Date(System.currentTimeMillis());
+                    Timestamp timeStamep = new Timestamp(date.getTime());
+                    follower.setFollowTime(timeStamep);
+                    followerSerive.deleteFollower(userId,targetUserId);
+                    myResult.changeStatus(true);
+                }
+            }
+        }
+        return myResult;
+
+
+    }
     @PostMapping("/searchUser")
 
     @ApiOperation("搜索用户")
