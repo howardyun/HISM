@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
@@ -52,7 +53,7 @@ public class UserController {
             return myResult;
         }
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList==null) {
+        if (userList == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户信息");
         } else if (userList.size() == 1) {
@@ -89,7 +90,7 @@ public class UserController {
         }
         //判断userId是否已存在
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList==null) {
+        if (userList == null) {
             User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
@@ -317,8 +318,8 @@ public class UserController {
 
     @ApiOperation("获取粉丝列表")
 
-    public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId){
-        MyResult myResult=new MyResult();
+    public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId) {
+        MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(targetUserId)) {
             myResult.changeStatus(false);
             myResult.add("message", "账号/密码不能为空");
@@ -381,31 +382,34 @@ public class UserController {
                 myResult.changeStatus(false);
                 myResult.add("message", "举报者id不唯一");
             } else {
-                if(users.get(0).getUserState()!=1){
+                if (users.get(0).getUserState() != 1) {
                     myResult.changeStatus(false);
                     myResult.add("message", "当前被举报用户已经被封");
-                }else{
+                } else {
 
-                  List<TipOffUser> tipOffUsers= tipOffUserSerive.selectTipOffByUserId(targetUserId);
-                  if(tipOffUsers.size()>=5){
-                      users.get(0).setUserState(0);
-                      userService.updateUser(users.get(0));
-                      myResult.changeStatus(false);
-                      myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
-                  }else if(tipOffUsers.size()==4){
-                      TipOffUser tipOffUser=new TipOffUser();
-//                      tipOffUser.setUserId();
-                      users.get(0).setUserState(0);
-                      userService.updateUser(users.get(0));
+                    List<TipOffUser> tipOffUsers = tipOffUserSerive.selectTipOffByUserId(targetUserId);
+                    if (tipOffUsers.size() >= 5) {
+                        users.get(0).setUserState(0);
+                        userService.updateUser(users.get(0));
+                        myResult.changeStatus(false);
+                        myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
+                    } else {
 
-
-                  }else {
-
-
-
-                  }
-
-
+                        TipOffUser tipOffUser = new TipOffUser();
+                        tipOffUser.setUserId(targetUserId);
+                        tipOffUser.setInformerId(userId);
+                        tipOffUser.setIsValid(1);
+                        tipOffUser.setTipOffContent(message);
+                        Date date = new Date(System.currentTimeMillis());
+                        Timestamp timeStamep = new Timestamp(date.getTime());
+                        tipOffUser.setTipOffTime(timeStamep);
+                        tipOffUserSerive.insertTipOff(tipOffUser);
+                        if (tipOffUsers.size() == 4) {
+                            users.get(0).setUserState(0);
+                            userService.updateUser(users.get(0));
+                        }
+                        myResult.changeStatus(true);
+                    }
                 }
             }
         }
@@ -441,11 +445,11 @@ public class UserController {
                 myResult.add("message", "查询者id不唯一");
             } else {
 
-                int i=followerSerive.getFollowState(userId,targetUserId);
-                if(i==1||i==3){
+                int i = followerSerive.getFollowState(userId, targetUserId);
+                if (i == 1 || i == 3) {
                     myResult.changeStatus(false);
                     myResult.add("message", "已经关注，无需重新关注");
-                }else {
+                } else {
                     Follower follower = new Follower();
                     follower.setUserId(userId);
                     follower.setFollowerId(targetUserId);
