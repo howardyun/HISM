@@ -4,8 +4,10 @@ import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.FollowerSerive;
 import com.HISM.backfront.Service.GeneralService;
+import com.HISM.backfront.Service.TipOffUserSerive;
 import com.HISM.backfront.Service.UserService;
 import com.HISM.backfront.domain.Follower;
+import com.HISM.backfront.domain.TipOffUser;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,9 @@ public class UserController {
 
     @Resource
     WebAppConfig webAppConfig;
+
+    @Resource
+    TipOffUserSerive tipOffUserSerive;
 
     @PostMapping("/logIn")
     //必填
@@ -359,12 +364,51 @@ public class UserController {
 
     public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam String message) {
         MyResult myResult = new MyResult();
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
+
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "举报者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "举报者id不唯一");
+            } else {
+                if(users.get(0).getUserState()!=1){
+                    myResult.changeStatus(false);
+                    myResult.add("message", "当前被举报用户已经被封");
+                }else{
+
+                  List<TipOffUser> tipOffUsers= tipOffUserSerive.selectTipOffByUserId(targetUserId);
+                  if(tipOffUsers.size()>=5){
+                      users.get(0).setUserState(0);
+                      userService.updateUser(users.get(0));
+                      myResult.changeStatus(false);
+                      myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
+                  }else if(tipOffUsers.size()==4){
+                      TipOffUser tipOffUser=new TipOffUser();
+//                      tipOffUser.setUserId();
+                      users.get(0).setUserState(0);
+                      userService.updateUser(users.get(0));
+
+
+                  }else {
 
 
 
+                  }
 
 
-
+                }
+            }
+        }
         return myResult;
     }
 
