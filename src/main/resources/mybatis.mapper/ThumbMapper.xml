@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.HISM.backfront.mapper.ThumbMapper">
+    <resultMap id="thumbMap" type="com.HISM.backfront.domain.Thumb">
+    </resultMap>
+
 
     <insert id="insertThumb">
         insert into Thumb value (#{dynamicId}, #{userId})
@@ -10,4 +13,8 @@
     <delete id="deleteThumb">
         delete from Thumb where dynamicId = #{dynamicId} and userId = #{userId}
     </delete>
+
+    <select id="isThumb" resultType="java.lang.Integer">
+        select count(*) from thumb where dynamicId = #{dynamicId} and userId = #{userId}
+    </select>
 </mapper>

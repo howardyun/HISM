@@ -5,6 +5,7 @@ import com.HISM.backfront.mapper.ThumbMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ThumbSerive {
@@ -31,5 +32,16 @@ public class ThumbSerive {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // 判断某个用户是否对某个动态进行点赞
+    public Boolean isThumb(String userId, int dynamicId){
+        int thumbNum = thumbMapper.isThumb(dynamicId, userId);
+        if(thumbNum == 1){
+            return true;
+        }else if(thumbNum > 1){
+            System.out.println("用户重复点赞两次，系统有bug");
+        }
+        return false;
     }
 }

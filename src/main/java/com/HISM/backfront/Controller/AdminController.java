@@ -193,7 +193,7 @@ public class AdminController {
                 }
                 map.put("thumbNum", dynamic.getThumbNum());
                 map.put("commentNum", dynamic.getCommentNum());
-                map.put("tag", dynamic.getDynamicIndex1());
+                map.put("tag", dynamic.getDynamicIndex());
                 tmp.add(map);
             }
             myResult.add("message", tmp);

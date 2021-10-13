@@ -87,4 +87,11 @@ public class DynamicSerive {
         return dynamicMapper.selectDynamicByState(dynamicState);
     }
 
+    // 通过动态标签获取动态
+    public List<Dynamic> selectDynamicByIndex(String index){
+        return dynamicMapper.selectDynamicByIndex(index);
+    }
+
+
+
 }

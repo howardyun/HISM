@@ -23,7 +23,9 @@
         select * from comment where dynamicId = #{dynamicId}
     </select>
 
-
+    <select id="isComment" resultType="java.lang.Integer">
+        select count(*) from comment where dynamicId = #{dynamicId} and userId = #{userId}
+    </select>
 
 
 

@@ -33,4 +33,8 @@ public interface DynamicMapper {
     // 获取所有指定状态的动态
     public List<Dynamic> selectDynamicByState(int dynamicState);
 
+    // 根据动态标签获取动态
+    public List<Dynamic> selectDynamicByIndex(String index);
+
+
 }

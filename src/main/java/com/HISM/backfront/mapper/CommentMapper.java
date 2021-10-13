@@ -18,4 +18,7 @@ public interface CommentMapper {
 
     // 查看某一动态评论
     public List<Comment> selectCommentByD(int dynamicId);
+
+    // 判断某一用户是否对某一动态进行评论
+    public int isComment(String userId, int dynamicId);
 }

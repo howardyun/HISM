@@ -40,6 +40,9 @@ class DemoApplicationTests {
     @Autowired
     TipOffUserSerive tipOffUserSerive;
 
+    @Autowired
+    CommentSerive commentSerive;
+
 
     @Test
     void contextLoads() {
@@ -48,11 +51,8 @@ class DemoApplicationTests {
 
     @Test
     void Test(){
-        TipOffUser tipOffuser = new TipOffUser("16", "188", new Date(), "无用举报", 1);
-        System.out.println(tipOffUserSerive.invalidateTipOff("16"));
-
-
-
+//        System.out.println(dynamicSerive.selectDynamicByIndex("鬼畜").get(1)+ "---------");
+        System.out.println(commentSerive.isComment("16", 99));
     }
 
     @Test

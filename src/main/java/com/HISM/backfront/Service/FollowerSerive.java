@@ -17,13 +17,13 @@ public class FollowerSerive {
     public boolean insertFollower(Follower follower){
         try{
             followerMapper.insertFollower(follower);
-            return true;
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
+        return true;
     }
-    // 取消关注某一用户
+    // 某一follower(粉丝) 取消关注某一user
     public boolean deleteFollower(String followerId, String userId){
         try{
             followerMapper.deleteFollower(followerId, userId);
@@ -54,7 +54,7 @@ public class FollowerSerive {
         }
 
         if(user1FollowUser2 && user2FollowUser1){
-            //相互关注
+            //用户1与用户2相互关注
             return 3;
         }else if(user1FollowUser2 && (!user2FollowUser1)){
             //"用户1仅关注用户2"
