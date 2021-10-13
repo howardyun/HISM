@@ -3,6 +3,7 @@ package com.HISM.backfront.Controller;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.AdministratorSerive;
 import com.HISM.backfront.Service.DynamicSerive;
+import com.HISM.backfront.Service.TipOffDynamicSerive;
 import com.HISM.backfront.Service.UserService;
 import com.HISM.backfront.domain.Administrator;
 import com.HISM.backfront.domain.Dynamic;
@@ -34,6 +35,8 @@ public class AdminController {
     AdministratorSerive administratorSerive;
     @Resource
     DynamicSerive dynamicSerive;
+    @Resource
+    TipOffDynamicSerive tipOffDynamicSerive;
 
     public boolean verifyId(String Id, MyResult myResult) {
         if ("".equals(Id)) {
@@ -108,7 +111,7 @@ public class AdminController {
             map.put("blockedUsers", blockedUsers.size());
             map.put("allDynamics", allDynamics.size());
             map.put("blockedDynamics", blockedDynamics.size());
-            myResult.add("message",map);
+            myResult.add("message", map);
         }
 
         return myResult;
@@ -141,7 +144,7 @@ public class AdminController {
                 map.put("userState", user.getUserState());
                 tmp.add(map);
             }
-            myResult.add("message",tmp);
+            myResult.add("message", tmp);
         }
 
         return myResult;
@@ -172,7 +175,7 @@ public class AdminController {
                 map.put("time", dynamic.getDynamicTime());
                 map.put("appendixType", dynamic.getDynamicType());
                 if (dynamic.getDynamicType().equals("0")) {
-                   map.put("text", dynamic.getDynamicContent());
+                    map.put("text", dynamic.getDynamicContent());
                 } else if (dynamic.getDynamicType().equals("1")) {
                     if (dynamic.getDynamicContent().contains(";")) {
                         String[] urls = dynamic.getDynamicContent().split(";");
@@ -193,7 +196,7 @@ public class AdminController {
                 map.put("tag", dynamic.getDynamicIndex1());
                 tmp.add(map);
             }
-            myResult.add("message",tmp);
+            myResult.add("message", tmp);
         }
         return myResult;
     }
@@ -208,12 +211,10 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
-        }
-        else if(dynamicState!=0){
+        } else if (dynamicState != 0) {
             myResult.changeStatus(false);
             myResult.add("message", "您用户状态传递错啦！！！");
-        }
-        else {
+        } else {
             myResult.changeStatus(true);
             List<Dynamic> dynamics = dynamicSerive.selectDynamicByState(dynamicState);
             List<Map<String, Object>> tmp = new ArrayList<>();
@@ -244,7 +245,7 @@ public class AdminController {
                 }
                 tmp.add(map);
             }
-            myResult.add("message",tmp);
+            myResult.add("message", tmp);
         }
         return myResult;
     }
@@ -252,7 +253,7 @@ public class AdminController {
 
     @PostMapping("/aduitMoments")
     @ApiOperation("审核被封动态")
-    public MyResult aduitMoments(@RequestParam String adminId, @RequestParam String dynamicId, @RequestParam int dynamicState) {
+    public MyResult aduitMoments(@RequestParam String adminId, @RequestParam int dynamicId, @RequestParam int dynamicState) {
         MyResult myResult = new MyResult();
         if (!verifyId(adminId, myResult)) return myResult;
 
@@ -260,9 +261,34 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
+            return myResult;
+        }
+        Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+        if (dynamic == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该动态不存在");
+            return myResult;
         } else {
-
-
+            int i = dynamic.getDynamicState();
+            if (i == -1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "该动态已永久被封");
+            } else if (i == 0) {
+                if (dynamicState == 0) {
+                    dynamic.setDynamicState(-1);
+                } else {
+                    dynamic.setDynamicState(2);
+                }
+                dynamicSerive.updateDynamic(dynamic);
+                tipOffDynamicSerive.invalidateTipOff(dynamicId);
+                myResult.changeStatus(true);
+                Map<String, Object> map = new HashMap<>(1);
+                map.put("status",dynamicState);
+                myResult.add("message",map);
+            } else {
+                myResult.changeStatus(false);
+                myResult.add("message", "该动态没有被封");
+            }
         }
         return myResult;
     }
