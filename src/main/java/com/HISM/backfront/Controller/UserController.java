@@ -142,7 +142,7 @@ public class UserController {
                 User user = userList.get(0);
                 myResult.changeStatus(true);
                 List<User> tmp_FansList = userService.getFanByUserId(targetUserId);
-                List<User> tmp_SubsList = userService.getFanByUserId(targetUserId);
+                List<User> tmp_SubsList = userService.getSubscriberByUserId(targetUserId);
                 Map<String, Object> map = new HashMap<>();
                 map.put("userId", user.getUserId());
                 map.put("userName", user.getUserName());
@@ -315,7 +315,7 @@ public class UserController {
 
     @PostMapping("/getFollowers")
 
-    @ApiOperation("获取粉丝列表")
+    @ApiOperation("获取关注列表")
 
     public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId) {
         MyResult myResult = new MyResult();
