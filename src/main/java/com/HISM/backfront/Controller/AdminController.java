@@ -10,10 +10,7 @@ import com.HISM.backfront.domain.Dynamic;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,6 +24,7 @@ import java.util.regex.Pattern;
 //必填
 @Api(tags = "管理员操作接口")
 @RequestMapping("/admin")
+@CrossOrigin("http://39.106.25.203")
 public class AdminController {
 
     @Resource
