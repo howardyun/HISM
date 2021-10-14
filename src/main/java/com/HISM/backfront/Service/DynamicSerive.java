@@ -5,6 +5,7 @@ import com.HISM.backfront.mapper.DynamicMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class DynamicSerive {
     }
 
 
-    // 通过发送者名称查看动态
+    // 通过发送者id查看动态
     public List<Dynamic> selectDynamicByUserId(String userId){
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserId(userId);
         if(dynamicList.isEmpty()){
@@ -81,17 +82,17 @@ public class DynamicSerive {
         return dynamicMapper.selectDynamicAll();
     }
 
-
     // 通过动态的状态，获取动态。
     public List<Dynamic> selectDynamicByState(int dynamicState){
         return dynamicMapper.selectDynamicByState(dynamicState);
     }
 
     // 通过动态标签获取动态
-    public List<Dynamic> selectDynamicByIndex(String index){
-        return dynamicMapper.selectDynamicByIndex(index);
+    public List<Dynamic> selectDynamicByIndex(List<String> indexList){
+        List<Dynamic> dynamicList = new ArrayList<>();
+        for(String index: indexList){
+            dynamicList.addAll(dynamicMapper.selectDynamicByIndex(index)) ;
+        }
+        return dynamicList;
     }
-
-
-
 }

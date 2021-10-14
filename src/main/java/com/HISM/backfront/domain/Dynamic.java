@@ -15,7 +15,6 @@ public class Dynamic {
     int dynamicId;
     // 动态标签, ex: 美食, 金融
     String dynamicIndex;
-    String dynamicIndex2;
     // 动态状态， -1动态被封；0动态暂时被封；1动态仅自己可见；2动态所有人可见
     int dynamicState;
     // 动态内容
@@ -34,19 +33,6 @@ public class Dynamic {
     String userId;
 
 
-    public Dynamic(String dynamicIndex1, String dynamicIndex2, int dynamicAccess, String dynamicContent, Date dynamicTime, int thumbNum, int commentNum, int tipOffNum, String dynamicType, String userName) {
-        this.dynamicIndex = dynamicIndex1;
-        this.dynamicIndex2 = dynamicIndex2;
-        this.dynamicState = dynamicAccess;
-        this.dynamicContent = dynamicContent;
-        this.dynamicTime = dynamicTime;
-        this.thumbNum = thumbNum;
-        this.commentNum = commentNum;
-        this.tipOffNum = tipOffNum;
-        this.dynamicType = dynamicType;
-        this.userId = userName;
-    }
-
     public int getDynamicId() {
         return dynamicId;
     }
@@ -61,14 +47,6 @@ public class Dynamic {
 
     public void setDynamicIndex(String dynamicIndex) {
         this.dynamicIndex = dynamicIndex;
-    }
-
-    public String getDynamicIndex2() {
-        return dynamicIndex2;
-    }
-
-    public void setDynamicIndex2(String dynamicIndex2) {
-        this.dynamicIndex2 = dynamicIndex2;
     }
 
     public int getDynamicState() {

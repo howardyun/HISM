@@ -23,6 +23,8 @@ public class FollowerSerive {
         }
         return true;
     }
+
+
     // 某一follower(粉丝) 取消关注某一user
     public boolean deleteFollower(String followerId, String userId){
         try{
@@ -66,5 +68,4 @@ public class FollowerSerive {
         //"谁也不关注谁"
         return 0;
     }
-
 }

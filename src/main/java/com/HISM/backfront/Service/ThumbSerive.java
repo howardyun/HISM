@@ -3,9 +3,7 @@ package com.HISM.backfront.Service;
 import com.HISM.backfront.domain.Thumb;
 import com.HISM.backfront.mapper.ThumbMapper;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 @Service
 public class ThumbSerive {

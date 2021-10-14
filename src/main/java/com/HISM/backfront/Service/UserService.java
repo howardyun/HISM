@@ -86,7 +86,7 @@ public class UserService {
         return userMapper.selectUserByTipOffNum(tipOffNum);
     }
 
-    // 获取所有用户
+    // 获取所有用户数据
     public List<User> selectUserAll(){
         return userMapper.selectUserAll();
     }

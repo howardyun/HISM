@@ -18,11 +18,9 @@ public class TipOffUserSerive {
     @Resource
     UserMapper userMapper;
 
-
     // 功能：通过用户id插入一次举报记录， 举报次数加一，判断是否需要封锁动态
     public int insertTipOff(TipOffUser tipOffUser) {
         User user = userMapper.selectUserbyId(tipOffUser.getUserId()).get(0);
-
         try {
             // 插入一次举报记录
             tipOffUserMapper.insertTipOff(tipOffUser);
@@ -45,7 +43,6 @@ public class TipOffUserSerive {
         }
         // 返回0 正常举报
         return 0;
-
     }
 
     // 通过被举报的用户id获取举报数据

@@ -44,7 +44,6 @@ public class CommentSerive {
         return commentList;
     }
 
-
     // 判断某一用户是否对某一动态进行评论
     public Boolean isComment(String userId, int dynamicId){
         int commentNum = commentMapper.isComment(userId, dynamicId);

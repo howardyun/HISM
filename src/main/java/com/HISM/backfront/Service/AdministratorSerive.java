@@ -11,7 +11,7 @@ public class AdministratorSerive {
 
     @Resource
     AdministratorMapper administratorMapper;
-    // 通过Id查询用户
+    // 通过Id查询管理员账户
     public Administrator queryUserbyId(String AdminId){
         Administrator administrator = administratorMapper.queryAdministratorById(AdminId);
         if(administrator == null) {

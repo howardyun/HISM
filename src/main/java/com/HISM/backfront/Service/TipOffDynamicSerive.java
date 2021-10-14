@@ -5,7 +5,6 @@ import com.HISM.backfront.domain.TipOffDynamic;
 import com.HISM.backfront.mapper.DynamicMapper;
 import com.HISM.backfront.mapper.TipOffDynamicMapper;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -16,7 +15,6 @@ public class TipOffDynamicSerive {
 
     @Resource
     DynamicMapper dynamicMapper;
-
 
     // 功能：通过动态id插入一次举报记录， 举报次数加一，判断是否需要封锁动态
     public int insertTipOff(TipOffDynamic tipOffDynamic) {
