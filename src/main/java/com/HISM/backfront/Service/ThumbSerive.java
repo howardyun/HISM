@@ -12,24 +12,39 @@ public class ThumbSerive {
 
     // 插入点赞
     public boolean insertThumb(Thumb thumb){
-        try{
+        int thumbNum = thumbMapper.isThumb(thumb.getDynamicId(), thumb.getUserId());
+        if(thumbNum==0){
             thumbMapper.insertThumb(thumb);
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
         }
+        System.out.println("该条动态您已点赞");
+        return false;
+//        try{
+//            thumbMapper.insertThumb(thumb);
+//            return true;
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return false;
+//        }
+
     }
 
     // 删除点赞
     public boolean deleteThumb(int dynamicId, String userId){
-        try{
+        int thumbNum = thumbMapper.isThumb(dynamicId, userId);
+        if(thumbNum==1){
             thumbMapper.deleteThumb(dynamicId, userId);
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
         }
+        System.out.println("该动态未点赞");
+        return false;
+//        try{
+//            thumbMapper.deleteThumb(dynamicId, userId);
+//            return true;
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return false;
+//        }
     }
 
     // 判断某个用户是否对某个动态进行点赞
@@ -37,8 +52,6 @@ public class ThumbSerive {
         int thumbNum = thumbMapper.isThumb(dynamicId, userId);
         if(thumbNum == 1){
             return true;
-        }else if(thumbNum > 1){
-            System.out.println("用户重复点赞两次，系统有bug");
         }
         return false;
     }
