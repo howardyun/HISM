@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 //必填
@@ -247,41 +244,41 @@ public class DynamicController {
     @PostMapping("/likeMoment")
     //必填
     @ApiOperation("点赞/取消点赞")
-    public MyResult likeMoment(@RequestParam String userId, @RequestParam int dynamicId){
-        MyResult myResult=new MyResult();
-        if("".equals(userId)){
+    public MyResult likeMoment(@RequestParam String userId, @RequestParam int dynamicId) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
             return myResult;
         }
         List<User> user = userService.selectUserbyId(userId);
-        if(user==null){
+        if (user == null) {
             myResult.changeStatus(false);
-            myResult.add("message","不存在该用户");
-        }else if(user.size()>1){
+            myResult.add("message", "不存在该用户");
+        } else if (user.size() > 1) {
             myResult.changeStatus(false);
-            myResult.add("message","存在多个该用户信息");
-        }else{
+            myResult.add("message", "存在多个该用户信息");
+        } else {
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(dynamic==null){
+            if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "不存在该条动态");
-            }else{
+            } else {
                 Map<String, Object> map = new HashMap<>(2);
-                if(thumbSerive.isThumb(userId, dynamicId)){
+                if (thumbSerive.isThumb(userId, dynamicId)) {
                     thumbSerive.deleteThumb(dynamicId, userId);
                     dynamicSerive.updateDynamic(dynamic);
                     int likedNum = dynamic.getThumbNum();
                     myResult.changeStatus(true);
-                    map.put("isLiked","已取消点赞");
-                    map.put("likedNum",likedNum);
-                }else{
+                    map.put("isLiked", "已取消点赞");
+                    map.put("likedNum", likedNum);
+                } else {
                     thumbSerive.insertThumb(new Thumb(dynamicId, userId));
                     dynamicSerive.updateDynamic(dynamic);
                     int likedNum = dynamic.getThumbNum();
                     myResult.changeStatus(true);
                     map.put("isLiked", "点赞成功");
-                    map.put("likedNum",likedNum);
+                    map.put("likedNum", likedNum);
                 }
                 myResult.add("message", map);
             }
@@ -292,30 +289,36 @@ public class DynamicController {
     @PostMapping("/commentMoment")
     //必填
     @ApiOperation("发送评论")
-    public MyResult commentMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String commentText){
-        MyResult myResult=new MyResult();
-        if("".equals(userId)||"".equals(commentText)){
+    public MyResult commentMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String commentText) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(commentText)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id或评论不能为空");
             return myResult;
         }
         List<User> user = userService.selectUserbyId(userId);
-        if(user==null){
+        if (user == null) {
             myResult.changeStatus(false);
-            myResult.add("message","不存在该用户");
-        }else if(user.size()>1){
+            myResult.add("message", "不存在该用户");
+        } else if (user.size() > 1) {
             myResult.changeStatus(false);
-            myResult.add("message","存在多个该用户信息");
-        }else{
+            myResult.add("message", "存在多个该用户信息");
+        } else {
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(dynamic==null){
+            if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "不存在该条动态");
-            }else{
-                dynamic.setDynamicContent(commentText);
-                dynamicSerive.updateDynamic(dynamic);
+            } else {
+                Comment comment = new Comment();
+                comment.setCommentContent(commentText);
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timeStamp = new Timestamp(date.getTime());
+                comment.setCommentTime(timeStamp);
+                comment.setDynamicId(dynamicId);
+                comment.setUserId(userId);
+                commentSerive.insertComment(comment);
                 myResult.changeStatus(true);
-                myResult.add("message","评论成功");
+                myResult.add("message", "评论成功");
             }
         }
         return myResult;
@@ -323,40 +326,40 @@ public class DynamicController {
 
     @PostMapping("/getComment")
     @ApiOperation("获取评论")
-    public MyResult getComment(@RequestParam String userId, @RequestParam int dynamicId){
+    public MyResult getComment(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
-        if("".equals(userId)){
+        if ("".equals(userId)) {
             myResult.changeStatus(false);
-            myResult.add("message","用户id不能为空");
-            return  myResult;
+            myResult.add("message", "用户id不能为空");
+            return myResult;
         }
         List<User> user = userService.selectUserbyId(userId);
-        if(user==null){
+        if (user == null) {
             myResult.changeStatus(false);
-            myResult.add("message","不存在该用户");
-        }else if(user.size()>1){
+            myResult.add("message", "不存在该用户");
+        } else if (user.size() > 1) {
             myResult.changeStatus(false);
-            myResult.add("message","存在多个该用户信息");
-        }else{
+            myResult.add("message", "存在多个该用户信息");
+        } else {
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
             Map<String, Object> map = new HashMap<>(6);
-            if(dynamic.getDynamicContent()==null){
+            if (dynamic == null) {
                 myResult.changeStatus(true);
-                myResult.add("message","该条动态评论为空");
-            }else{
+                myResult.add("message", "该条动态不存在");
+            } else {
                 List<Comment> commentList = commentSerive.selectCommentByD(dynamicId);
-                Comment comment = new Comment();
-                for(int i=0; i<commentList.size(); i++){
-                    if(commentList.get(i).getUserId()==userId)comment= commentList.get(i);
+                List<Map<String, Object>> tmp = new ArrayList<>();
+                for (int i = 0; i < commentList.size(); i++) {
+                    map.put("commentId", commentList.get(i).getCommentId());
+                    map.put("userId", userId);
+                    map.put("userName", user.get(0).getUserName());
+                    map.put("userAvatar", user.get(0).getAvatarURL());
+                    map.put("time", commentList.get(i).getCommentTime());
+                    map.put("text", commentList.get(i).getCommentContent());
+                    tmp.add(map);
                 }
-                map.put("commentId",comment.getCommentId());
-                map.put("userId", userId);
-                map.put("userName",user.get(0).getUserName());
-                map.put("userAvatar", user.get(0).getAvatarURL());
-                map.put("time",comment.getCommentTime());
-                map.put("text",comment.getCommentContent());
+                myResult.add("message", tmp);
             }
-            myResult.add("message", map);
         }
         return myResult;
     }
