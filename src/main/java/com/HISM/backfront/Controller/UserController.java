@@ -393,7 +393,6 @@ public class UserController {
                         myResult.changeStatus(false);
                         myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
                     } else {
-
                         TipOffUser tipOffUser = new TipOffUser();
                         tipOffUser.setUserId(targetUserId);
                         tipOffUser.setInformerId(userId);
