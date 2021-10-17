@@ -153,7 +153,7 @@ public class DynamicController {
                 myResult.changeStatus(false);
                 myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
             }else{
-                if(commentSerive.getUserId(commentId)==userId){
+                if(commentSerive.getUserId(commentId).equals(userId)){
                     commentSerive.deleteComment(commentId);
                     myResult.changeStatus(true);
                     myResult.add("message", "评论删除成功");
