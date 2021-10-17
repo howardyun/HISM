@@ -18,6 +18,7 @@ public class ThumbSerive {
             return true;
         }
         System.out.println("该条动态您已点赞");
+
         return false;
 //        try{
 //            thumbMapper.insertThumb(thumb);

@@ -51,4 +51,15 @@ public class CommentSerive {
             return true;
         }return false;
     }
+
+    /////////////////////////////////////////////////////////////
+    //通过评论id获取动态id
+    public int getDynamicId(int commentId){
+        return commentMapper.getDynamicId(commentId);
+    }
+
+    //通过评论id获取用户id
+    public String getUserId(int commentId){
+        return commentMapper.getUserId(commentId);
+    }
 }

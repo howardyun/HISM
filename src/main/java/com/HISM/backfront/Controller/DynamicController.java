@@ -131,13 +131,56 @@ public class DynamicController {
         return myResult;
     }
 
+    @PostMapping("delComment")
+    @ApiOperation("删除评论")
+    public MyResult delComment(@RequestParam String userId, @RequestParam int commentId){
+        MyResult myResult = new MyResult();
+        if("".equals(userId)){
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if(user == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if(user.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        }else{
+            int dynamicId = commentSerive.getDynamicId(commentId);
+            if(!commentSerive.isComment(userId, dynamicId)){
+                myResult.changeStatus(false);
+                myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
+            }else{
+                if(commentSerive.getUserId(commentId)==userId){
+                    commentSerive.deleteComment(commentId);
+                    myResult.changeStatus(true);
+                    myResult.add("message", "评论删除成功");
+                }else{
+                    myResult.changeStatus(false);
+                    myResult.add("message", "不能删除别人的评论");
+                }
+            }
+        }
+        return myResult;
+    }
+
     @PostMapping("/delMoment")
     //必填
     @ApiOperation("删除动态")
-    public String delMoment(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
+    public MyResult delMoment(@RequestParam String userId, @RequestParam int dynamicId) {
+        MyResult myResult = new MyResult();
 
+        return myResult;
+    }
 
-        return userId;
+    @PostMapping("reportMoment")
+    @ApiOperation("举报动态")
+    public MyResult reportMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String message){
+        MyResult myResult = new MyResult();
+
+        return myResult;
     }
 
     @PostMapping("/getUsersMoments")

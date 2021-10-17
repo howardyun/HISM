@@ -21,4 +21,11 @@ public interface CommentMapper {
 
     // 判断某一用户是否对某一动态进行评论
     public int isComment(String userId, int dynamicId);
+
+    ///////////////////////////////////////////////////////////////
+    //通过评论id获取动态id
+    public int getDynamicId(int commentId);
+
+    //通过评论id获取用户id
+    public String getUserId(int commentId);
 }
