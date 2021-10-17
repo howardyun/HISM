@@ -27,7 +27,7 @@ public class Dynamic {
     int commentNum;
     // 举报数量
     int tipOffNum;
-    // 动态类型: 图片, 小程序, 视频
+    // 动态类型: 1-文本 2-图片 3-视频 4-代码
     String dynamicType;
     // 该动态发出者的名字
     String userId;
