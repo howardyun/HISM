@@ -412,7 +412,7 @@ public class DynamicController {
                 } else {
                     thumbSerive.insertThumb(new Thumb(dynamicId, userId));
                     dynamicSerive.updateDynamic(dynamic);
-                    int likedNum = dynamic.getThumbNum();
+                    int likedNum = dynamic.getThumbNum()+1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "点赞成功");
                     map.put("likedNum", likedNum);
@@ -500,5 +500,15 @@ public class DynamicController {
         }
         return myResult;
     }
+
+
+
+
+
+
+
+
+
+
 
 }
