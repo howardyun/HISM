@@ -150,18 +150,23 @@ public class DynamicController {
         }else{
             int dynamicId = commentSerive.getDynamicId(commentId);
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(!commentSerive.isComment(userId, dynamicId)){
+            if(dynamic==null){
                 myResult.changeStatus(false);
-                myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
+                myResult.add("message", "该评论所属的动态不存在");
             }else{
-                if(userId.equals(commentSerive.getUserId(commentId))){
-                    commentSerive.deleteComment(commentId);
-                    dynamicSerive.updateDynamic(dynamic);
-                    myResult.changeStatus(true);
-                    myResult.add("message", "");
-                }else{
+                if(!commentSerive.isComment(userId, dynamicId)){
                     myResult.changeStatus(false);
-                    myResult.add("message", "不能删除别人的评论");
+                    myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
+                }else{
+                    if(userId.equals(commentSerive.getUserId(commentId))){
+                        commentSerive.deleteComment(commentId);
+                        dynamicSerive.updateDynamic(dynamic);
+                        myResult.changeStatus(true);
+                        myResult.add("message", "");
+                    }else{
+                        myResult.changeStatus(false);
+                        myResult.add("message", "不能删除别人的评论");
+                    }
                 }
             }
         }
@@ -198,6 +203,7 @@ public class DynamicController {
                         if(app == null){
                             myResult.changeStatus(false);
                             myResult.add("message","不存在该条app");
+                            return myResult;
                         }else {
                             //设置appState
                         }
@@ -244,7 +250,8 @@ public class DynamicController {
                 tipOffDynamic.setDynamicId(dynamicId);
                 tipOffDynamic.setInformerId(userId);
                 Date date = new Date(System.currentTimeMillis());
-                tipOffDynamic.setTipOffTime(date);
+                Timestamp timeStamp = new Timestamp(date.getTime());
+                tipOffDynamic.setTipOffTime(timeStamp);
                 tipOffDynamic.setTipOffContent(message);
                 boolean userIsTipOff = false;
                 List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
