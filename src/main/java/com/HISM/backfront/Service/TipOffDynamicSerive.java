@@ -20,10 +20,10 @@ public class TipOffDynamicSerive {
     public int insertTipOff(TipOffDynamic tipOffDynamic) {
         Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(tipOffDynamic.getDynamicId());
 
-        try {
-            // 插入一次举报记录
+        try{
+            //插入一次举报记录
             tipOffDynamicMapper.insertTipOff(tipOffDynamic);
-        } catch (Exception e) {
+        }catch (Exception e){
             System.out.println("用户重复举报动态!!");
             return 2;
         }
@@ -36,13 +36,7 @@ public class TipOffDynamicSerive {
         // 更新动态
         dynamicMapper.updateDynamic(dynamic);
 
-        if (0 == dynamic.getDynamicState()) {
-            // 返回1 动态暂时被封.
-            return 1;
-        }
-        // 返回0 正常举报
-        return 0;
-
+        return dynamic.getDynamicState();
     }
 
     // 通过被举报的动态id获取举报数据

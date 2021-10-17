@@ -2,10 +2,7 @@ package com.HISM.backfront.Controller;
 
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
-import com.HISM.backfront.domain.Comment;
-import com.HISM.backfront.domain.Dynamic;
-import com.HISM.backfront.domain.Thumb;
-import com.HISM.backfront.domain.User;
+import com.HISM.backfront.domain.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +31,10 @@ public class DynamicController {
     ThumbSerive thumbSerive;
     @Resource
     CommentSerive commentSerive;
-
+    @Resource
+    TipOffDynamicSerive tipOffDynamicSerive;
+    @Resource
+    AppSerive appSerive;
 
     @PostMapping("/createMomentWithPhotos")
     //必填
@@ -149,14 +149,16 @@ public class DynamicController {
             myResult.add("message", "存在多个该用户信息");
         }else{
             int dynamicId = commentSerive.getDynamicId(commentId);
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
             if(!commentSerive.isComment(userId, dynamicId)){
                 myResult.changeStatus(false);
                 myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
             }else{
-                if(commentSerive.getUserId(commentId).equals(userId)){
+                if(userId.equals(commentSerive.getUserId(commentId))){
                     commentSerive.deleteComment(commentId);
+                    dynamicSerive.updateDynamic(dynamic);
                     myResult.changeStatus(true);
-                    myResult.add("message", "评论删除成功");
+                    myResult.add("message", "");
                 }else{
                     myResult.changeStatus(false);
                     myResult.add("message", "不能删除别人的评论");
@@ -171,7 +173,45 @@ public class DynamicController {
     @ApiOperation("删除动态")
     public MyResult delMoment(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
-
+        if("".equals(userId)){
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if(user == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if(user.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        }else{
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+            if(dynamic == null){
+                myResult.changeStatus(false);
+                myResult.add("message", "要删除的动态不存在");
+            }else{
+                if(userId.equals(dynamic.getUserId())){
+                    if(dynamic.getDynamicType().equals("4")){
+                        int appId = Integer.parseInt(dynamic.getDynamicContent());
+                        App app = appSerive.selectApp(appId);
+                        if(app == null){
+                            myResult.changeStatus(false);
+                            myResult.add("message","不存在该条app");
+                        }else {
+                            //设置appState
+                        }
+                    }
+                    dynamic.setDynamicState(3);
+                    dynamicSerive.updateDynamic(dynamic);
+                    myResult.changeStatus(true);
+                    myResult.add("message","");
+                }else{
+                    myResult.changeStatus(false);
+                    myResult.add("message", "不能删除别人的动态");
+                }
+            }
+        }
         return myResult;
     }
 
@@ -179,7 +219,54 @@ public class DynamicController {
     @ApiOperation("举报动态")
     public MyResult reportMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String message){
         MyResult myResult = new MyResult();
-
+        if("".equals(userId)){
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if(user == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if(user.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        }else{
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+            if(dynamic == null){
+                myResult.changeStatus(false);
+                myResult.add("message", "要举报的动态不存在");
+            }else if(userId.equals(dynamic.getUserId())){
+                myResult.changeStatus(false);
+                myResult.add("message", "不能举报自己的动态");
+            }else{
+                TipOffDynamic tipOffDynamic = new TipOffDynamic();
+                tipOffDynamic.setDynamicId(dynamicId);
+                tipOffDynamic.setInformerId(userId);
+                Date date = new Date(System.currentTimeMillis());
+                tipOffDynamic.setTipOffTime(date);
+                tipOffDynamic.setTipOffContent(message);
+                boolean userIsTipOff = false;
+                List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
+                if(tipOffDynamicList==null){
+                    tipOffDynamicSerive.insertTipOff(tipOffDynamic);
+                }else{
+                    for(int i=0; i<tipOffDynamicList.size(); i++){
+                        if(tipOffDynamicList.get(i).getInformerId().equals(tipOffDynamic.getInformerId())){
+                            userIsTipOff = true;
+                        }
+                    }
+                    if(!userIsTipOff){
+                        tipOffDynamicSerive.insertTipOff(tipOffDynamic);
+                        myResult.changeStatus(true);
+                        myResult.add("message", "");
+                    }else{
+                        myResult.changeStatus(false);
+                        myResult.add("message","不能重复举报动态");
+                    }
+                }
+            }
+        }
         return myResult;
     }
 

@@ -33,7 +33,7 @@
     </select>
 
     <select id="getUserId" resultType="java.lang.String">
-        select UserId from comment where commentId = #{commentId}
+        select userId from comment where commentId = #{commentId}
     </select>
 
 </mapper>
