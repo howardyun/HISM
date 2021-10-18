@@ -33,8 +33,8 @@ public class DynamicController {
     CommentSerive commentSerive;
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
-    @Resource
-    AppSerive appSerive;
+//    @Resource
+//    AppSerive appSerive;
 
     @PostMapping("/createMomentWithPhotos")
     //必填
@@ -66,12 +66,98 @@ public class DynamicController {
         return name;
     }
 
-    @PostMapping("/createMomentWithCode")
+    @PostMapping("/createMomentWithCodeCLI")
     //必填
-    @ApiOperation("用户上传代码")
-    public MyResult createMomentWithCode(@RequestParam String userId, @RequestParam String text, @RequestParam String tag, @RequestParam String code) {
+    @ApiOperation("发表含CLI程序段的⽂本动态")
+    public MyResult createMomentWithCodeCLI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
+                                         @RequestParam String language, @RequestParam String code, @RequestParam String para) {
         MyResult myResult = new MyResult();
+        if("".equals(userId)){
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if(user == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if(user.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        }else{
+            if("".equals(language) || "".equals(code)){
+                myResult.changeStatus(false);
+                myResult.add("message", "language, code均不能为空");
+            }else{
+                //dynamic基本属性的设置
+                Dynamic dynamic = new Dynamic();
+                dynamic.setDynamicIndex(tag);
+                dynamic.setDynamicType("4");
+                dynamic.setDynamicState(2);
+                if(!"".equals(text)){
+                    dynamic.setDynamicContent(text);
+                }
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timeStamp = new Timestamp(date.getTime());
+                dynamic.setDynamicTime(timeStamp);
+                //设定code相关属性
+                dynamic.setLanguage_(language);
+                dynamic.setCode(code);
+                dynamic.setPara(para);
+                dynamicSerive.insertDynamic(dynamic);
+                myResult.changeStatus(true);
+                myResult.add("message","");
+            }
+        }
+        return myResult;
+    }
 
+    @PostMapping("/createMomentWithCodeGUI")
+    //必填
+    @ApiOperation("发表含GUI程序段的⽂本动态")
+    public MyResult createMomentWithCodeGUI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
+                                         @RequestParam String language, @RequestParam String code, @RequestParam String html,
+                                         @RequestParam String css, @RequestParam String para) {
+        MyResult myResult = new MyResult();
+        if("".equals(userId)){
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if(user == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if(user.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        }else{
+            if("".equals(language) || "".equals(code) || "".equals(html) || "".equals(css)){
+                myResult.changeStatus(false);
+                myResult.add("message", "language, code, html, css等均不能为空");
+            }else{
+                //dynamic基本属性的设置
+                Dynamic dynamic = new Dynamic();
+                dynamic.setDynamicIndex(tag);
+                dynamic.setDynamicType("4");
+                dynamic.setDynamicState(2);
+                if(!"".equals(text)){
+                    dynamic.setDynamicContent(text);
+                }
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timestamp = new Timestamp(date.getTime());
+                dynamic.setDynamicTime(timestamp);
+                //code相关内容的设置
+                dynamic.setLanguage_(language);
+                dynamic.setCode(code);
+                dynamic.setHtml(html);
+                dynamic.setCss(css);
+                dynamic.setPara(para);
+                dynamicSerive.insertDynamic(dynamic);
+                myResult.changeStatus(true);
+                myResult.add("message","");
+            }
+        }
         return myResult;
     }
 
@@ -108,8 +194,8 @@ public class DynamicController {
             dynamic.setDynamicType("1");
             //设置时间
             Date date = new Date(System.currentTimeMillis());
-            Timestamp timeStamep = new Timestamp(date.getTime());
-            dynamic.setDynamicTime(timeStamep);
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            dynamic.setDynamicTime(timeStamp);
             //设置标签
             dynamic.setDynamicIndex(tag);
             dynamicSerive.insertDynamic(dynamic);
@@ -187,17 +273,6 @@ public class DynamicController {
                 myResult.add("message", "要删除的动态不存在");
             }else{
                 if(userId.equals(dynamic.getUserId())){
-                    if(dynamic.getDynamicType().equals("4")){
-                        int appId = Integer.parseInt(dynamic.getDynamicContent());
-                        App app = appSerive.selectApp(appId);
-                        if(app == null){
-                            myResult.changeStatus(false);
-                            myResult.add("message","不存在该条app");
-                            return myResult;
-                        }else {
-                            //设置appState
-                        }
-                    }
                     dynamic.setDynamicState(3);
                     dynamicSerive.updateDynamic(dynamic);
                     myResult.changeStatus(true);
