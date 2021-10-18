@@ -1,7 +1,6 @@
 package com.HISM.backfront.Service;
 
-import com.HISM.backfront.domain.App;
-import com.HISM.backfront.mapper.AppMapper;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 

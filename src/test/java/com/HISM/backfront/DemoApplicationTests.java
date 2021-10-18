@@ -34,9 +34,6 @@ class DemoApplicationTests {
     UserService userService;
 
     @Autowired
-    AppSerive appSerive;
-
-    @Autowired
     TipOffDynamicSerive tipOffDynamicSerive;
 
     @Autowired
