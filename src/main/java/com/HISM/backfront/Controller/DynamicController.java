@@ -33,8 +33,6 @@ public class DynamicController {
     CommentSerive commentSerive;
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
-//    @Resource
-//    AppSerive appSerive;
 
     @PostMapping("/createMomentWithPhotos")
     //必填
@@ -139,7 +137,7 @@ public class DynamicController {
                 //dynamic基本属性的设置
                 Dynamic dynamic = new Dynamic();
                 dynamic.setDynamicIndex(tag);
-                dynamic.setDynamicType("4");
+                dynamic.setDynamicType("3");
                 dynamic.setDynamicState(2);
                 if(!"".equals(text)){
                     dynamic.setDynamicContent(text);
@@ -165,14 +163,12 @@ public class DynamicController {
     //必填
     @ApiOperation("用户上传文本")
     public MyResult createMomentOnlyText(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
-
         MyResult myResult = new MyResult();
-        if ("".equals(userId) || "".equals(text) || "".equals(tag)) {
+        if ("".equals(userId) || "".equals(text)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id或text为空或tag为空");
             return myResult;
         }
-
         List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
@@ -182,15 +178,11 @@ public class DynamicController {
             myResult.add("message", "用户id大于1个");
         } else {
             Dynamic dynamic = new Dynamic();
-            //初始设置为0
-            dynamic.setCommentNum(0);
-            //公开
-            dynamic.setDynamicState(1);
+            //可见性
+            dynamic.setDynamicState(2);
             //设置内容
             dynamic.setDynamicContent(text);
-            //设置点赞数量
-            dynamic.setThumbNum(0);
-            //设置类型
+            //设置动态类型
             dynamic.setDynamicType("1");
             //设置时间
             Date date = new Date(System.currentTimeMillis());
@@ -202,8 +194,6 @@ public class DynamicController {
             myResult.changeStatus(true);
             myResult.add("message", "");
         }
-
-
         return myResult;
     }
 
@@ -387,17 +377,14 @@ public class DynamicController {
     @PostMapping("/getMoments")
     //必填
     @ApiOperation("获取动态")
-
     public MyResult getMoments() {
         MyResult myResult = new MyResult();
-
         return myResult;
     }
 
     @PostMapping("/getMomentByID")
     //必填
     @ApiOperation("获取单个动态")
-
     public MyResult getMomentByID(@RequestParam String userId, @RequestParam int momentId) {
         MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(momentId)) {
@@ -413,34 +400,49 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "源用户信息多于一个");
         } else {
-
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(momentId);
             if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "没有该动态");
             } else {
-
                 Map<String, Object> map = new HashMap<>(4);
                 map.put("momentId", momentId);
-                map.put("userId", user.get(0).getUserId());
+                map.put("userID", user.get(0).getUserId());
                 map.put("userName", user.get(0).getUserName());
                 map.put("userAvatar", user.get(0).getAvatarURL());
                 map.put("time", dynamic.getDynamicTime());
-
-//                int dynamicType= dynamic.getDynamicType();
-//                map.put("appendixType", dynamicstate);
-//                if(d)
-
+                map.put("text", dynamic.getDynamicContent());
                 map.put("likedNum", dynamic.getThumbNum());
                 map.put("commentNum", dynamic.getCommentNum());
-                map.put("isLiked", "");
+                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                 map.put("isDel", dynamic.getDynamicState() == 3);
                 map.put("tag", dynamic.getDynamicType());
-
-
+                String dynamicType = dynamic.getDynamicType();
+                if(dynamicType.equals("0")){
+                    map.put("text", dynamic.getDynamicContent());
+                }else if(dynamicType.equals("1")){
+                    int length = dynamic.getDynamicContent().split(";").length;
+                    if(length==0){
+                        myResult.changeStatus(false);
+                        myResult.add("message", "动态中不包含图片");
+                        return myResult;
+                    }else if(length==1){
+                        map.put("photo", dynamic.getDynamicContent());
+                    }else{
+                        for(int i=0; i<length; i++){
+                            map.put("photos",dynamic.getDynamicContent().split(";")[i]);
+                        }
+                    }
+                }else if(dynamicType.equals("2")){
+                    map.put("video", dynamic.getDynamicContent());
+                }else if(dynamicType.equals("3")||dynamicType.equals("4")){
+                    map.put("momentId", dynamic.getDynamicId());
+                }else{
+                    myResult.changeStatus(false);
+                    myResult.add("message", "动态类型码错误");
+                    return myResult;
+                }
             }
-
-
         }
         return myResult;
     }
