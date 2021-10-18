@@ -8,8 +8,8 @@
     </resultMap>
 
     <insert id="insertDynamic">
-        insert into dynamic (dynamicIndex, dynamicIndex2, dynamicState, dynamicContent, dynamicTime, thumbNum, commentNum, tipOffNum, dynamicType, userId)
-        values (#{dynamicIndex}, #{dynamicIndex2}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{thumbNum}, #{commentNum}, #{tipOffNum}, #{dynamicType}, #{userId})
+        insert into dynamic (dynamicIndex,  dynamicState, dynamicContent, dynamicTime, dynamicType, userId)
+        values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{dynamicType}, #{userId})
     </insert>
 
     <delete id="deleteDynamic">

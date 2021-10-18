@@ -22,15 +22,16 @@ public class Dynamic {
     // 发布动态时间
     Date dynamicTime;
     // 点赞数量
-    int thumbNum;
+    int thumbNum = 0;
     // 评论数量
-    int commentNum;
+    int commentNum = 0;
     // 举报数量
-    int tipOffNum;
+    int tipOffNum = 0;
     // 动态类型: 1-文本 2-图片 3-视频 4-代码
     String dynamicType;
     // 该动态发出者的名字
     String userId;
+
 
 
     public int getDynamicId() {
