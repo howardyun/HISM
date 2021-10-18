@@ -322,6 +322,8 @@ public class DynamicController {
                 List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
                 if(tipOffDynamicList==null){
                     tipOffDynamicSerive.insertTipOff(tipOffDynamic);
+                    myResult.changeStatus(true);
+                    myResult.add("message", "");
                 }else{
                     for(int i=0; i<tipOffDynamicList.size(); i++){
                         if(tipOffDynamicList.get(i).getInformerId().equals(tipOffDynamic.getInformerId())){
