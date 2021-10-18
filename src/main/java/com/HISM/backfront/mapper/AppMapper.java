@@ -16,5 +16,4 @@ public interface AppMapper {
     void updateApp(App app);
     // 查找App
     App selectApp(int appId);
-
 }

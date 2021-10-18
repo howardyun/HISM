@@ -51,8 +51,8 @@ public class TipOffDynamicSerive {
     // 使某一动态的举报无效  动态解封后使用
     public Boolean invalidateTipOff(int dynamicId) {
         List<TipOffDynamic> tipOffDynamicList = selectTipOffByDynamicId(dynamicId);
-        try {
-            for (int i = 0; i < tipOffDynamicList.size(); i++) {
+        try{
+            for(int i = 0; i < tipOffDynamicList.size(); i++) {
                 // 设置为0 使动态无效
                 tipOffDynamicList.get(i).setIsValid(0);
                 tipOffDynamicMapper.updateTipOff(tipOffDynamicList.get(i));

@@ -15,6 +15,16 @@ public class App {
     private String css;
     private String para;
     private String url;
+    // 0-App被删， 1-App正常可访问
+    private int state;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 
     public int getAppId() {
         return appId;

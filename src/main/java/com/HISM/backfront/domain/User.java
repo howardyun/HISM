@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +29,16 @@ public class User {
     private Integer userState;
     //举报次数
     private Integer tipOffNum = 0;
+    //用户感兴趣的动态index
+    private String favorIndex;
+
+    public String getFavorIndex() {
+        return favorIndex;
+    }
+
+    public void setFavorIndex(String favorIndex) {
+        this.favorIndex = favorIndex;
+    }
 
     public Integer getTipOffNum() {
         return tipOffNum;
@@ -42,7 +50,7 @@ public class User {
 
 
 
-    public User(String userId, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState) {
+    public User(String userId, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex) {
         this.userId = userId;
         this.userName = userName;
         this.userAddress = userAddress;
@@ -50,6 +58,7 @@ public class User {
         this.userSex = userSex;
         this.userDescription = userDescription;
         this.userState = userState;
+        this.favorIndex = favorIndex;
     }
 
     public String getUserId() {
