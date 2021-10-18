@@ -42,20 +42,20 @@ public class AdminController {
             myResult.add("message", "id不能为空");
             return false;
         }
-        //判断id合法性(合法id构成：第一个字符为字母，Id中无特殊符号，只能是字母和数字的组合)
-        if (Id.charAt(0) == '0' || Id.charAt(0) == '1' || Id.charAt(0) == '2' || Id.charAt(0) == '3' || Id.charAt(0) == '4' ||
-                Id.charAt(0) == '5' || Id.charAt(0) == '6' || Id.charAt(0) == '7' || Id.charAt(0) == '8' || Id.charAt(0) == '9') {
-            myResult.changeStatus(false);
-            myResult.add("message", "id中首字符为数字");
-            return false;
-        }
-        Pattern idComposition = Pattern.compile("[a-zA-Z0-9]*");
-        Matcher idMatcher = idComposition.matcher(Id);
-        if (!idMatcher.matches()) {
-            myResult.changeStatus(false);
-            myResult.add("message", "id中有非法字符,只能是字母和数字组合");
-            return false;
-        }
+//        //判断id合法性(合法id构成：第一个字符为字母，Id中无特殊符号，只能是字母和数字的组合)
+//        if (Id.charAt(0) == '0' || Id.charAt(0) == '1' || Id.charAt(0) == '2' || Id.charAt(0) == '3' || Id.charAt(0) == '4' ||
+//                Id.charAt(0) == '5' || Id.charAt(0) == '6' || Id.charAt(0) == '7' || Id.charAt(0) == '8' || Id.charAt(0) == '9') {
+//            myResult.changeStatus(false);
+//            myResult.add("message", "id中首字符为数字");
+//            return false;
+//        }
+//        Pattern idComposition = Pattern.compile("[a-zA-Z0-9]*");
+//        Matcher idMatcher = idComposition.matcher(Id);
+//        if (!idMatcher.matches()) {
+//            myResult.changeStatus(false);
+//            myResult.add("message", "id中有非法字符,只能是字母和数字组合");
+//            return false;
+//        }
         return true;
     }
 
@@ -99,16 +99,16 @@ public class AdminController {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
         } else {
-            List<User> allUsers = userService.selectUserAll();
-            List<User> blockedUsers = userService.selectUserByState(-1);
-            List<Dynamic> allDynamics = dynamicSerive.selectDynamicAll();
-            List<Dynamic> blockedDynamics = dynamicSerive.selectDynamicByState(-1);
+            List<User> userNumber = userService.selectUserAll();
+            List<User> userReportedNumber = userService.selectUserByState(-1);
+            List<Dynamic> momentNumber = dynamicSerive.selectDynamicAll();
+            List<Dynamic> momentReportedNumber = dynamicSerive.selectDynamicByState(-1);
             myResult.changeStatus(true);
             Map<String, Object> map = new HashMap<>(4);
-            map.put("allUsers", allUsers.size());
-            map.put("blockedUsers", blockedUsers.size());
-            map.put("allDynamics", allDynamics.size());
-            map.put("blockedDynamics", blockedDynamics.size());
+            map.put("userNumber", userNumber.size());
+            map.put("userReportedNumber", userReportedNumber.size());
+            map.put("momentNumber", momentNumber.size());
+            map.put("momentReportedNumber", momentReportedNumber.size());
             myResult.add("message", map);
         }
 
@@ -136,10 +136,10 @@ public class AdminController {
             List<Map<String, Object>> tmp = new ArrayList<>();
             for (User user : blockedUsers) {
                 Map<String, Object> map = new HashMap<>(4);
-                map.put("userId", user.getUserId());
+                map.put("userID", user.getUserId());
                 map.put("userName", user.getUserName());
-                map.put("tipOffNum", user.getTipOffNum());
-                map.put("userState", user.getUserState());
+                map.put("userTimes", user.getTipOffNum());
+                map.put("userStatus", user.getUserState());
                 tmp.add(map);
             }
             myResult.add("message", tmp);
@@ -166,10 +166,10 @@ public class AdminController {
             List<Map<String, Object>> tmp = new ArrayList<>();
             for (Dynamic dynamic : dynamics) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("dynamicId", dynamic.getDynamicId());
-                map.put("userId", dynamic.getUserId());
+                map.put("momentID", dynamic.getDynamicId());
+                map.put("userID", dynamic.getUserId());
                 map.put("userName", user.get(0).getUserName());
-                map.put("userAvatarUrl", user.get(0).getAvatarURL());
+                map.put("userAvatar", user.get(0).getAvatarURL());
                 map.put("time", dynamic.getDynamicTime());
                 map.put("appendixType", dynamic.getDynamicType());
                 if (dynamic.getDynamicType().equals("0")) {
@@ -179,17 +179,17 @@ public class AdminController {
                         String[] urls = dynamic.getDynamicContent().split(";");
                         for (int i = 0; i < urls.length; i++) {
                             String url = urls[i];
-                            map.put("photoUrl" + (i + 1), url);
+                            map.put("photos" + (i + 1), url);
                         }
                     } else {
-                        map.put("photoUrl", dynamic.getDynamicContent());
+                        map.put("photo", dynamic.getDynamicContent());
                     }
                 } else if (dynamic.getDynamicType().equals("2")) {
-                    map.put("videoUrl", dynamic.getDynamicContent());
+                    map.put("video", dynamic.getDynamicContent());
                 } else if (dynamic.getDynamicType().equals("3")) {
                     map.put("program", dynamic.getDynamicContent());
                 }
-                map.put("thumbNum", dynamic.getThumbNum());
+                map.put("likeNum", dynamic.getThumbNum());
                 map.put("commentNum", dynamic.getCommentNum());
                 map.put("tag", dynamic.getDynamicIndex());
                 tmp.add(map);
@@ -219,10 +219,11 @@ public class AdminController {
             for (Dynamic dynamic : dynamics) {
                 Map<String, Object> map = new HashMap<>();
                 List<User> user = userService.selectUserbyId(dynamic.getUserId());
-                map.put("dynamicId", dynamic.getDynamicId());
-                map.put("userId", dynamic.getUserId());
+                map.put("index", dynamic.getDynamicIndex());
+                map.put("momentID", dynamic.getDynamicId());
+                map.put("userID", dynamic.getUserId());
                 map.put("userName", user.get(0).getUserName());
-                map.put("userAvatarUrl", user.get(0).getAvatarURL());
+                map.put("userAvatar", user.get(0).getAvatarURL());
                 map.put("time", dynamic.getDynamicTime());
                 if (dynamic.getDynamicType().equals("0")) {
                     map.put("text", dynamic.getDynamicContent());
@@ -231,13 +232,13 @@ public class AdminController {
                         String[] urls = dynamic.getDynamicContent().split(";");
                         for (int i = 0; i < urls.length; i++) {
                             String url = urls[i];
-                            map.put("photoUrl" + (i + 1), url);
+                            map.put("photos" + (i + 1), url);
                         }
                     } else {
-                        map.put("photoUrl", dynamic.getDynamicContent());
+                        map.put("photo", dynamic.getDynamicContent());
                     }
                 } else if (dynamic.getDynamicType().equals("2")) {
-                    map.put("videoUrl", dynamic.getDynamicContent());
+                    map.put("video", dynamic.getDynamicContent());
                 } else if (dynamic.getDynamicType().equals("3")) {
                     map.put("program", dynamic.getDynamicContent());
                 }
