@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class TipOffDynamicSerive {
+public class TipOffDynamicSerive extends FollowerSerive {
     @Resource
     TipOffDynamicMapper tipOffDynamicMapper;
 
