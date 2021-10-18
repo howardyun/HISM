@@ -29,10 +29,91 @@ public class Dynamic {
     int tipOffNum = 0;
     // 动态类型: 1-文本 2-图片 3-视频 4-代码
     String dynamicType;
-    // 该动态发出者的名字
+    // 该动态发出者的id
     String userId;
 
+    // App 数据信息。
+    private String language_;
+    private String code;
+    private String html;
+    private String css;
+    private String para;
+    private String url;
+    // 0-App被删， 1-App正常可访问
+    private int appState;
 
+
+    public Dynamic(String dynamicIndex, int dynamicState, String dynamicContent, Date dynamicTime, String dynamicType, String userId, String language_, String code, String html, String css, String para, String url, int appState) {
+        this.dynamicIndex = dynamicIndex;
+        this.dynamicState = dynamicState;
+        this.dynamicContent = dynamicContent;
+        this.dynamicTime = dynamicTime;
+        this.dynamicType = dynamicType;
+        this.userId = userId;
+        this.language_ = language_;
+        this.code = code;
+        this.html = html;
+        this.css = css;
+        this.para = para;
+        this.url = url;
+        this.appState = appState;
+    }
+
+    public String getLanguage_() {
+        return language_;
+    }
+
+    public void setLanguage_(String language_) {
+        this.language_ = language_;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
+    }
+
+    public String getPara() {
+        return para;
+    }
+
+    public void setPara(String para) {
+        this.para = para;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getAppState() {
+        return appState;
+    }
+
+    public void setAppState(int appState) {
+        this.appState = appState;
+    }
 
     public int getDynamicId() {
         return dynamicId;

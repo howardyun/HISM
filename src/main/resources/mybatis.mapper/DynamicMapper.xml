@@ -8,8 +8,8 @@
     </resultMap>
 
     <insert id="insertDynamic">
-        insert into dynamic (dynamicIndex,  dynamicState, dynamicContent, dynamicTime, dynamicType, userId)
-        values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{dynamicType}, #{userId})
+        insert into dynamic (dynamicIndex,  dynamicState, dynamicContent, dynamicTime, dynamicType, userId, language_, code, html, css, para, url, appState)
+        values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{dynamicType}, #{userId}, #{language_}, #{code}, #{html}, #{css}, #{para}, #{url}, #{appState})
     </insert>
 
     <delete id="deleteDynamic">
@@ -29,7 +29,8 @@
     </select>
 
     <update id="updateDynamic">
-        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicIndex2 = #{dynamicIndex2}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId}
+        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicIndex2 = #{dynamicIndex2}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
+        language_ = #{language_}, code = #{code}, html = #{html}, css = #{css}, para = #{para}, url = #{url}, appState = #{appState}
         where dynamicId = #{dynamicId}
     </update>
 
@@ -43,6 +44,11 @@
 
     <select id="selectDynamicByIndex" resultMap="dynamicMap">
         select * from dynamic where dynamicIndex like concat('%', #{dynamicIndex, jdbcType=VARCHAR}, '%')
+        order by dynamicTime
+    </select>
+
+    <select id="selectDynamicByType" resultMap="dynamicMap">
+        select * from dynamic where dynamicType = #{dynamicType}
         order by dynamicTime
     </select>
 

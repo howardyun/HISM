@@ -36,5 +36,9 @@ public interface DynamicMapper {
     // 根据动态标签获取动态
     public List<Dynamic> selectDynamicByIndex(String index);
 
+    // 根据动态类型查看动态
+    public List<Dynamic> selectDynamicByType(int appState);
+
+
 
 }

@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
 
-<mapper namespace="com.HISM.backfront.mapper.AppMapper">
-    <resultMap id="appMap" type="com.HISM.backfront.domain.App">
-    </resultMap>
+<!--<mapper namespace="com.HISM.backfront.mapper.AppMapper">-->
+<!--    <resultMap id="appMap" type="com.HISM.backfront.domain.App">-->
+<!--    </resultMap>-->
 
 
-    <insert id="insertApp">
-        insert into app (language_, code, html, css, para, url) value (#{language_}, #{code}, #{html}, #{css}, #{para}, #{url})
-    </insert>
+<!--    <insert id="insertApp">-->
+<!--        insert into app (language_, code, html, css, para, url) value (#{language_}, #{code}, #{html}, #{css}, #{para}, #{url})-->
+<!--    </insert>-->
 
-    <delete id="deleteApp">
-        delete from app where appId = #{appId}
-    </delete>
+<!--    <delete id="deleteApp">-->
+<!--        delete from app where appId = #{appId}-->
+<!--    </delete>-->
 
-    <update id="updateApp">
-        update app set language_ = #{language_}, code = #{code}, html = #{html}, para = #{para}, url = #{url}
-        where appId = #{appId}
-    </update>
+<!--    <update id="updateApp">-->
+<!--        update app set language_ = #{language_}, code = #{code}, html = #{html}, para = #{para}, url = #{url}-->
+<!--        where appId = #{appId}-->
+<!--    </update>-->
 
-    <select id="selectApp" resultMap="appMap">
-        select * from app where appId = #{appId}
-    </select>
-</mapper>
+<!--    <select id="selectApp" resultMap="appMap">-->
+<!--        select * from app where appId = #{appId}-->
+<!--    </select>-->
+<!--</mapper>-->

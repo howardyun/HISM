@@ -35,7 +35,7 @@ public class UserService {
     }
 
 
-    // 通过名字查询用户
+    // 通过用户名模糊查询用户
     public List<User> selectUserbyName(String name){
         List<User> userList = userMapper.selectUserbyName(name);
         if(userList.isEmpty()) {

@@ -3,9 +3,6 @@
 <mapper namespace="com.HISM.backfront.mapper.UserMapper">
     <resultMap id="userMap" type="com.HISM.backfront.domain.User">
         <id property="userId" column="userId" />
-        <result property="password" column="password" />
-        <result property="userAddress" column="userAddress" />
-        <result property="userDescription" column="userDescription" />
     </resultMap>
 
     <insert id="insertUser">
@@ -19,7 +16,7 @@
 
 
     <select id="selectUserbyName" resultMap="userMap">
-        select * from user where username = #{userId}
+        select * from user where username like concat('%', #{userName, jdbcType=VARCHAR}, '%')
     </select>
 
     <select id="selectUserbyId" resultMap="userMap">

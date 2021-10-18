@@ -95,4 +95,9 @@ public class DynamicSerive {
         }
         return dynamicList;
     }
+
+    // 根据动态类型查看动态
+    public List<Dynamic> selectDynamicByType(int appState){
+        return dynamicMapper.selectDynamicByType(appState);
+    }
 }
