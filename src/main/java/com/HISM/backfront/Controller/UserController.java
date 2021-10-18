@@ -193,7 +193,7 @@ public class UserController {
         return myResult;
     }
 
-    @PutMapping("/changeAvatar")
+    @PostMapping("/changeAvatar")
 
     @ApiOperation("修改头像")
 
