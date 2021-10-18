@@ -219,7 +219,7 @@ public class UserController {
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                user.setAvatarURL(filePath + "/" + root_fileName);
+                user.setAvatarURL("http://39.106.25.203/img/"+userId + "/Avatar/" + root_fileName);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
