@@ -121,16 +121,6 @@ public class DynamicController {
         return myResult;
     }
 
-    @PostMapping("/likeComment")
-    //必填
-    @ApiOperation("点赞评论")
-    public MyResult likeComment(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
-        MyResult myResult = new MyResult();
-
-
-        return myResult;
-    }
-
     @PostMapping("delComment")
     @ApiOperation("删除评论")
     public MyResult delComment(@RequestParam String userId, @RequestParam int commentId){
