@@ -24,6 +24,12 @@ public interface DynamicMapper {
     // 通过动态发布者的id查找动态
     public List<Dynamic> selectDynamicByUserId(String userId);
 
+    // 通过动态发布者的id和动态的状态查找动态
+    public List<Dynamic> selectDynamicByUserIdAndState(String userId, int dynamicState);
+
+    // 通过动态发布者的id和动态的任意（or）两个状态查找动态
+    public List<Dynamic> selectDynamicByUserIdAnd2State(String userId, int dynamicState1, int dynamicState2);
+
     // 通过举报次数查询动态
     public List<Dynamic> selectDynamicByTipOffNum(int tipOffNum);
 
@@ -39,6 +45,10 @@ public interface DynamicMapper {
     // 根据动态类型查看动态
     public List<Dynamic> selectDynamicByType(int appState);
 
+    // 获取该用户某一动态后的num条动态
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimit20(String userId, int dynamicId, int num);
 
+    // 获取该某一动态后的num条动态
+    public List<Dynamic> selectDynamicByDynamicIdLimit20(int dynamicId, int num);
 
 }

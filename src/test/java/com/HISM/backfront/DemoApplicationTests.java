@@ -52,8 +52,8 @@ class DemoApplicationTests {
     void Test(){
         Date date = new Date();
 //        System.out.println(dynamicSerive.selectDynamicByIndex("鬼畜").get(1)+ "---------");
-        Dynamic dynamic = new Dynamic("小程序", 2,"金轮秀肌肉小程序", date, "程序", "123", "python", "空代码", "wu", "sdf", "fsd", "baidu.com", 1);
-        dynamicSerive.insertDynamic(dynamic);
+        // Dynamic dynamic = new Dynamic("小程序", 2,"金轮秀肌肉小程序", date, "程序", "123", "python", "空代码", "wu", "sdf", "fsd", "baidu.com", 1);
+        System.out.println(dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20("16888", 322, 13).size());
     }
 
     @Test

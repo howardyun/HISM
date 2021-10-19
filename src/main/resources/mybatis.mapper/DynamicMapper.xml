@@ -24,6 +24,14 @@
         select * from dynamic where dynamicId = #{dynamicId}
     </select>
 
+    <select id="selectDynamicByUserIdAndState" resultMap="dynamicMap">
+        select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} order by dynamicTime
+    </select>
+
+    <select id="selectDynamicByUserIdAnd2State" resultMap="dynamicMap">
+        select * from dynamic where userId = #{userId} and (dynamicState = #{dynamicState1} or dynamicState = #{dynamicState2}) order by dynamicTime
+    </select>
+
     <select id="selectDynamicByTipOffNum" resultMap="dynamicMap">
         select * from dynamic where tipOffNum = #{tipOffNum} order by dynamicTime
     </select>
@@ -50,6 +58,14 @@
     <select id="selectDynamicByType" resultMap="dynamicMap">
         select * from dynamic where dynamicType = #{dynamicType}
         order by dynamicTime
+    </select>
+
+    <select id="selectDynamicByUserIdAndDynamicIdLimit20" resultMap="dynamicMap">
+        select * from (SELECT * from dynamic WHERE userId = #{userId}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+    </select>
+
+    <select id="selectDynamicByDynamicIdLimit20" resultMap="dynamicMap">
+        select * from dynamic where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
     </select>
 
 </mapper>

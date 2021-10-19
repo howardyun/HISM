@@ -44,6 +44,25 @@ public class DynamicSerive {
         return dynamicList;
     }
 
+    // 通过动态发布者的id和动态的一个状态 获取动态
+    public List<Dynamic> selectDynamicByUserIdAndState(String userId, int dynamicState){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndState(userId, dynamicState);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }
+        return dynamicList;
+    }
+
+
+    // 通过动态发布者的id和动态的任意（or）两个状态查找动态
+    public List<Dynamic> selectDynamicByUserIdAnd2State(String userId, int dynamicState1, int dynamicState2){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAnd2State(userId, dynamicState1, dynamicState2);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }
+        return dynamicList;
+    }
+
     // 通过动态Id查看动态
     public Dynamic selectDynamicByDynamicId(int DynamicId){
         try{
@@ -99,5 +118,29 @@ public class DynamicSerive {
     // 根据动态类型查看动态
     public List<Dynamic> selectDynamicByType(int appState){
         return dynamicMapper.selectDynamicByType(appState);
+    }
+
+
+    // 获取该用户某一动态后的20条动态
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimit20(String userId, int dynamicId, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdLimit20(userId, dynamicId, num);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }else if(dynamicList.size() < num){
+            System.out.println("获取的动态数量不满足"+num+"条");
+        }
+        return dynamicList;
+    }
+
+
+    // 获取该某一动态后的20条动态
+    public List<Dynamic> selectDynamicByDynamicIdLimit20(int dynamicId, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdLimit20(dynamicId, num);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }else if(dynamicList.size() < num){
+            System.out.println("获取的动态数量不满足"+num+"条");
+        }
+        return dynamicList;
     }
 }
