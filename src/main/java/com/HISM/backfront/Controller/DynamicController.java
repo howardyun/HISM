@@ -418,9 +418,11 @@ public class DynamicController {
                 map.put("isDel", dynamic.getDynamicState() == 3);
                 map.put("tag", dynamic.getDynamicType());
                 String dynamicType = dynamic.getDynamicType();
+                myResult.changeStatus(true);
                 if(dynamicType.equals("0")){
                     map.put("text", dynamic.getDynamicContent());
-                }else if(dynamicType.equals("1")){
+                }
+                else if(dynamicType.equals("1")){
                     int length = dynamic.getDynamicContent().split(";").length;
                     if(length==0){
                         myResult.changeStatus(false);
@@ -429,20 +431,23 @@ public class DynamicController {
                     }else if(length==1){
                         map.put("photo", dynamic.getDynamicContent());
                     }else{
-                        for(int i=0; i<length; i++){
-                            map.put("photos",dynamic.getDynamicContent().split(";")[i]);
-                        }
+                            map.put("photos",dynamic.getDynamicContent());
                     }
-                }else if(dynamicType.equals("2")){
+                }
+                else if(dynamicType.equals("2")){
                     map.put("video", dynamic.getDynamicContent());
-                }else if(dynamicType.equals("3")||dynamicType.equals("4")){
+                }
+                else if(dynamicType.equals("3")||dynamicType.equals("4")){
                     map.put("momentId", dynamic.getDynamicId());
-                }else{
+                }
+                else{
                     myResult.changeStatus(false);
                     myResult.add("message", "动态类型码错误");
                     return myResult;
                 }
+                myResult.add("mesasge",map);
             }
+
         }
         return myResult;
     }
