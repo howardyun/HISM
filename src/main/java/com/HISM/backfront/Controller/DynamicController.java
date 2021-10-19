@@ -360,7 +360,7 @@ public class DynamicController {
                 myResult.changeStatus(false);
                 myResult.add("message", "目标用户多于一个");
             } else {
-                if(user.get(0).getUserId().equals(user1.get(0).getUserId())){
+                if(userId.equals(targetUserId)){
                     List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
                     if(dynamics == null){
                         myResult.changeStatus(false);
@@ -383,22 +383,25 @@ public class DynamicController {
                             String dynamicType = dynamic.getDynamicType();
                             if(dynamicType.equals("0")){
                                 map.put("text", dynamic.getDynamicContent());
-                            } else if(dynamicType.equals("1")){
+                            }
+                            else if(dynamicType.equals("1")){
                                 int imageLength = dynamic.getDynamicContent().split(";").length;
                                 if(imageLength==0){
                                     myResult.changeStatus(false);
                                     myResult.add("message", "动态中不包含图片");
                                     return myResult;
-                                }else if(imageLength==1){
-                                    map.put("photo", dynamic.getDynamicContent());
-                                }else{
+                                }
+                                else{
                                     map.put("photos",dynamic.getDynamicContent());
                                 }
-                            } else if(dynamicType.equals("2")){
+                            }
+                            else if(dynamicType.equals("2")){
                                 map.put("video", dynamic.getDynamicContent());
-                            } else if(dynamicType.equals("3")||dynamicType.equals("4")){
+                            }
+                            else if(dynamicType.equals("3")||dynamicType.equals("4")){
                                 map.put("momentId", dynamic.getDynamicId());
-                            } else{
+                            }
+                            else{
                                 myResult.changeStatus(false);
                                 myResult.add("message", "动态类型码错误");
                                 return myResult;
@@ -444,16 +447,18 @@ public class DynamicController {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态中不包含图片");
                                         return myResult;
-                                    }else if(imageLength==1){
-                                        map.put("photo", dynamic.getDynamicContent());
-                                    }else{
+                                    }
+                                    else{
                                         map.put("photos",dynamic.getDynamicContent());
                                     }
-                                } else if(dynamicType.equals("2")){
+                                }
+                                else if(dynamicType.equals("2")){
                                     map.put("video", dynamic.getDynamicContent());
-                                } else if(dynamicType.equals("3")||dynamicType.equals("4")){
+                                }
+                                else if(dynamicType.equals("3")||dynamicType.equals("4")){
                                     map.put("momentId", dynamic.getDynamicId());
-                                } else{
+                                }
+                                else{
                                     myResult.changeStatus(false);
                                     myResult.add("message", "动态类型码错误");
                                     return myResult;
