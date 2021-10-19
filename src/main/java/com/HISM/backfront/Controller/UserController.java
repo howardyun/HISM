@@ -211,7 +211,13 @@ public class UserController {
         } else {
             User user = users.get(0);
             //获取源文件名称
-            String root_fileName = "userAvatar.png";
+            System.out.println(multipartFile.getContentType());
+            String name = multipartFile.getOriginalFilename();
+            assert name != null;
+            String []s=name.split("\\.");
+            Date date = new Date(System.currentTimeMillis());
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            String root_fileName = "userAvatar" + "-" + timeStamp + "."+s[s.length-1];
             //获取地址
             String filePath = webAppConfig.location + "/";
             filePath += user.getUserId();
@@ -219,7 +225,7 @@ public class UserController {
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                user.setAvatarURL("http://39.106.25.203/img/"+userId + "/Avatar/" + root_fileName);
+                user.setAvatarURL("http://39.106.25.203/img/" + userId + "/Avatar/" + root_fileName);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
@@ -465,7 +471,7 @@ public class UserController {
 
     @PostMapping("/cancelFollowUser")
     @ApiOperation("取消关注用户")
-    public MyResult cancelFollowUser(@RequestParam String userId, @RequestParam String targetUserId){
+    public MyResult cancelFollowUser(@RequestParam String userId, @RequestParam String targetUserId) {
         MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(targetUserId)) {
             myResult.changeStatus(false);
@@ -501,7 +507,7 @@ public class UserController {
                     Date date = new Date(System.currentTimeMillis());
                     Timestamp timeStamep = new Timestamp(date.getTime());
                     follower.setFollowTime(timeStamep);
-                    followerSerive.deleteFollower(userId,targetUserId);
+                    followerSerive.deleteFollower(userId, targetUserId);
                     myResult.changeStatus(true);
                 }
             }
@@ -510,6 +516,7 @@ public class UserController {
 
 
     }
+
     @PostMapping("/searchUser")
 
     @ApiOperation("搜索用户")
