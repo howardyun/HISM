@@ -404,6 +404,11 @@ public class DynamicController {
                 if (userId.equals(targetUserId)) {
                     if (lastMomentId == -1) {
                         List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
+                        if(allDynamics == null){
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该用户无动态");
+                            return myResult;
+                        }
                         int beginDynamicId = allDynamics.get(0).getDynamicId();
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
                         if (dynamics == null) {
