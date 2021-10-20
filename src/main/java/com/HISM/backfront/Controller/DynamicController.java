@@ -34,559 +34,6 @@ public class DynamicController {
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
 
-    @PostMapping("/createMomentWithPhotos")
-    //必填
-    @ApiOperation("用户上传照片")
-    public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile[] multipartFile, @RequestParam String text, @RequestParam String tag) {
-        MyResult myResult = new MyResult();
-        if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "userId或text或tag为空");
-            return myResult;
-        }
-        List<User> users = userService.selectUserbyId(userId);
-        if (users == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "无该用户信息");
-        } else if (users.size() > 1) {
-            myResult.changeStatus(false);
-            myResult.add("message", "用户信息");
-        } else {
-
-        }
-        return myResult;
-    }
-
-    @PostMapping("/createMomentWithVideo")
-    //必填
-    @ApiOperation("用户上传视频")
-    public String createMomentWithVideo(@RequestParam String name) {
-        return name;
-    }
-
-    @PostMapping("/createMomentWithCodeCLI")
-    //必填
-    @ApiOperation("发表含CLI程序段的⽂本动态")
-    public MyResult createMomentWithCodeCLI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
-                                         @RequestParam String language, @RequestParam String code, @RequestParam String para) {
-        MyResult myResult = new MyResult();
-        if("".equals(userId)){
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if(user == null){
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        }else if(user.size()>1){
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        }else{
-            if("".equals(language) || "".equals(code)){
-                myResult.changeStatus(false);
-                myResult.add("message", "language, code均不能为空");
-            }else{
-                //dynamic基本属性的设置
-                Dynamic dynamic = new Dynamic();
-                dynamic.setDynamicIndex(tag);
-                dynamic.setDynamicType("4");
-                dynamic.setDynamicState(2);
-                if(!"".equals(text)){
-                    dynamic.setDynamicContent(text);
-                }
-                Date date = new Date(System.currentTimeMillis());
-                Timestamp timeStamp = new Timestamp(date.getTime());
-                dynamic.setDynamicTime(timeStamp);
-                //设定code相关属性
-                dynamic.setLanguage_(language);
-                dynamic.setCode(code);
-                dynamic.setPara(para);
-                dynamicSerive.insertDynamic(dynamic);
-                myResult.changeStatus(true);
-                myResult.add("message","");
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("/createMomentWithCodeGUI")
-    //必填
-    @ApiOperation("发表含GUI程序段的⽂本动态")
-    public MyResult createMomentWithCodeGUI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
-                                         @RequestParam String language, @RequestParam String code, @RequestParam String html,
-                                         @RequestParam String css, @RequestParam String para) {
-        MyResult myResult = new MyResult();
-        if("".equals(userId)){
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if(user == null){
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        }else if(user.size()>1){
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        }else{
-            if("".equals(language) || "".equals(code) || "".equals(html) || "".equals(css)){
-                myResult.changeStatus(false);
-                myResult.add("message", "language, code, html, css等均不能为空");
-            }else{
-                //dynamic基本属性的设置
-                Dynamic dynamic = new Dynamic();
-                dynamic.setDynamicIndex(tag);
-                dynamic.setDynamicType("3");
-                dynamic.setDynamicState(2);
-                if(!"".equals(text)){
-                    dynamic.setDynamicContent(text);
-                }
-                Date date = new Date(System.currentTimeMillis());
-                Timestamp timestamp = new Timestamp(date.getTime());
-                dynamic.setDynamicTime(timestamp);
-                //code相关内容的设置
-                dynamic.setLanguage_(language);
-                dynamic.setCode(code);
-                dynamic.setHtml(html);
-                dynamic.setCss(css);
-                dynamic.setPara(para);
-                dynamicSerive.insertDynamic(dynamic);
-                myResult.changeStatus(true);
-                myResult.add("message","");
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("/createMomentOnlyText")
-    //必填
-    @ApiOperation("用户上传文本")
-    public MyResult createMomentOnlyText(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
-        MyResult myResult = new MyResult();
-        if ("".equals(userId) || "".equals(text)) {
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id或text为空或tag为空");
-            return myResult;
-        }
-        List<User> users = userService.selectUserbyId(userId);
-        if (users == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "无该用户");
-        } else if (users.size() > 1) {
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id大于1个");
-        } else {
-            Dynamic dynamic = new Dynamic();
-            //可见性
-            dynamic.setDynamicState(2);
-            //设置内容
-            dynamic.setDynamicContent(text);
-            //设置动态类型
-            dynamic.setDynamicType("1");
-            //设置时间
-            Date date = new Date(System.currentTimeMillis());
-            Timestamp timeStamp = new Timestamp(date.getTime());
-            dynamic.setDynamicTime(timeStamp);
-            //设置标签
-            dynamic.setDynamicIndex(tag);
-            dynamicSerive.insertDynamic(dynamic);
-            myResult.changeStatus(true);
-            myResult.add("message", "");
-        }
-        return myResult;
-    }
-
-    @PostMapping("delComment")
-    @ApiOperation("删除评论")
-    public MyResult delComment(@RequestParam String userId, @RequestParam int commentId){
-        MyResult myResult = new MyResult();
-        if("".equals(userId)){
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if(user == null){
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        }else if(user.size()>1){
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        }else{
-            int dynamicId = commentSerive.getDynamicId(commentId);
-            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(dynamic==null){
-                myResult.changeStatus(false);
-                myResult.add("message", "该评论所属的动态不存在");
-            }else{
-                if(!commentSerive.isComment(userId, dynamicId)){
-                    myResult.changeStatus(false);
-                    myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
-                }else{
-                    if(userId.equals(commentSerive.getUserId(commentId))){
-                        commentSerive.deleteComment(commentId);
-                        dynamicSerive.updateDynamic(dynamic);
-                        myResult.changeStatus(true);
-                        myResult.add("message", "");
-                    }else{
-                        myResult.changeStatus(false);
-                        myResult.add("message", "不能删除别人的评论");
-                    }
-                }
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("/delMoment")
-    //必填
-    @ApiOperation("删除动态")
-    public MyResult delMoment(@RequestParam String userId, @RequestParam int dynamicId) {
-        MyResult myResult = new MyResult();
-        if("".equals(userId)){
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if(user == null){
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        }else if(user.size()>1){
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        }else{
-            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(dynamic == null){
-                myResult.changeStatus(false);
-                myResult.add("message", "要删除的动态不存在");
-            }else{
-                if(userId.equals(dynamic.getUserId())){
-                    dynamic.setDynamicState(3);
-                    dynamicSerive.updateDynamic(dynamic);
-                    myResult.changeStatus(true);
-                    myResult.add("message","");
-                }else{
-                    myResult.changeStatus(false);
-                    myResult.add("message", "不能删除别人的动态");
-                }
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("reportMoment")
-    @ApiOperation("举报动态")
-    public MyResult reportMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String message){
-        MyResult myResult = new MyResult();
-        if("".equals(userId)){
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if(user == null){
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        }else if(user.size()>1){
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        }else{
-            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if(dynamic == null){
-                myResult.changeStatus(false);
-                myResult.add("message", "要举报的动态不存在");
-            }else if(userId.equals(dynamic.getUserId())){
-                myResult.changeStatus(false);
-                myResult.add("message", "不能举报自己的动态");
-            }else{
-                TipOffDynamic tipOffDynamic = new TipOffDynamic();
-                tipOffDynamic.setDynamicId(dynamicId);
-                tipOffDynamic.setInformerId(userId);
-                Date date = new Date(System.currentTimeMillis());
-                Timestamp timeStamp = new Timestamp(date.getTime());
-                tipOffDynamic.setTipOffTime(timeStamp);
-                tipOffDynamic.setTipOffContent(message);
-                boolean userIsTipOff = false;
-                List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
-                if(tipOffDynamicList==null){
-                    tipOffDynamicSerive.insertTipOff(tipOffDynamic);
-                    myResult.changeStatus(true);
-                    myResult.add("message", "");
-                }else{
-                    for(int i=0; i<tipOffDynamicList.size(); i++){
-                        if(tipOffDynamicList.get(i).getInformerId().equals(tipOffDynamic.getInformerId())){
-                            userIsTipOff = true;
-                        }
-                    }
-                    if(!userIsTipOff){
-                        tipOffDynamicSerive.insertTipOff(tipOffDynamic);
-                        myResult.changeStatus(true);
-                        myResult.add("message", "");
-                    }else{
-                        myResult.changeStatus(false);
-                        myResult.add("message","不能重复举报动态");
-                    }
-                }
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("/getUsersMoments")
-    //必填
-    @ApiOperation("获取用户动态")
-    public MyResult getUsersMoments(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam int lastMomentId, @RequestParam int length) {
-        MyResult myResult = new MyResult();
-        if ("".equals(userId) || "".equals(targetUserId)) {
-            myResult.changeStatus(false);
-            myResult.add("message", "源用户id，目标用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        List<User> user1 = userService.selectUserbyId(targetUserId);
-        if (user == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "没有源用户");
-        } else if (user.size() > 1) {
-            myResult.changeStatus(false);
-            myResult.add("message", "源用户信息多于一个");
-        } else {
-            if (user1 == null) {
-                myResult.changeStatus(false);
-                myResult.add("message", "没有目标用户");
-            } else if (user1.size() > 1) {
-                myResult.changeStatus(false);
-                myResult.add("message", "目标用户多于一个");
-            } else {
-                if(userId.equals(targetUserId)){
-                    if(lastMomentId == -1){
-                        List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
-                        int beginDynamicId = allDynamics.get(0).getDynamicId();
-                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
-                        if(dynamics == null){
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
-                        }else{
-                            List<Map<String, Object>> tmp = new ArrayList<>();
-                            for(Dynamic dynamic:dynamics){
-                                Map<String, Object> map = new HashMap<>(4);
-                                map.put("momentId", dynamic.getDynamicId());
-                                map.put("userID", user1.get(0).getUserId());
-                                map.put("userName", user1.get(0).getUserName());
-                                map.put("userAvatar", user1.get(0).getAvatarURL());
-                                map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
-                                map.put("likedNum", dynamic.getThumbNum());
-                                map.put("commentNum", dynamic.getCommentNum());
-                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
-                                map.put("isDel", dynamic.getDynamicState() == 3);
-                                map.put("tag", dynamic.getDynamicType());
-                                String dynamicType = dynamic.getDynamicType();
-                                if(dynamicType.equals("0")){
-                                    map.put("text", dynamic.getDynamicContent());
-                                }
-                                else if(dynamicType.equals("1")){
-                                    int imageLength = dynamic.getDynamicContent().split(";").length;
-                                    if(imageLength==0){
-                                        myResult.changeStatus(false);
-                                        myResult.add("message", "动态中不包含图片");
-                                        return myResult;
-                                    }
-                                    else{
-                                        map.put("photos",dynamic.getDynamicContent());
-                                    }
-                                }
-                                else if(dynamicType.equals("2")){
-                                    map.put("video", dynamic.getDynamicContent());
-                                }
-                                else if(dynamicType.equals("3")||dynamicType.equals("4")){
-                                    map.put("momentId", dynamic.getDynamicId());
-                                }
-                                else{
-                                    myResult.changeStatus(false);
-                                    myResult.add("message", "动态类型码错误");
-                                    return myResult;
-                                }
-                                tmp.add(map);
-                            }
-                            myResult.changeStatus(true);
-                            myResult.add("message", tmp);
-                        }
-                    }else{
-                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
-                        if(dynamics == null){
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
-                        }else{
-                            List<Map<String, Object>> tmp = new ArrayList<>();
-                            for(Dynamic dynamic:dynamics){
-                                Map<String, Object> map = new HashMap<>(4);
-                                map.put("momentId", dynamic.getDynamicId());
-                                map.put("userID", user1.get(0).getUserId());
-                                map.put("userName", user1.get(0).getUserName());
-                                map.put("userAvatar", user1.get(0).getAvatarURL());
-                                map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
-                                map.put("likedNum", dynamic.getThumbNum());
-                                map.put("commentNum", dynamic.getCommentNum());
-                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
-                                map.put("isDel", dynamic.getDynamicState() == 3);
-                                map.put("tag", dynamic.getDynamicType());
-                                String dynamicType = dynamic.getDynamicType();
-                                if(dynamicType.equals("0")){
-                                    map.put("text", dynamic.getDynamicContent());
-                                }
-                                else if(dynamicType.equals("1")){
-                                    int imageLength = dynamic.getDynamicContent().split(";").length;
-                                    if(imageLength==0){
-                                        myResult.changeStatus(false);
-                                        myResult.add("message", "动态中不包含图片");
-                                        return myResult;
-                                    }
-                                    else{
-                                        map.put("photos",dynamic.getDynamicContent());
-                                    }
-                                }
-                                else if(dynamicType.equals("2")){
-                                    map.put("video", dynamic.getDynamicContent());
-                                }
-                                else if(dynamicType.equals("3")||dynamicType.equals("4")){
-                                    map.put("momentId", dynamic.getDynamicId());
-                                }
-                                else{
-                                    myResult.changeStatus(false);
-                                    myResult.add("message", "动态类型码错误");
-                                    return myResult;
-                                }
-                                tmp.add(map);
-                            }
-                            myResult.changeStatus(true);
-                            myResult.add("message", tmp);
-                        }
-                    }
-                }else{
-                    if(lastMomentId == -1){
-                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
-                        if(dynamics == null){
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
-                        }else{
-                            List<Map<String, Object>> tmp = new ArrayList<>();
-                            for(Dynamic dynamic:dynamics){
-                                if(length == 0){
-                                    break;
-                                }
-                                length--;
-                                Map<String, Object> map = new HashMap<>(4);
-                                map.put("momentId", dynamic.getDynamicId());
-                                map.put("userID", user1.get(0).getUserId());
-                                map.put("userName", user1.get(0).getUserName());
-                                map.put("userAvatar", user1.get(0).getAvatarURL());
-                                map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
-                                map.put("likedNum", dynamic.getThumbNum());
-                                map.put("commentNum", dynamic.getCommentNum());
-                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
-                                map.put("isDel", dynamic.getDynamicState() == 3);
-                                map.put("tag", dynamic.getDynamicType());
-                                String dynamicType = dynamic.getDynamicType();
-                                if(dynamicType.equals("0")){
-                                    map.put("text", dynamic.getDynamicContent());
-                                } else if(dynamicType.equals("1")){
-                                    int imageLength = dynamic.getDynamicContent().split(";").length;
-                                    if(imageLength==0){
-                                        myResult.changeStatus(false);
-                                        myResult.add("message", "动态中不包含图片");
-                                        return myResult;
-                                    }
-                                    else{
-                                        map.put("photos",dynamic.getDynamicContent());
-                                    }
-                                }
-                                else if(dynamicType.equals("2")){
-                                    map.put("video", dynamic.getDynamicContent());
-                                }
-                                else if(dynamicType.equals("3")||dynamicType.equals("4")){
-                                    map.put("momentId", dynamic.getDynamicId());
-                                }
-                                else{
-                                    myResult.changeStatus(false);
-                                    myResult.add("message", "动态类型码错误");
-                                    return myResult;
-                                }
-                                tmp.add(map);
-                            }
-                            myResult.changeStatus(true);
-                            myResult.add("message", tmp);
-                        }
-                    } else{
-                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
-                        if(dynamics == null){
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
-                        }else{
-                            List<Map<String, Object>> tmp = new ArrayList<>();
-                            for(Dynamic dynamic:dynamics){
-                                if(dynamic.getDynamicId() <= lastMomentId){
-                                    continue;
-                                }else{
-                                    if(length == 0){
-                                        break;
-                                    }
-                                    length--;
-                                    Map<String, Object> map = new HashMap<>(4);
-                                    map.put("momentId", dynamic.getDynamicId());
-                                    map.put("userID", user1.get(0).getUserId());
-                                    map.put("userName", user1.get(0).getUserName());
-                                    map.put("userAvatar", user1.get(0).getAvatarURL());
-                                    map.put("time", dynamic.getDynamicTime());
-                                    map.put("text", dynamic.getDynamicContent());
-                                    map.put("likedNum", dynamic.getThumbNum());
-                                    map.put("commentNum", dynamic.getCommentNum());
-                                    map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
-                                    map.put("isDel", dynamic.getDynamicState() == 3);
-                                    map.put("tag", dynamic.getDynamicType());
-                                    String dynamicType = dynamic.getDynamicType();
-                                    if(dynamicType.equals("0")){
-                                        map.put("text", dynamic.getDynamicContent());
-                                    } else if(dynamicType.equals("1")){
-                                        int imageLength = dynamic.getDynamicContent().split(";").length;
-                                        if(imageLength==0){
-                                            myResult.changeStatus(false);
-                                            myResult.add("message", "动态中不包含图片");
-                                            return myResult;
-                                        }
-                                        else{
-                                            map.put("photos",dynamic.getDynamicContent());
-                                        }
-                                    }
-                                    else if(dynamicType.equals("2")){
-                                        map.put("video", dynamic.getDynamicContent());
-                                    }
-                                    else if(dynamicType.equals("3")||dynamicType.equals("4")){
-                                        map.put("momentId", dynamic.getDynamicId());
-                                    }
-                                    else{
-                                        myResult.changeStatus(false);
-                                        myResult.add("message", "动态类型码错误");
-                                        return myResult;
-                                    }
-                                    tmp.add(map);
-                                }
-                            }
-                            myResult.changeStatus(true);
-                            myResult.add("message", tmp);
-                            }
-                        }
-                    }
-                }
-            }
-        return myResult;
-    }
-
-
     @PostMapping("/getMoments")
     //必填
     @ApiOperation("获取动态")
@@ -632,33 +79,29 @@ public class DynamicController {
                 map.put("tag", dynamic.getDynamicType());
                 String dynamicType = dynamic.getDynamicType();
                 myResult.changeStatus(true);
-                if(dynamicType.equals("0")){
+                if (dynamicType.equals("0")) {
                     map.put("text", dynamic.getDynamicContent());
-                }
-                else if(dynamicType.equals("1")){
+                } else if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
-                    if(length==0){
+                    if (length == 0) {
                         myResult.changeStatus(false);
                         myResult.add("message", "动态中不包含图片");
                         return myResult;
-                    }else if(length==1){
+                    } else if (length == 1) {
                         map.put("photo", dynamic.getDynamicContent());
-                    }else{
-                        map.put("photos",dynamic.getDynamicContent());
+                    } else {
+                        map.put("photos", dynamic.getDynamicContent());
                     }
-                }
-                else if(dynamicType.equals("2")){
+                } else if (dynamicType.equals("2")) {
                     map.put("video", dynamic.getDynamicContent());
-                }
-                else if(dynamicType.equals("3")||dynamicType.equals("4")){
+                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                     map.put("momentId", dynamic.getDynamicId());
-                }
-                else{
+                } else {
                     myResult.changeStatus(false);
                     myResult.add("message", "动态类型码错误");
                     return myResult;
                 }
-                myResult.add("message",map);
+                myResult.add("message", map);
             }
         }
         return myResult;
@@ -691,14 +134,14 @@ public class DynamicController {
                 if (thumbSerive.isThumb(userId, dynamicId)) {
                     thumbSerive.deleteThumb(dynamicId, userId);
                     dynamicSerive.updateDynamic(dynamic);
-                    int likedNum = dynamic.getThumbNum()-1;
+                    int likedNum = dynamic.getThumbNum() - 1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "已取消点赞");
                     map.put("likedNum", likedNum);
                 } else {
                     thumbSerive.insertThumb(new Thumb(dynamicId, userId));
                     dynamicSerive.updateDynamic(dynamic);
-                    int likedNum = dynamic.getThumbNum()+1;
+                    int likedNum = dynamic.getThumbNum() + 1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "点赞成功");
                     map.put("likedNum", likedNum);
@@ -787,11 +230,551 @@ public class DynamicController {
         return myResult;
     }
 
+    @PostMapping("/createMomentOnlyText")
+    //必填
+    @ApiOperation("用户上传文本")
+    public MyResult createMomentOnlyText(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(text)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id或text为空或tag为空");
+            return myResult;
+        }
+        List<User> users = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "无该用户");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id大于1个");
+        } else {
+            Dynamic dynamic = new Dynamic();
+            //可见性
+            dynamic.setDynamicState(2);
+            //设置内容
+            dynamic.setDynamicContent(text);
+            //设置动态类型
+            dynamic.setDynamicType("1");
+            //设置时间
+            Date date = new Date(System.currentTimeMillis());
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            dynamic.setDynamicTime(timeStamp);
+            //设置标签
+            dynamic.setDynamicIndex(tag);
+            dynamicSerive.insertDynamic(dynamic);
+            myResult.changeStatus(true);
+            myResult.add("message", "");
+        }
+        return myResult;
+    }
+
+    @PostMapping("/createMomentWithPhotos")
+    //必填
+    @ApiOperation("用户上传图片+文本")
+    public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile[] multipartFile, @RequestParam String text, @RequestParam String tag) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "userId或text或tag为空");
+            return myResult;
+        }
+        List<User> users = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "无该用户信息");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户信息");
+        } else {
+
+        }
+        return myResult;
+    }
+
+    @PostMapping("/createMomentWithVideo")
+    //必填
+    @ApiOperation("用户上传视频")
+    public String createMomentWithVideo(@RequestParam String name) {
+        return name;
+    }
+
+    @PostMapping("delComment")
+    @ApiOperation("删除评论")
+    public MyResult delComment(@RequestParam String userId, @RequestParam int commentId) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {
+            int dynamicId = commentSerive.getDynamicId(commentId);
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+            if (dynamic == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "该评论所属的动态不存在");
+            } else {
+                if (!commentSerive.isComment(userId, dynamicId)) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
+                } else {
+                    if (userId.equals(commentSerive.getUserId(commentId))) {
+                        commentSerive.deleteComment(commentId);
+                        dynamicSerive.updateDynamic(dynamic);
+                        myResult.changeStatus(true);
+                        myResult.add("message", "");
+                    } else {
+                        myResult.changeStatus(false);
+                        myResult.add("message", "不能删除别人的评论");
+                    }
+                }
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/delMoment")
+    //必填
+    @ApiOperation("删除动态")
+    public MyResult delMoment(@RequestParam String userId, @RequestParam int dynamicId) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+            if (dynamic == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "要删除的动态不存在");
+            } else {
+                if (userId.equals(dynamic.getUserId())) {
+                    dynamic.setDynamicState(3);
+                    dynamicSerive.updateDynamic(dynamic);
+                    myResult.changeStatus(true);
+                    myResult.add("message", "");
+                } else {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "不能删除别人的动态");
+                }
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/getUsersMoments")
+    //必填
+    @ApiOperation("获取用户动态")
+    public MyResult getUsersMoments(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam int lastMomentId, @RequestParam int length) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "源用户id，目标用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        List<User> user1 = userService.selectUserbyId(targetUserId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "没有源用户");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "源用户信息多于一个");
+        } else {
+            if (user1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "没有目标用户");
+            } else if (user1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "目标用户多于一个");
+            } else {
+                if (userId.equals(targetUserId)) {
+                    if (lastMomentId == -1) {
+                        List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
+                        int beginDynamicId = allDynamics.get(0).getDynamicId();
+                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
+                        if (dynamics == null) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该用户无动态");
+                        } else {
+                            List<Map<String, Object>> tmp = new ArrayList<>();
+                            for (Dynamic dynamic : dynamics) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", dynamic.getDynamicId());
+                                map.put("userID", user1.get(0).getUserId());
+                                map.put("userName", user1.get(0).getUserName());
+                                map.put("userAvatar", user1.get(0).getAvatarURL());
+                                map.put("time", dynamic.getDynamicTime());
+                                map.put("text", dynamic.getDynamicContent());
+                                map.put("likedNum", dynamic.getThumbNum());
+                                map.put("commentNum", dynamic.getCommentNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                                map.put("isDel", dynamic.getDynamicState() == 3);
+                                map.put("tag", dynamic.getDynamicType());
+                                String dynamicType = dynamic.getDynamicType();
+                                if (dynamicType.equals("0")) {
+                                    map.put("text", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("1")) {
+                                    int imageLength = dynamic.getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", dynamic.getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", dynamic.getDynamicId());
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                tmp.add(map);
+                            }
+                            myResult.changeStatus(true);
+                            myResult.add("message", tmp);
+                        }
+                    } else {
+                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
+                        if (dynamics == null) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该用户无动态");
+                        } else {
+                            List<Map<String, Object>> tmp = new ArrayList<>();
+                            for (Dynamic dynamic : dynamics) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", dynamic.getDynamicId());
+                                map.put("userID", user1.get(0).getUserId());
+                                map.put("userName", user1.get(0).getUserName());
+                                map.put("userAvatar", user1.get(0).getAvatarURL());
+                                map.put("time", dynamic.getDynamicTime());
+                                map.put("text", dynamic.getDynamicContent());
+                                map.put("likedNum", dynamic.getThumbNum());
+                                map.put("commentNum", dynamic.getCommentNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                                map.put("isDel", dynamic.getDynamicState() == 3);
+                                map.put("tag", dynamic.getDynamicType());
+                                String dynamicType = dynamic.getDynamicType();
+                                if (dynamicType.equals("0")) {
+                                    map.put("text", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("1")) {
+                                    int imageLength = dynamic.getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", dynamic.getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", dynamic.getDynamicId());
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                tmp.add(map);
+                            }
+                            myResult.changeStatus(true);
+                            myResult.add("message", tmp);
+                        }
+                    }
+                } else {
+                    if (lastMomentId == -1) {
+                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
+                        if (dynamics == null) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该用户无动态");
+                        } else {
+                            List<Map<String, Object>> tmp = new ArrayList<>();
+                            for (Dynamic dynamic : dynamics) {
+                                if (length == 0) {
+                                    break;
+                                }
+                                length--;
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", dynamic.getDynamicId());
+                                map.put("userID", user1.get(0).getUserId());
+                                map.put("userName", user1.get(0).getUserName());
+                                map.put("userAvatar", user1.get(0).getAvatarURL());
+                                map.put("time", dynamic.getDynamicTime());
+                                map.put("text", dynamic.getDynamicContent());
+                                map.put("likedNum", dynamic.getThumbNum());
+                                map.put("commentNum", dynamic.getCommentNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                                map.put("isDel", dynamic.getDynamicState() == 3);
+                                map.put("tag", dynamic.getDynamicType());
+                                String dynamicType = dynamic.getDynamicType();
+                                if (dynamicType.equals("0")) {
+                                    map.put("text", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("1")) {
+                                    int imageLength = dynamic.getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", dynamic.getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", dynamic.getDynamicId());
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                tmp.add(map);
+                            }
+                            myResult.changeStatus(true);
+                            myResult.add("message", tmp);
+                        }
+                    } else {
+                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
+                        if (dynamics == null) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该用户无动态");
+                        } else {
+                            List<Map<String, Object>> tmp = new ArrayList<>();
+                            for (Dynamic dynamic : dynamics) {
+                                if (dynamic.getDynamicId() <= lastMomentId) {
+                                    continue;
+                                } else {
+                                    if (length == 0) {
+                                        break;
+                                    }
+                                    length--;
+                                    Map<String, Object> map = new HashMap<>(4);
+                                    map.put("momentId", dynamic.getDynamicId());
+                                    map.put("userID", user1.get(0).getUserId());
+                                    map.put("userName", user1.get(0).getUserName());
+                                    map.put("userAvatar", user1.get(0).getAvatarURL());
+                                    map.put("time", dynamic.getDynamicTime());
+                                    map.put("text", dynamic.getDynamicContent());
+                                    map.put("likedNum", dynamic.getThumbNum());
+                                    map.put("commentNum", dynamic.getCommentNum());
+                                    map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                                    map.put("isDel", dynamic.getDynamicState() == 3);
+                                    map.put("tag", dynamic.getDynamicType());
+                                    String dynamicType = dynamic.getDynamicType();
+                                    if (dynamicType.equals("0")) {
+                                        map.put("text", dynamic.getDynamicContent());
+                                    } else if (dynamicType.equals("1")) {
+                                        int imageLength = dynamic.getDynamicContent().split(";").length;
+                                        if (imageLength == 0) {
+                                            myResult.changeStatus(false);
+                                            myResult.add("message", "动态中不包含图片");
+                                            return myResult;
+                                        } else {
+                                            map.put("photos", dynamic.getDynamicContent());
+                                        }
+                                    } else if (dynamicType.equals("2")) {
+                                        map.put("video", dynamic.getDynamicContent());
+                                    } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                        map.put("momentId", dynamic.getDynamicId());
+                                    } else {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态类型码错误");
+                                        return myResult;
+                                    }
+                                    tmp.add(map);
+                                }
+                            }
+                            myResult.changeStatus(true);
+                            myResult.add("message", tmp);
+                        }
+                    }
+                }
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/getTagMoments")
+    //必填
+    @ApiOperation("获取用户动态")
+    public MyResult getTagMoments(){
+        MyResult myResult=new MyResult();
 
 
 
+        return myResult;
+    }
+
+    @PostMapping("reportMoment")
+    @ApiOperation("举报动态")
+    public MyResult reportMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String message) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {
+            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+            if (dynamic == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "要举报的动态不存在");
+            } else if (userId.equals(dynamic.getUserId())) {
+                myResult.changeStatus(false);
+                myResult.add("message", "不能举报自己的动态");
+            } else {
+                TipOffDynamic tipOffDynamic = new TipOffDynamic();
+                tipOffDynamic.setDynamicId(dynamicId);
+                tipOffDynamic.setInformerId(userId);
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timeStamp = new Timestamp(date.getTime());
+                tipOffDynamic.setTipOffTime(timeStamp);
+                tipOffDynamic.setTipOffContent(message);
+                boolean userIsTipOff = false;
+                List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
+                if (tipOffDynamicList == null) {
+                    tipOffDynamicSerive.insertTipOff(tipOffDynamic);
+                    myResult.changeStatus(true);
+                    myResult.add("message", "");
+                } else {
+                    for (int i = 0; i < tipOffDynamicList.size(); i++) {
+                        if (tipOffDynamicList.get(i).getInformerId().equals(tipOffDynamic.getInformerId())) {
+                            userIsTipOff = true;
+                        }
+                    }
+                    if (!userIsTipOff) {
+                        tipOffDynamicSerive.insertTipOff(tipOffDynamic);
+                        myResult.changeStatus(true);
+                        myResult.add("message", "");
+                    } else {
+                        myResult.changeStatus(false);
+                        myResult.add("message", "不能重复举报动态");
+                    }
+                }
+            }
+        }
+        return myResult;
+    }
 
 
+    @PostMapping("/createMomentWithCodeCLI")
+    //必填
+    @ApiOperation("发表含CLI程序段的⽂本动态")
+    public MyResult createMomentWithCodeCLI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
+                                            @RequestParam String language, @RequestParam String code, @RequestParam String para) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {
+            if ("".equals(language) || "".equals(code)) {
+                myResult.changeStatus(false);
+                myResult.add("message", "language, code均不能为空");
+            } else {
+                //dynamic基本属性的设置
+                Dynamic dynamic = new Dynamic();
+                dynamic.setDynamicIndex(tag);
+                dynamic.setDynamicType("4");
+                dynamic.setDynamicState(2);
+                if (!"".equals(text)) {
+                    dynamic.setDynamicContent(text);
+                }
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timeStamp = new Timestamp(date.getTime());
+                dynamic.setDynamicTime(timeStamp);
+                //设定code相关属性
+                dynamic.setLanguage_(language);
+                dynamic.setCode(code);
+                dynamic.setPara(para);
+                dynamicSerive.insertDynamic(dynamic);
+                myResult.changeStatus(true);
+                myResult.add("message", "");
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/createMomentWithCodeGUI")
+    //必填
+    @ApiOperation("发表含GUI程序段的⽂本动态")
+    public MyResult createMomentWithCodeGUI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
+                                            @RequestParam String language, @RequestParam String code, @RequestParam String html,
+                                            @RequestParam String css, @RequestParam String para) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {
+            if ("".equals(language) || "".equals(code) || "".equals(html) || "".equals(css)) {
+                myResult.changeStatus(false);
+                myResult.add("message", "language, code, html, css等均不能为空");
+            } else {
+                //dynamic基本属性的设置
+                Dynamic dynamic = new Dynamic();
+                dynamic.setDynamicIndex(tag);
+                dynamic.setDynamicType("3");
+                dynamic.setDynamicState(2);
+                if (!"".equals(text)) {
+                    dynamic.setDynamicContent(text);
+                }
+                Date date = new Date(System.currentTimeMillis());
+                Timestamp timestamp = new Timestamp(date.getTime());
+                dynamic.setDynamicTime(timestamp);
+                //code相关内容的设置
+                dynamic.setLanguage_(language);
+                dynamic.setCode(code);
+                dynamic.setHtml(html);
+                dynamic.setCss(css);
+                dynamic.setPara(para);
+                dynamicSerive.insertDynamic(dynamic);
+                myResult.changeStatus(true);
+                myResult.add("message", "");
+            }
+        }
+        return myResult;
+    }
 
 
 
