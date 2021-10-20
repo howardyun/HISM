@@ -87,16 +87,18 @@ public class DynamicController {
                         myResult.changeStatus(false);
                         myResult.add("message", "动态中不包含图片");
                         return myResult;
-                    } else if (length == 1) {
-                        map.put("photo", dynamic.getDynamicContent());
-                    } else {
+                    }
+                    else {
                         map.put("photos", dynamic.getDynamicContent());
                     }
-                } else if (dynamicType.equals("2")) {
+                }
+                else if (dynamicType.equals("2")) {
                     map.put("video", dynamic.getDynamicContent());
-                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                }
+                else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                     map.put("momentId", dynamic.getDynamicId());
-                } else {
+                }
+                else {
                     myResult.changeStatus(false);
                     myResult.add("message", "动态类型码错误");
                     return myResult;
@@ -614,9 +616,8 @@ public class DynamicController {
     @PostMapping("/getTagMoments")
     //必填
     @ApiOperation("获取用户动态")
-    public MyResult getTagMoments(){
-        MyResult myResult=new MyResult();
-
+    public MyResult getTagMoments() {
+        MyResult myResult = new MyResult();
 
 
         return myResult;
@@ -775,9 +776,6 @@ public class DynamicController {
         }
         return myResult;
     }
-
-
-
 
 
 }
