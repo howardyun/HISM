@@ -87,18 +87,14 @@ public class DynamicController {
                         myResult.changeStatus(false);
                         myResult.add("message", "动态中不包含图片");
                         return myResult;
-                    }
-                    else {
+                    } else {
                         map.put("photos", dynamic.getDynamicContent());
                     }
-                }
-                else if (dynamicType.equals("2")) {
+                } else if (dynamicType.equals("2")) {
                     map.put("video", dynamic.getDynamicContent());
-                }
-                else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                     map.put("momentId", dynamic.getDynamicId());
-                }
-                else {
+                } else {
                     myResult.changeStatus(false);
                     myResult.add("message", "动态类型码错误");
                     return myResult;
@@ -615,7 +611,7 @@ public class DynamicController {
 
     @PostMapping("/getTagMoments")
     //必填
-    @ApiOperation("获取用户动态")
+    @ApiOperation("获取某类型动态")
     public MyResult getTagMoments() {
         MyResult myResult = new MyResult();
 
@@ -772,6 +768,58 @@ public class DynamicController {
                 dynamicSerive.insertDynamic(dynamic);
                 myResult.changeStatus(true);
                 myResult.add("message", "");
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/getAppCLI")
+    //必填
+    @ApiOperation("获取CLI程序段")
+    public MyResult getAppCLI(@RequestParam int appId) {
+        MyResult myResult = new MyResult();
+        Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(appId);
+        if(dynamic==null){
+            myResult.changeStatus(false);
+            myResult.add("message","没有该app");
+        }else {
+            if(dynamic.getDynamicType().equals("4")){
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("language",dynamic.getLanguage_());
+                map.put("code",dynamic.getCode());
+                map.put("para",dynamic.getPara());
+                myResult.changeStatus(true);
+                myResult.add("message",map);
+            }else {
+                myResult.changeStatus(false);
+                myResult.add("message","该动态类型不是CLI");
+            }
+        }
+        return myResult;
+    }
+
+    @PostMapping("/getAppGUI")
+    //必填
+    @ApiOperation("获取GUI程序段")
+    public MyResult getAppGUI(@RequestParam int appId) {
+        MyResult myResult = new MyResult();
+        Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(appId);
+        if(dynamic==null){
+            myResult.changeStatus(false);
+            myResult.add("message","没有该app");
+        }else {
+            if(dynamic.getDynamicType().equals("3")){
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("language",dynamic.getLanguage_());
+                map.put("code",dynamic.getCode());
+                map.put("html",dynamic.getHtml());
+                map.put("css",dynamic.getCss());
+                map.put("para",dynamic.getPara());
+                myResult.changeStatus(true);
+                myResult.add("message",map);
+            }else {
+                myResult.changeStatus(false);
+                myResult.add("message","该动态类型不是GUI");
             }
         }
         return myResult;
