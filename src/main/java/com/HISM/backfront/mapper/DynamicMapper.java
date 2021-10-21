@@ -46,9 +46,15 @@ public interface DynamicMapper {
     public List<Dynamic> selectDynamicByType(int appState);
 
     // 获取该用户某一动态后的num条动态
-    public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimit20(String userId, int dynamicId, int num);
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimitNUM(String userId, int dynamicId, int num);
 
     // 获取该某一动态后的num条动态
-    public List<Dynamic> selectDynamicByDynamicIdLimit20(int dynamicId, int num);
+    public List<Dynamic> selectDynamicByDynamicIdLimitNUM(int dynamicId, int num);
 
+    // 获取该用户某一动态后的20条为的动态，要求20调动态的标签为dynamicIndex
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(String userId, int dynamicId, String dynamicIndex, int num);
+
+
+    // 获取该用户某一动态后num条动态 要求20条动态的状态为dynamicState
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(String userId, int dynamicId, int dynamicState, int num);
 }

@@ -123,7 +123,7 @@ public class DynamicSerive {
 
     // 获取该用户某一动态后的20条动态
     public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimit20(String userId, int dynamicId, int num){
-        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdLimit20(userId, dynamicId, num);
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdLimitNUM(userId, dynamicId, num);
         if(dynamicList.isEmpty()){
             System.out.println("error, 符合该条件的动态数量为0");
         }else if(dynamicList.size() < num){
@@ -133,9 +133,32 @@ public class DynamicSerive {
     }
 
 
-    // 获取该某一动态后的20条动态
-    public List<Dynamic> selectDynamicByDynamicIdLimit20(int dynamicId, int num){
-        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdLimit20(dynamicId, num);
+    // 获取该用户某一动态后的num条动态 要求num条动态的状态为dynamicState
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(String userId, int dynamicId, int dynamicState, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(userId, dynamicId, dynamicState, num);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }else if(dynamicList.size() < num){
+            System.out.println("获取的动态数量不满足"+num+"条");
+        }
+        return dynamicList;
+    }
+
+
+    // 获取该用户某一动态后的num条为的动态，要求num条动态的标签为dynamicIndex
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(String userId, int dynamicId, String dynamicIndex, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(userId, dynamicId, dynamicIndex, num);
+        if(dynamicList.isEmpty()){
+            System.out.println("error, 符合该条件的动态数量为0");
+        }else if(dynamicList.size() < num){
+            System.out.println("获取的动态数量不满足"+num+"条");
+        }
+        return dynamicList;
+    }
+
+    // 获取该某一动态后的num条动态
+    public List<Dynamic> selectDynamicByDynamicIdLimitNUM(int dynamicId, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdLimitNUM(dynamicId, num);
         if(dynamicList.isEmpty()){
             System.out.println("error, 符合该条件的动态数量为0");
         }else if(dynamicList.size() < num){
