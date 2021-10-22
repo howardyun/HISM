@@ -616,11 +616,36 @@ public class DynamicController {
 
     @PostMapping("/getTagMoments")
     //必填
-    @ApiOperation("获取某类型动态")
-    public MyResult getTagMoments() {
+    @ApiOperation("获取某类型动态")  //tag-希望获取的动态类型，即dynamicType
+    public MyResult getTagMoments(@RequestParam String userId, @RequestParam String tag, @RequestParam int lastMomentId, @RequestParam int length) {
         MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "存在多个该用户信息");
+        } else {     //dynamicList=null,length=0,lastMomentId=-1
+            if(tag.equals("0")){
 
+            }else if(tag.equals("1")){
 
+            }else if(tag.equals("2")){
+
+            }else if(tag.equals("3")){
+
+            }else if(tag.equals("4")){
+
+            }else{
+
+            }
+        }
         return myResult;
     }
 
