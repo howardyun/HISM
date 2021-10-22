@@ -117,8 +117,7 @@ public class AdminController {
 
 
     @PostMapping("/reportedUser")
-    @ApiOperation("获取所有被封用户基本信息")
-    //参数userStates可以不要，因为是查找被封用户，所以这个state一定是1
+    @ApiOperation("获取所有被封用户基本信息")  //获取所有处于 userStatus 状态的用户
     public MyResult reportedUser(@RequestParam String adminId, @RequestParam int userStatus) {
         MyResult myResult = new MyResult();
         if (!verifyId(adminId, myResult)) return myResult;
@@ -127,14 +126,16 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
-        } else if (userStatus != 0) {
-            myResult.changeStatus(false);
-            myResult.add("message", "调用接口状态不为被封");
-        } else {
+        }
+//        else if (userStatus != -1) {
+//            myResult.changeStatus(false);
+//            myResult.add("message", "调用接口状态不为被封");
+//        }
+        else {
             myResult.changeStatus(true);
-            List<User> blockedUsers = userService.selectUserByState(userStatus);
+            List<User> RequestedUsers = userService.selectUserByState(userStatus);
             List<Map<String, Object>> tmp = new ArrayList<>();
-            for (User user : blockedUsers) {
+            for (User user : RequestedUsers) {
                 Map<String, Object> map = new HashMap<>(4);
                 map.put("userID", user.getUserId());
                 map.put("userName", user.getUserName());
@@ -209,9 +210,9 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
-        } else if (dynamicState != 0) {
+        } else if (dynamicState != -1) {
             myResult.changeStatus(false);
-            myResult.add("message", "您用户状态传递错啦！！！");
+            myResult.add("message", "该动态未被封");
         } else {
             myResult.changeStatus(true);
             List<Dynamic> dynamics = dynamicSerive.selectDynamicByState(dynamicState);
