@@ -43,7 +43,11 @@ public class Dynamic {
     private int appState;
 
 
-    public Dynamic(String dynamicIndex, int dynamicState, String dynamicContent, Date dynamicTime, String dynamicType, String userId, String language_, String code, String html, String css, String para, String url, int appState) {
+    // text文本
+    private String text;
+
+
+    public Dynamic(String dynamicIndex, int dynamicState, String dynamicContent, Date dynamicTime, String dynamicType, String userId, String language_, String code, String html, String css, String para, String url, int appState, String text) {
         this.dynamicIndex = dynamicIndex;
         this.dynamicState = dynamicState;
         this.dynamicContent = dynamicContent;
@@ -57,6 +61,15 @@ public class Dynamic {
         this.para = para;
         this.url = url;
         this.appState = appState;
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getLanguage_() {
