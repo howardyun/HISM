@@ -614,7 +614,7 @@ public class DynamicController {
     @ApiOperation("获取某类型动态")
     public MyResult getTagMoments() {
         MyResult myResult = new MyResult();
-
+        //dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20()
 
         return myResult;
     }
