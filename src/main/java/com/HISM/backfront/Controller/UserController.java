@@ -96,6 +96,7 @@ public class UserController {
             user.setPassword(password);
             user.setUserName(userName);
             user.setUserSex(isMale);
+            user.setUserState(1);
             userService.insertUser(user);
             myResult.changeStatus(true);
             HashMap<String, Object> tmp = new HashMap<>();
