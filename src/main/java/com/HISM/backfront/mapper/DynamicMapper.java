@@ -62,5 +62,5 @@ public interface DynamicMapper {
     public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(String userId, int dynamicId, int dynamicState, String dynamicType, int num);
 
     // 挑出该用户的所有符合参数动态状态和动态类型的动态，
-    public List<Dynamic> selectDynamicByUserIdAndDynamicStateAndDynamicType(String userId, int dynamicState, String dynamicType)
+    public List<Dynamic> selectDynamicByUserIdAndDynamicStateAndDynamicType(String userId, int dynamicState, String dynamicType);
 }

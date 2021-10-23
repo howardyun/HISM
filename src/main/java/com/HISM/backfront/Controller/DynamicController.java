@@ -619,6 +619,16 @@ public class DynamicController {
     @ApiOperation("获取某类型动态")  //tag-希望获取的动态类型，即dynamicType
     public MyResult getTagMoments(@RequestParam String userId, @RequestParam String tag, @RequestParam int lastMomentId, @RequestParam int length) {
         MyResult myResult = new MyResult();
+        if(length == 0){
+            myResult.changeStatus(false);
+            myResult.add("message", "长度异常");
+            return myResult;
+        }
+        if(dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null){
+            myResult.changeStatus(false);
+            myResult.add("message", "传入的lastMomentId有误，不存在该条动态");
+            return myResult;
+        }
         if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
@@ -631,10 +641,11 @@ public class DynamicController {
         } else if (user.size() > 1) {
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
-        } else {     //dynamicList=null,length=0,lastMomentId=-1
+        } else {
             if(lastMomentId == -1){
-                //选出所有符合用户id，动态类型，动态状态的动态
-                List<Dynamic> allRequestedDynamics;
+                //选出所有符合userId、dynamicState、dynamicType的动态
+                List<Dynamic> allRequestedDynamics = dynamicSerive.selectDynamicByUserIdAndDynamicStateAndDynamicType(
+                        userId,2,tag);
                 if(allRequestedDynamics == null){
                     myResult.changeStatus(false);
                     myResult.add("message", "该用户动态为空");
@@ -642,7 +653,8 @@ public class DynamicController {
                 }
                 int beginDynamicId = allRequestedDynamics.get(0).getDynamicId();
                 //找到beginDynamicId以后，从此处开始挑动态，长度为length，放入list
-                List<Dynamic> dynamics;
+                List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
+                        userId, beginDynamicId, 2, tag, length);
                 if(dynamics == null){
                     myResult.changeStatus(false);
                     myResult.add("message", "该动态后面无动态");
@@ -688,7 +700,8 @@ public class DynamicController {
                 }
             }else{
                 //挑出lastMomentId后所有符合条件的动态，长度为length
-                List<Dynamic> dynamics;
+                List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
+                        userId, lastMomentId, 2, tag, length);
                 if(dynamics == null){
                     myResult.changeStatus(false);
                     myResult.add("message", "该动态后面无动态");
