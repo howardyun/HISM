@@ -316,6 +316,7 @@ public class DynamicController {
             dynamic.setDynamicContent(ttt);
             dynamic.setDynamicTime(timeStamp);
             dynamic.setUserId(userId);
+            dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
             myResult.add("message","");
         }
@@ -365,6 +366,7 @@ public class DynamicController {
             }
             dynamic.setDynamicTime(timeStamp);
             dynamic.setUserId(userId);
+            dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
             myResult.add("message","");
         }
