@@ -15,7 +15,7 @@ public class Dynamic {
     int dynamicId;
     // 动态标签, ex: 美食, 金融
     String dynamicIndex;
-    // 动态状态， -1动态被封；0动态暂时被封；1动态仅自己可见；2动态所有人可见
+    // 动态状态，  -1--动态被封  0--动态暂时被封  1--仅自己可见  2--所有人可见  3--自己删除
     int dynamicState;
     // 动态内容
     String dynamicContent;
