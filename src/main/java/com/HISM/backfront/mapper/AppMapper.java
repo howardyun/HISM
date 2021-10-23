@@ -13,7 +13,6 @@
 //    // 删除App
 //    void deleteApp(int appId);
 //    // 更新App
-//    void updateApp(App app);
-//    // 查找App
+//    void updateApp(App app);//    // 查找App
 //    App selectApp(int appId);
 //}
