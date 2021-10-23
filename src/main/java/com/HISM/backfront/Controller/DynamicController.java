@@ -306,7 +306,7 @@ public class DynamicController {
                 String file_name = null;
                 try {
                     file_name = generalService.saveImg(multipartFile.get(i), filePath, root_fileName);
-                    ttt+=("http://39.106.25.203/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName+";");
+                    ttt+=("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName+";");
                 } catch (IOException e) {
                     myResult.changeStatus(false);
                     myResult.add("message", "test");
@@ -358,7 +358,7 @@ public class DynamicController {
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                dynamic.setDynamicContent("http://39.106.25.203/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName);
+                dynamic.setDynamicContent("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName);
             } catch (IOException e) {
                 myResult.changeStatus(false);
                 myResult.add("message", "test");
