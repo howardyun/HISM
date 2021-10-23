@@ -25,7 +25,7 @@ public class TipOffDynamicSerive extends FollowerSerive {
             tipOffDynamicMapper.insertTipOff(tipOffDynamic);
         }catch (Exception e){
             System.out.println("用户重复举报动态!!");
-            return 2;
+            return 222;
         }
         dynamic.setTipOffNum(dynamic.getTipOffNum() + 1);
 
@@ -48,15 +48,21 @@ public class TipOffDynamicSerive extends FollowerSerive {
         return tipOffDynamicList;
     }
 
-    // 使某一动态的举报无效  动态解封后使用
+    // 解封动态，设置dynamicState为2， 使该动态的所有举报无效
     public Boolean invalidateTipOff(int dynamicId) {
+        // 解封动态，设置dynamicState为2
+        Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(dynamicId);
+        dynamic.setDynamicState(2);
+        dynamicMapper.updateDynamic(dynamic);
+
+        //  设置为0 使该动态所有相关举报无效
         List<TipOffDynamic> tipOffDynamicList = selectTipOffByDynamicId(dynamicId);
         try{
             for(int i = 0; i < tipOffDynamicList.size(); i++) {
-                // 设置为0 使动态无效
                 tipOffDynamicList.get(i).setIsValid(0);
                 tipOffDynamicMapper.updateTipOff(tipOffDynamicList.get(i));
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;

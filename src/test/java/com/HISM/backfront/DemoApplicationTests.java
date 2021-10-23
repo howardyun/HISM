@@ -2,10 +2,7 @@ package com.HISM.backfront;
 
 import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Service.*;
-import com.HISM.backfront.domain.Dynamic;
-import com.HISM.backfront.domain.TipOffDynamic;
-import com.HISM.backfront.domain.TipOffUser;
-import com.HISM.backfront.domain.User;
+import com.HISM.backfront.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,12 +45,22 @@ class DemoApplicationTests {
     }
 
 
+
     @Test
     void Test(){
         Date date = new Date();
+        Comment comment = new Comment(date, "年轻人不要太气盛", 311, "123");
+
+
+
+
 //        System.out.println(dynamicSerive.selectDynamicByIndex("鬼畜").get(1)+ "---------");
         // Dynamic dynamic = new Dynamic("小程序", 2,"金轮秀肌肉小程序", date, "程序", "123", "python", "空代码", "wu", "sdf", "fsd", "baidu.com", 1);
-        System.out.println(dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20("16888", 322, 13).size());
+        // System.out.println(dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20("16888", 322, 13).size());
+
+        // commentSerive.insertComment(comment);
+
+
     }
 
     @Test

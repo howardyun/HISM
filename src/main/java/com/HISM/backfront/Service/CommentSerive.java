@@ -45,8 +45,8 @@ public class CommentSerive {
     }
 
     // 查看某一动态评论
-    public List<Comment> selectCommentByD(int dynamicId){
-        List<Comment> commentList = commentMapper.selectCommentByD(dynamicId);
+    public List<Comment> selectCommentById(int dynamicId){
+        List<Comment> commentList = commentMapper.selectCommentById(dynamicId);
         if(commentList.isEmpty()){
             System.out.println("error, 无法查到此动态的评论");
         }

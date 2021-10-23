@@ -12,7 +12,7 @@ public class User {
     //用户Id
     private String userId;
     //用户密码
-    private String password = "****";
+    private String password = "*****";
     //用户姓名
     private String userName;
     // 用户头像URL
@@ -50,8 +50,9 @@ public class User {
 
 
 
-    public User(String userId, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex) {
+    public User(String userId, String password, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex) {
         this.userId = userId;
+        this.password = password;
         this.userName = userName;
         this.userAddress = userAddress;
         this.userOld = userOld;
@@ -60,6 +61,8 @@ public class User {
         this.userState = userState;
         this.favorIndex = favorIndex;
     }
+
+
 
     public String getUserId() {
         return userId;

@@ -214,7 +214,7 @@ public class DynamicController {
                 myResult.changeStatus(true);
                 myResult.add("message", "该条动态不存在");
             } else {
-                List<Comment> commentList = commentSerive.selectCommentByD(dynamicId);
+                List<Comment> commentList = commentSerive.selectCommentById(dynamicId);
                 List<Map<String, Object>> tmp = new ArrayList<>();
                 for (int i = 0; i < commentList.size(); i++) {
                     map.put("commentId", commentList.get(i).getCommentId());

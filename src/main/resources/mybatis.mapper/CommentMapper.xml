@@ -19,7 +19,7 @@
         delete from comment where commentId = #{commentId}
     </delete>
 
-    <select id="selectCommentByD" resultMap="commentMap">
+    <select id="selectCommentById" resultMap="commentMap">
         select * from comment where dynamicId = #{dynamicId}
     </select>
 
