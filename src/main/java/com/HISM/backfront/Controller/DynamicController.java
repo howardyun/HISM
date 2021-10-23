@@ -404,7 +404,7 @@ public class DynamicController {
                 if (userId.equals(targetUserId)) {
                     if (lastMomentId == -1) {
                         List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
-                        if(allDynamics == null){
+                        if (allDynamics == null) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该用户无动态");
                             return myResult;
@@ -423,16 +423,14 @@ public class DynamicController {
                                 map.put("userName", user1.get(0).getUserName());
                                 map.put("userAvatar", user1.get(0).getAvatarURL());
                                 map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
+                                map.put("text", dynamic.getText());
                                 map.put("likedNum", dynamic.getThumbNum());
                                 map.put("commentNum", dynamic.getCommentNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
-                                if (dynamicType.equals("0")) {
-                                    map.put("text", dynamic.getDynamicContent());
-                                } else if (dynamicType.equals("1")) {
+                                if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
@@ -445,6 +443,8 @@ public class DynamicController {
                                     map.put("video", dynamic.getDynamicContent());
                                 } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                     map.put("momentId", dynamic.getDynamicId());
+                                } else if (dynamicType.equals("0")) {
+
                                 } else {
                                     myResult.changeStatus(false);
                                     myResult.add("message", "动态类型码错误");
@@ -469,16 +469,14 @@ public class DynamicController {
                                 map.put("userName", user1.get(0).getUserName());
                                 map.put("userAvatar", user1.get(0).getAvatarURL());
                                 map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
+                                map.put("text", dynamic.getText());
                                 map.put("likedNum", dynamic.getThumbNum());
                                 map.put("commentNum", dynamic.getCommentNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
-                                if (dynamicType.equals("0")) {
-                                    map.put("text", dynamic.getDynamicContent());
-                                } else if (dynamicType.equals("1")) {
+                                if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
@@ -491,6 +489,7 @@ public class DynamicController {
                                     map.put("video", dynamic.getDynamicContent());
                                 } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                     map.put("momentId", dynamic.getDynamicId());
+                                } else if (dynamicType.equals("0")) {
                                 } else {
                                     myResult.changeStatus(false);
                                     myResult.add("message", "动态类型码错误");
@@ -521,16 +520,14 @@ public class DynamicController {
                                 map.put("userName", user1.get(0).getUserName());
                                 map.put("userAvatar", user1.get(0).getAvatarURL());
                                 map.put("time", dynamic.getDynamicTime());
-                                map.put("text", dynamic.getDynamicContent());
+                                map.put("text", dynamic.getText());
                                 map.put("likedNum", dynamic.getThumbNum());
                                 map.put("commentNum", dynamic.getCommentNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
-                                if (dynamicType.equals("0")) {
-                                    map.put("text", dynamic.getDynamicContent());
-                                } else if (dynamicType.equals("1")) {
+                                if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
@@ -543,6 +540,7 @@ public class DynamicController {
                                     map.put("video", dynamic.getDynamicContent());
                                 } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                     map.put("momentId", dynamic.getDynamicId());
+                                } else if (dynamicType.equals("0")) {
                                 } else {
                                     myResult.changeStatus(false);
                                     myResult.add("message", "动态类型码错误");
@@ -574,16 +572,14 @@ public class DynamicController {
                                     map.put("userName", user1.get(0).getUserName());
                                     map.put("userAvatar", user1.get(0).getAvatarURL());
                                     map.put("time", dynamic.getDynamicTime());
-                                    map.put("text", dynamic.getDynamicContent());
+                                    map.put("text", dynamic.getText());
                                     map.put("likedNum", dynamic.getThumbNum());
                                     map.put("commentNum", dynamic.getCommentNum());
                                     map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                                     map.put("isDel", dynamic.getDynamicState() == 3);
                                     map.put("tag", dynamic.getDynamicType());
                                     String dynamicType = dynamic.getDynamicType();
-                                    if (dynamicType.equals("0")) {
-                                        map.put("text", dynamic.getDynamicContent());
-                                    } else if (dynamicType.equals("1")) {
+                                    if (dynamicType.equals("1")) {
                                         int imageLength = dynamic.getDynamicContent().split(";").length;
                                         if (imageLength == 0) {
                                             myResult.changeStatus(false);
@@ -596,6 +592,7 @@ public class DynamicController {
                                         map.put("video", dynamic.getDynamicContent());
                                     } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                         map.put("momentId", dynamic.getDynamicId());
+                                    } else if (dynamicType.equals("0")) {
                                     } else {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态类型码错误");
@@ -619,12 +616,12 @@ public class DynamicController {
     @ApiOperation("获取某类型动态")  //tag-希望获取的动态类型，即dynamicType
     public MyResult getTagMoments(@RequestParam String userId, @RequestParam String tag, @RequestParam int lastMomentId, @RequestParam int length) {
         MyResult myResult = new MyResult();
-        if(length == 0){
+        if (length == 0) {
             myResult.changeStatus(false);
             myResult.add("message", "长度异常");
             return myResult;
         }
-        if(dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null){
+        if (dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null) {
             myResult.changeStatus(false);
             myResult.add("message", "传入的lastMomentId有误，不存在该条动态");
             return myResult;
@@ -642,11 +639,11 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
-            if(lastMomentId == -1){
+            if (lastMomentId == -1) {
                 //选出所有符合userId、dynamicState、dynamicType的动态
                 List<Dynamic> allRequestedDynamics = dynamicSerive.selectDynamicByUserIdAndDynamicStateAndDynamicType(
-                        userId,2,tag);
-                if(allRequestedDynamics == null){
+                        userId, 2, tag);
+                if (allRequestedDynamics.size() == 0) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该用户动态为空");
                     return myResult;
@@ -655,38 +652,37 @@ public class DynamicController {
                 //找到beginDynamicId以后，从此处开始挑动态，长度为length，放入list
                 List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
                         userId, beginDynamicId, 2, tag, length);
-                if(dynamics == null){
+                if (dynamics.size() == 0) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该动态后面无动态");
-                }else{
+                } else {
                     List<Map<String, Object>> tmp = new ArrayList<>();
-                    for(Dynamic dynamic:dynamics){
+                    for (Dynamic dynamic : dynamics) {
                         Map<String, Object> map = new HashMap<>(4);
                         map.put("momentId", dynamic.getDynamicId());
                         map.put("userID", userId);
                         map.put("userName", user.get(0).getUserName());
                         map.put("userAvatar", user.get(0).getAvatarURL());
                         map.put("time", dynamic.getDynamicTime());
-                        map.put("text", dynamic.getDynamicContent());
+                        map.put("text", dynamic.getText());
                         map.put("likedNum", dynamic.getThumbNum());
                         map.put("commentNum", dynamic.getCommentNum());
                         map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                         map.put("isDel", dynamic.getDynamicState() == 3);
                         map.put("tag", dynamic.getDynamicType());
                         String dynamicType = dynamic.getDynamicType();
-                        if("".equals(dynamic.getDynamicContent())){
+                        if ("".equals(dynamic.getDynamicContent())) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该条动态内容为空");
                             return myResult;
-                        }else{
-                            if (dynamicType.equals("0")) {
-                                map.put("text", dynamic.getDynamicContent());
-                            } else if (dynamicType.equals("1")) {
+                        } else {
+                            if (dynamicType.equals("1")) {
                                 map.put("photos", dynamic.getDynamicContent());
                             } else if (dynamicType.equals("2")) {
                                 map.put("video", dynamic.getDynamicContent());
                             } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                 map.put("momentId", dynamic.getDynamicId());
+                            } else if (dynamicType.equals("0")) {
                             } else {
                                 myResult.changeStatus(false);
                                 myResult.add("message", "动态类型码错误");
@@ -698,42 +694,41 @@ public class DynamicController {
                     myResult.changeStatus(true);
                     myResult.add("message", tmp);
                 }
-            }else{
+            } else {
                 //挑出lastMomentId后所有符合条件的动态，长度为length
                 List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
                         userId, lastMomentId, 2, tag, length);
-                if(dynamics == null){
+                if (dynamics == null) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该动态后面无动态");
-                }else{
+                } else {
                     List<Map<String, Object>> tmp = new ArrayList<>();
-                    for(Dynamic dynamic:dynamics){
+                    for (Dynamic dynamic : dynamics) {
                         Map<String, Object> map = new HashMap<>(4);
                         map.put("momentId", dynamic.getDynamicId());
                         map.put("userID", userId);
                         map.put("userName", user.get(0).getUserName());
                         map.put("userAvatar", user.get(0).getAvatarURL());
                         map.put("time", dynamic.getDynamicTime());
-                        map.put("text", dynamic.getDynamicContent());
+                        map.put("text", dynamic.getText());
                         map.put("likedNum", dynamic.getThumbNum());
                         map.put("commentNum", dynamic.getCommentNum());
                         map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                         map.put("isDel", dynamic.getDynamicState() == 3);
                         map.put("tag", dynamic.getDynamicType());
                         String dynamicType = dynamic.getDynamicType();
-                        if("".equals(dynamic.getDynamicContent())){
+                        if ("".equals(dynamic.getDynamicContent())) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该条动态内容为空");
                             return myResult;
-                        }else{
-                            if (dynamicType.equals("0")) {
-                                map.put("text", dynamic.getDynamicContent());
-                            } else if (dynamicType.equals("1")) {
+                        } else {
+                            if (dynamicType.equals("1")) {
                                 map.put("photos", dynamic.getDynamicContent());
                             } else if (dynamicType.equals("2")) {
                                 map.put("video", dynamic.getDynamicContent());
                             } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                                 map.put("momentId", dynamic.getDynamicId());
+                            } else if (dynamicType.equals("0")) {
                             } else {
                                 myResult.changeStatus(false);
                                 myResult.add("message", "动态类型码错误");
@@ -784,7 +779,7 @@ public class DynamicController {
                 tipOffDynamic.setTipOffContent(message);
                 boolean userIsTipOff = false;
                 List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
-                if (tipOffDynamicList == null) {
+                if (tipOffDynamicList.size()==0) {
                     tipOffDynamicSerive.insertTipOff(tipOffDynamic);
                     myResult.changeStatus(true);
                     myResult.add("message", "");
@@ -838,7 +833,9 @@ public class DynamicController {
                 dynamic.setDynamicType("4");
                 dynamic.setDynamicState(2);
                 if (!"".equals(text)) {
-                    dynamic.setDynamicContent(text);
+                    dynamic.setText(text);
+                } else {
+                    dynamic.setText("");
                 }
                 Date date = new Date(System.currentTimeMillis());
                 Timestamp timeStamp = new Timestamp(date.getTime());
@@ -885,7 +882,9 @@ public class DynamicController {
                 dynamic.setDynamicType("3");
                 dynamic.setDynamicState(2);
                 if (!"".equals(text)) {
-                    dynamic.setDynamicContent(text);
+                    dynamic.setText(text);
+                } else {
+                    dynamic.setText("");
                 }
                 Date date = new Date(System.currentTimeMillis());
                 Timestamp timestamp = new Timestamp(date.getTime());
@@ -910,20 +909,20 @@ public class DynamicController {
     public MyResult getAppCLI(@RequestParam int appId) {
         MyResult myResult = new MyResult();
         Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(appId);
-        if(dynamic==null){
+        if (dynamic == null) {
             myResult.changeStatus(false);
-            myResult.add("message","没有该app");
-        }else {
-            if(dynamic.getDynamicType().equals("4")){
+            myResult.add("message", "没有该app");
+        } else {
+            if (dynamic.getDynamicType().equals("4")) {
                 Map<String, Object> map = new HashMap<>(4);
-                map.put("language",dynamic.getLanguage_());
-                map.put("code",dynamic.getCode());
-                map.put("para",dynamic.getPara());
+                map.put("language", dynamic.getLanguage_());
+                map.put("code", dynamic.getCode());
+                map.put("para", dynamic.getPara());
                 myResult.changeStatus(true);
-                myResult.add("message",map);
-            }else {
+                myResult.add("message", map);
+            } else {
                 myResult.changeStatus(false);
-                myResult.add("message","该动态类型不是CLI");
+                myResult.add("message", "该动态类型不是CLI");
             }
         }
         return myResult;
@@ -935,22 +934,23 @@ public class DynamicController {
     public MyResult getAppGUI(@RequestParam int appId) {
         MyResult myResult = new MyResult();
         Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(appId);
-        if(dynamic==null){
+        if (dynamic == null) {
             myResult.changeStatus(false);
-            myResult.add("message","没有该app");
-        }else {
-            if(dynamic.getDynamicType().equals("3")){
+            myResult.add("message", "没有该app");
+        } else {
+            if (dynamic.getDynamicType().equals("3")) {
                 Map<String, Object> map = new HashMap<>(4);
-                map.put("language",dynamic.getLanguage_());
-                map.put("code",dynamic.getCode());
-                map.put("html",dynamic.getHtml());
-                map.put("css",dynamic.getCss());
-                map.put("para",dynamic.getPara());
+                map.put("text", dynamic.getText());
+                map.put("language", dynamic.getLanguage_());
+                map.put("code", dynamic.getCode());
+                map.put("html", dynamic.getHtml());
+                map.put("css", dynamic.getCss());
+                map.put("para", dynamic.getPara());
                 myResult.changeStatus(true);
-                myResult.add("message",map);
-            }else {
+                myResult.add("message", map);
+            } else {
                 myResult.changeStatus(false);
-                myResult.add("message","该动态类型不是GUI");
+                myResult.add("message", "该动态类型不是GUI");
             }
         }
         return myResult;
