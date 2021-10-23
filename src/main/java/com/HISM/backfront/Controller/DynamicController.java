@@ -71,7 +71,7 @@ public class DynamicController {
                 map.put("userName", user.get(0).getUserName());
                 map.put("userAvatar", user.get(0).getAvatarURL());
                 map.put("time", dynamic.getDynamicTime());
-                map.put("text", dynamic.getDynamicContent());
+                map.put("text", dynamic.getText());
                 map.put("likedNum", dynamic.getThumbNum());
                 map.put("commentNum", dynamic.getCommentNum());
                 map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
@@ -79,9 +79,7 @@ public class DynamicController {
                 map.put("tag", dynamic.getDynamicType());
                 String dynamicType = dynamic.getDynamicType();
                 myResult.changeStatus(true);
-                if (dynamicType.equals("0")) {
-                    map.put("text", dynamic.getDynamicContent());
-                } else if (dynamicType.equals("1")) {
+                if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
                     if (length == 0) {
                         myResult.changeStatus(false);
@@ -94,6 +92,7 @@ public class DynamicController {
                     map.put("video", dynamic.getDynamicContent());
                 } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
                     map.put("momentId", dynamic.getDynamicId());
+                } else if (dynamicType.equals("0")) {
                 } else {
                     myResult.changeStatus(false);
                     myResult.add("message", "动态类型码错误");
@@ -779,7 +778,7 @@ public class DynamicController {
                 tipOffDynamic.setTipOffContent(message);
                 boolean userIsTipOff = false;
                 List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
-                if (tipOffDynamicList.size()==0) {
+                if (tipOffDynamicList.size() == 0) {
                     tipOffDynamicSerive.insertTipOff(tipOffDynamic);
                     myResult.changeStatus(true);
                     myResult.add("message", "");
