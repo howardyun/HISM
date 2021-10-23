@@ -76,4 +76,14 @@
         select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
     </select>
 
+    <select id="selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM" resultMap="dynamicMap">
+        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState} and dynamicType = #{dynamicType}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+    </select>
+
+
+    <select id="selectDynamicByUserIdAndDynamicStateAndDynamicType" resultMap="dynamicMap">
+        select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} and dynamicType = #{dynamicType}
+        order by dynamicTime
+    </select>
+
 </mapper>
