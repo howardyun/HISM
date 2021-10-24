@@ -1,5 +1,6 @@
 package com.HISM.backfront.Controller;
 
+import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -33,6 +35,8 @@ public class DynamicController {
     CommentSerive commentSerive;
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
+    @Resource
+    WebAppConfig webAppConfig;
 
     @PostMapping("/getMoments")
     //必填
@@ -210,7 +214,7 @@ public class DynamicController {
                 myResult.changeStatus(true);
                 myResult.add("message", "该条动态不存在");
             } else {
-                List<Comment> commentList = commentSerive.selectCommentByD(dynamicId);
+                List<Comment> commentList = commentSerive.selectCommentById(dynamicId);
                 List<Map<String, Object>> tmp = new ArrayList<>();
                 for (int i = 0; i < commentList.size(); i++) {
                     map.put("commentId", commentList.get(i).getCommentId());
@@ -249,7 +253,7 @@ public class DynamicController {
             //可见性
             dynamic.setDynamicState(2);
             //设置内容
-            dynamic.setDynamicContent(text);
+            dynamic.setText(text);
             //设置动态类型
             dynamic.setDynamicType("1");
             //设置时间
@@ -268,7 +272,7 @@ public class DynamicController {
     @PostMapping("/createMomentWithPhotos")
     //必填
     @ApiOperation("用户上传图片+文本")
-    public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile[] multipartFile, @RequestParam String text, @RequestParam String tag) {
+    public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") List<MultipartFile> multipartFile, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
@@ -283,7 +287,38 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "用户信息");
         } else {
-
+            Dynamic dynamic = new Dynamic();
+            dynamic.setText(text);
+            dynamic.setDynamicState(2);
+            dynamic.setDynamicType("1");
+            dynamic.setDynamicIndex(tag);
+            String ttt="";
+            Date date = new Date(System.currentTimeMillis());
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            for(int i=0;i<multipartFile.size();++i){
+                String name = multipartFile.get(i).getOriginalFilename();
+                assert name != null;
+                String []s=name.split("\\.");
+                String root_fileName = i + "-" + timeStamp + "."+s[s.length-1];
+                //获取地址
+                String filePath = webAppConfig.location + "/";
+                filePath += (userId+"/" + "Dynamic"+"/"+timeStamp);
+                String file_name = null;
+                try {
+                    file_name = generalService.saveImg(multipartFile.get(i), filePath, root_fileName);
+                    ttt+=("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName+";");
+                } catch (IOException e) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "test");
+                    return myResult;
+                }
+            }
+            dynamic.setDynamicContent(ttt);
+            dynamic.setDynamicTime(timeStamp);
+            dynamic.setUserId(userId);
+            dynamicSerive.insertDynamic(dynamic);
+            myResult.changeStatus(true);
+            myResult.add("message","");
         }
         return myResult;
     }
@@ -291,8 +326,51 @@ public class DynamicController {
     @PostMapping("/createMomentWithVideo")
     //必填
     @ApiOperation("用户上传视频")
-    public String createMomentWithVideo(@RequestParam String name) {
-        return name;
+    public MyResult createMomentWithVideo(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile multipartFile, @RequestParam String text, @RequestParam String tag) {
+        MyResult myResult =new MyResult();
+        if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "userId或text或tag为空");
+            return myResult;
+        }
+        List<User> users = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "无该用户信息");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户信息");
+        } else {
+            Dynamic dynamic = new Dynamic();
+            dynamic.setText(text);
+            dynamic.setDynamicState(2);
+            dynamic.setDynamicType("1");
+            dynamic.setDynamicIndex(tag);
+            Date date = new Date(System.currentTimeMillis());
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            String name = multipartFile.getOriginalFilename();
+            assert name != null;
+            String []s=name.split("\\.");
+            String root_fileName = timeStamp + "."+s[s.length-1];
+            //获取地址
+            String filePath = webAppConfig.location + "/";
+            filePath += (userId+"/" + "Dynamic"+"/"+timeStamp);
+            String file_name = null;
+            try {
+                file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
+                dynamic.setDynamicContent("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName);
+            } catch (IOException e) {
+                myResult.changeStatus(false);
+                myResult.add("message", "test");
+                return myResult;
+            }
+            dynamic.setDynamicTime(timeStamp);
+            dynamic.setUserId(userId);
+            dynamicSerive.insertDynamic(dynamic);
+            myResult.changeStatus(true);
+            myResult.add("message","");
+        }
+        return myResult;
     }
 
     @PostMapping("delComment")

@@ -37,7 +37,7 @@
     </select>
 
     <update id="updateDynamic">
-        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicIndex2 = #{dynamicIndex2}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
+        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
         language_ = #{language_}, code = #{code}, html = #{html}, css = #{css}, para = #{para}, url = #{url}, appState = #{appState}, text = #{text}
         where dynamicId = #{dynamicId}
     </update>

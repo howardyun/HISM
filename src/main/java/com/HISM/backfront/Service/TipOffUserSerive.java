@@ -37,12 +37,8 @@ public class TipOffUserSerive {
         // 更新动态
         userMapper.updateUser(user);
 
-        if (-1 == user.getUserState()) {
-            // 返回1 用户暂时被封.
-            return 1;
-        }
-        // 返回0 正常举报
-        return 0;
+        // 返回用户状态。
+        return user.getUserState();
     }
 
     // 通过被举报的用户id获取举报数据

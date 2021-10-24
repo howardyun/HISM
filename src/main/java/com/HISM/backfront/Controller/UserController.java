@@ -96,6 +96,7 @@ public class UserController {
             user.setPassword(password);
             user.setUserName(userName);
             user.setUserSex(isMale);
+            user.setUserState(1);
             userService.insertUser(user);
             myResult.changeStatus(true);
             HashMap<String, Object> tmp = new HashMap<>();
@@ -225,7 +226,7 @@ public class UserController {
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                user.setAvatarURL("http://39.106.25.203/img/" + userId + "/Avatar/" + root_fileName);
+                user.setAvatarURL("/img/" + userId + "/Avatar/" + root_fileName);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
