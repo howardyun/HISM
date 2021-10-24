@@ -220,12 +220,14 @@ public class AdminController {
             for (Dynamic dynamic : dynamics) {
                 Map<String, Object> map = new HashMap<>();
                 List<User> user = userService.selectUserbyId(dynamic.getUserId());
-                map.put("index", dynamic.getDynamicIndex());
+                map.put("tag", dynamic.getDynamicIndex());
                 map.put("momentID", dynamic.getDynamicId());
                 map.put("userID", dynamic.getUserId());
                 map.put("userName", user.get(0).getUserName());
                 map.put("userAvatar", user.get(0).getAvatarURL());
                 map.put("time", dynamic.getDynamicTime());
+                map.put("likedNum", dynamic.getThumbNum());
+                map.put("commentNum", dynamic.getCommentNum());
                 if (dynamic.getDynamicType().equals("0")) {
                     map.put("text", dynamic.getDynamicContent());
                 } else if (dynamic.getDynamicType().equals("1")) {
