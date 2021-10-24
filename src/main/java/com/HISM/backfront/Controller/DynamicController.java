@@ -82,6 +82,7 @@ public class DynamicController {
                 map.put("isDel", dynamic.getDynamicState() == 3);
                 map.put("tag", dynamic.getDynamicType());
                 String dynamicType = dynamic.getDynamicType();
+                map.put("dynamicType",dynamicType);
                 myResult.changeStatus(true);
                 if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
