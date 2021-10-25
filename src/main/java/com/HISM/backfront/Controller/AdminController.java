@@ -1,10 +1,7 @@
 package com.HISM.backfront.Controller;
 
 import com.HISM.backfront.Result.MyResult;
-import com.HISM.backfront.Service.AdministratorSerive;
-import com.HISM.backfront.Service.DynamicSerive;
-import com.HISM.backfront.Service.TipOffDynamicSerive;
-import com.HISM.backfront.Service.UserService;
+import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.Administrator;
 import com.HISM.backfront.domain.Dynamic;
 import com.HISM.backfront.domain.User;
@@ -35,6 +32,8 @@ public class AdminController {
     DynamicSerive dynamicSerive;
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
+    @Resource
+    ThumbSerive thumbSerive;
 
     public boolean verifyId(String Id, MyResult myResult) {
         if ("".equals(Id)) {
@@ -126,12 +125,7 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
-        }
-//        else if (userStatus != -1) {
-//            myResult.changeStatus(false);
-//            myResult.add("message", "调用接口状态不为被封");
-//        }
-        else {
+        } else {
             myResult.changeStatus(true);
             List<User> RequestedUsers = userService.selectUserByState(userStatus);
             List<Map<String, Object>> tmp = new ArrayList<>();
@@ -285,8 +279,8 @@ public class AdminController {
                 tipOffDynamicSerive.invalidateTipOff(dynamicId);
                 myResult.changeStatus(true);
                 Map<String, Object> map = new HashMap<>(1);
-                map.put("status",dynamicState);
-                myResult.add("message",map);
+                map.put("status", dynamicState);
+                myResult.add("message", map);
             } else {
                 myResult.changeStatus(false);
                 myResult.add("message", "该动态没有被封");
@@ -296,4 +290,69 @@ public class AdminController {
 
     }
 
+
+    @PostMapping("/selectUserAllDynamics")
+    @ApiOperation("搜索用户所有")
+    public MyResult selectUserAllDynamics(@RequestParam String adminId, @RequestParam String userId) {
+        MyResult myResult = new MyResult();
+        Administrator administrator = administratorSerive.queryUserbyId(adminId);
+
+        if (administrator == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该管理员不存在");
+        } else {
+            List<User> user = userService.selectUserbyId(userId);
+            if (user == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "该管理员不存在");
+                return myResult;
+            } else {
+               List<Dynamic> dynamicList= dynamicSerive.selectDynamicByUserId(userId);
+               myResult.changeStatus(true);
+                List<Map<String, Object>> tmp = new ArrayList<>();
+                for (int i = 0; i < dynamicList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>(4);
+                    map.put("momentId", dynamicList.get(i).getDynamicId());
+                    map.put("userID", user.get(0).getUserId());
+                    map.put("userName", user.get(0).getUserName());
+                    map.put("userAvatar", user.get(0).getAvatarURL());
+                    map.put("time", dynamicList.get(i).getDynamicTime());
+                    map.put("text", dynamicList.get(i).getText());
+                    map.put("likedNum", dynamicList.get(i).getThumbNum());
+                    map.put("commentNum", dynamicList.get(i).getCommentNum());
+                    map.put("isLiked", thumbSerive.isThumb(userId, dynamicList.get(i).getDynamicId()));
+                    map.put("isDel", dynamicList.get(i).getDynamicState() == 3);
+                    map.put("tag", dynamicList.get(i).getDynamicType());
+                    String dynamicType = dynamicList.get(i).getDynamicType();
+                    map.put("appendixType", dynamicList.get(i).getDynamicType());
+                    if (dynamicType.equals("1")) {
+                        int imageLength = dynamicList.get(i).getDynamicContent().split(";").length;
+                        if (imageLength == 0) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "动态中不包含图片");
+                            return myResult;
+                        } else {
+                            map.put("photos", dynamicList.get(i).getDynamicContent());
+                        }
+                    } else if (dynamicType.equals("2")) {
+                        map.put("video", dynamicList.get(i).getDynamicContent());
+                    } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                        map.put("momentId", dynamicList.get(i).getDynamicId());
+                    } else if (dynamicType.equals("0")) {
+
+                    } else {
+                        myResult.changeStatus(false);
+                        myResult.add("message", "动态类型码错误");
+                        return myResult;
+                    }
+                    tmp.add(map);
+                }
+                myResult.add("message", tmp);
+
+            }
+        }
+
+
+        return myResult;
+    }
 }
