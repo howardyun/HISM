@@ -210,7 +210,7 @@ public class AdminController {
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
-        } else if (dynamicState != -1) {
+        } else if (dynamicState != 0) {
             myResult.changeStatus(false);
             myResult.add("message", "该动态未被封");
         } else {
