@@ -82,7 +82,8 @@ public class DynamicController {
                 map.put("isDel", dynamic.getDynamicState() == 3);
                 map.put("tag", dynamic.getDynamicType());
                 String dynamicType = dynamic.getDynamicType();
-                map.put("dynamicType",dynamicType);
+                map.put("dynamicType", dynamicType);
+                map.put("appendixType", dynamicType);
                 myResult.changeStatus(true);
                 if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
@@ -295,21 +296,21 @@ public class DynamicController {
             dynamic.setDynamicState(2);
             dynamic.setDynamicType("1");
             dynamic.setDynamicIndex(tag);
-            String ttt="";
+            String ttt = "";
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
-            for(int i=0;i<multipartFile.size();++i){
+            for (int i = 0; i < multipartFile.size(); ++i) {
                 String name = multipartFile.get(i).getOriginalFilename();
                 assert name != null;
-                String []s=name.split("\\.");
-                String root_fileName = i + "-" + timeStamp + "."+s[s.length-1];
+                String[] s = name.split("\\.");
+                String root_fileName = i + "-" + timeStamp + "." + s[s.length - 1];
                 //获取地址
                 String filePath = webAppConfig.location + "/";
-                filePath += (userId+"/" + "Dynamic"+"/"+timeStamp);
+                filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
                 String file_name = null;
                 try {
                     file_name = generalService.saveImg(multipartFile.get(i), filePath, root_fileName);
-                    ttt+=("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName+";");
+                    ttt += ("/img/" + userId + "/Dynamic/" + timeStamp + "/" + root_fileName + ";");
                 } catch (IOException e) {
                     myResult.changeStatus(false);
                     myResult.add("message", "test");
@@ -321,7 +322,7 @@ public class DynamicController {
             dynamic.setUserId(userId);
             dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
-            myResult.add("message","");
+            myResult.add("message", "");
         }
         return myResult;
     }
@@ -330,7 +331,7 @@ public class DynamicController {
     //必填
     @ApiOperation("用户上传视频")
     public MyResult createMomentWithVideo(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile multipartFile, @RequestParam String text, @RequestParam String tag) {
-        MyResult myResult =new MyResult();
+        MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
             myResult.add("message", "userId或text或tag为空");
@@ -347,21 +348,21 @@ public class DynamicController {
             Dynamic dynamic = new Dynamic();
             dynamic.setText(text);
             dynamic.setDynamicState(2);
-            dynamic.setDynamicType("1");
+            dynamic.setDynamicType("2");
             dynamic.setDynamicIndex(tag);
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
             String name = multipartFile.getOriginalFilename();
             assert name != null;
-            String []s=name.split("\\.");
-            String root_fileName = timeStamp + "."+s[s.length-1];
+            String[] s = name.split("\\.");
+            String root_fileName = timeStamp + "." + s[s.length - 1];
             //获取地址
             String filePath = webAppConfig.location + "/";
-            filePath += (userId+"/" + "Dynamic"+"/"+timeStamp);
+            filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                dynamic.setDynamicContent("/img/" + userId + "/Dynamic/" +timeStamp+"/"+ root_fileName);
+                dynamic.setDynamicContent("/img/" + userId + "/Dynamic/" + timeStamp + "/" + root_fileName);
             } catch (IOException e) {
                 myResult.changeStatus(false);
                 myResult.add("message", "test");
@@ -371,7 +372,7 @@ public class DynamicController {
             dynamic.setUserId(userId);
             dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
-            myResult.add("message","");
+            myResult.add("message", "");
         }
         return myResult;
     }
@@ -510,6 +511,7 @@ public class DynamicController {
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
+                                map.put("appendixType", dynamic.getDynamicType());
                                 if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
@@ -556,6 +558,8 @@ public class DynamicController {
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
+                                map.put("appendixType", dynamic.getDynamicType());
+
                                 if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
@@ -607,6 +611,8 @@ public class DynamicController {
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicType());
                                 String dynamicType = dynamic.getDynamicType();
+                                map.put("appendixType", dynamic.getDynamicType());
+
                                 if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
                                     if (imageLength == 0) {
@@ -659,6 +665,7 @@ public class DynamicController {
                                     map.put("isDel", dynamic.getDynamicState() == 3);
                                     map.put("tag", dynamic.getDynamicType());
                                     String dynamicType = dynamic.getDynamicType();
+                                    map.put("appendixType", dynamic.getDynamicType());
                                     if (dynamicType.equals("1")) {
                                         int imageLength = dynamic.getDynamicContent().split(";").length;
                                         if (imageLength == 0) {
@@ -751,6 +758,8 @@ public class DynamicController {
                         map.put("isDel", dynamic.getDynamicState() == 3);
                         map.put("tag", dynamic.getDynamicType());
                         String dynamicType = dynamic.getDynamicType();
+                        map.put("appendixType", dynamic.getDynamicType());
+
                         if ("".equals(dynamic.getDynamicContent())) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该条动态内容为空");
@@ -797,6 +806,8 @@ public class DynamicController {
                         map.put("isDel", dynamic.getDynamicState() == 3);
                         map.put("tag", dynamic.getDynamicType());
                         String dynamicType = dynamic.getDynamicType();
+                        map.put("appendixType", dynamic.getDynamicType());
+
                         if ("".equals(dynamic.getDynamicContent())) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该条动态内容为空");
@@ -997,6 +1008,7 @@ public class DynamicController {
         } else {
             if (dynamic.getDynamicType().equals("4")) {
                 Map<String, Object> map = new HashMap<>(4);
+                map.put("appendixType", dynamic.getDynamicType());
                 map.put("language", dynamic.getLanguage_());
                 map.put("code", dynamic.getCode());
                 map.put("para", dynamic.getPara());
@@ -1022,6 +1034,7 @@ public class DynamicController {
         } else {
             if (dynamic.getDynamicType().equals("3")) {
                 Map<String, Object> map = new HashMap<>(4);
+                map.put("appendixType", dynamic.getDynamicType());
                 map.put("text", dynamic.getText());
                 map.put("language", dynamic.getLanguage_());
                 map.put("code", dynamic.getCode());
