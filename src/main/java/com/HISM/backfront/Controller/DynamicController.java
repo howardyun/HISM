@@ -471,30 +471,34 @@ public class DynamicController {
         if (user == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有源用户");
-        } else if (user.size() > 1) {
+        }
+        else if (user.size() > 1) {
             myResult.changeStatus(false);
             myResult.add("message", "源用户信息多于一个");
-        } else {
+        }
+        else {
             if (user1 == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "没有目标用户");
-            } else if (user1.size() > 1) {
+            }
+            else if (user1.size() > 1) {
                 myResult.changeStatus(false);
                 myResult.add("message", "目标用户多于一个");
             } else {
                 if (userId.equals(targetUserId)) {
                     if (lastMomentId == -1) {
                         List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
-                        if (allDynamics == null) {
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
+                        if (allDynamics.size()==0) {
+                            myResult.changeStatus(true);
+                            myResult.add("message", "");
                             return myResult;
                         }
                         int beginDynamicId = allDynamics.get(0).getDynamicId();
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
-                        if (dynamics == null) {
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
+                        if (dynamics.size()==0) {
+                            myResult.changeStatus(true);
+                            myResult.add("message", "");
+                            return myResult;
                         } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
                             for (Dynamic dynamic : dynamics) {
@@ -513,7 +517,6 @@ public class DynamicController {
                                 String dynamicType = dynamic.getDynamicType();
                                 map.put("appendixType", dynamic.getDynamicType());
                                 if (dynamicType.equals("1")) {
-
                                     String [] s=dynamic.getDynamicContent().split(";");
                                     int imageLength = s.length;
                                     if (imageLength == 0) {
@@ -539,12 +542,15 @@ public class DynamicController {
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
                         }
-                    } else {
+                    }
+                    else {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
-                        if (dynamics == null) {
-                            myResult.changeStatus(false);
-                            myResult.add("message", "该用户无动态");
-                        } else {
+                        if (dynamics.size()==0) {
+                            myResult.changeStatus(true);
+                            myResult.add("message", "");
+                            return myResult;
+                        }
+                        else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
                             for (Dynamic dynamic : dynamics) {
                                 Map<String, Object> map = new HashMap<>(4);
@@ -587,11 +593,12 @@ public class DynamicController {
                             myResult.add("message", tmp);
                         }
                     }
-                } else {
+                }
+                else {
                     if (lastMomentId == -1) {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
-                        if (dynamics == null) {
-                            myResult.changeStatus(false);
+                        if (dynamics.size()==0) {
+                            myResult.changeStatus(true);
                             myResult.add("message", "该用户无动态");
                         } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
@@ -641,7 +648,7 @@ public class DynamicController {
                         }
                     } else {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
-                        if (dynamics == null) {
+                        if (dynamics.size()==0) {
                             myResult.changeStatus(false);
                             myResult.add("message", "该用户无动态");
                         } else {
