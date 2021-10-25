@@ -99,9 +99,9 @@ public class AdminController {
             myResult.add("message", "该管理员不存在");
         } else {
             List<User> userNumber = userService.selectUserAll();
-            List<User> userReportedNumber = userService.selectUserByState(-1);
+            List<User> userReportedNumber = userService.selectUserByState(0);
             List<Dynamic> momentNumber = dynamicSerive.selectDynamicAll();
-            List<Dynamic> momentReportedNumber = dynamicSerive.selectDynamicByState(-1);
+            List<Dynamic> momentReportedNumber = dynamicSerive.selectDynamicByState(0);
             myResult.changeStatus(true);
             Map<String, Object> map = new HashMap<>(4);
             map.put("userNumber", userNumber.size());
