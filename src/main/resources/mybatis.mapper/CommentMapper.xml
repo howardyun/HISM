@@ -12,7 +12,7 @@
     </resultMap>
 
     <insert id="insertComment">
-        insert into comment (commentTime, commentContent, dynamicId, userId) values (#{commentTime, jdbcType=DATE}, #{commentContent}, #{dynamicId}, #{userId})
+        insert into comment (commentTime, commentContent, dynamicId, userId) values (#{commentTime, jdbcType=TIMESTAMP}, #{commentContent}, #{dynamicId}, #{userId})
     </insert>
 
     <delete id="deleteComment">

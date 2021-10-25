@@ -9,7 +9,7 @@
 
     <insert id="insertDynamic">
         insert into dynamic (dynamicIndex,  dynamicState, dynamicContent, dynamicTime, dynamicType, userId, language_, code, html, css, para, url, appState, text)
-        values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=DATE}, #{dynamicType}, #{userId}, #{language_}, #{code}, #{html}, #{css}, #{para}, #{url}, #{appState}, #{text})
+        values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=TIMESTAMP}, #{dynamicType}, #{userId}, #{language_}, #{code}, #{html}, #{css}, #{para}, #{url}, #{appState}, #{text})
     </insert>
 
     <delete id="deleteDynamic">
@@ -17,7 +17,7 @@
     </delete>
 
     <select id="selectDynamicByUserId" resultMap="dynamicMap">
-        select * from dynamic where userId = #{userId} order by dynamicTime
+        select * from dynamic where userId = #{userId} order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByDynamicId" resultMap="dynamicMap">
@@ -25,65 +25,65 @@
     </select>
 
     <select id="selectDynamicByUserIdAndState" resultMap="dynamicMap">
-        select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} order by dynamicTime
+        select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByUserIdAnd2State" resultMap="dynamicMap">
-        select * from dynamic where userId = #{userId} and (dynamicState = #{dynamicState1} or dynamicState = #{dynamicState2}) order by dynamicTime
+        select * from dynamic where userId = #{userId} and (dynamicState = #{dynamicState1} or dynamicState = #{dynamicState2}) order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByTipOffNum" resultMap="dynamicMap">
-        select * from dynamic where tipOffNum = #{tipOffNum} order by dynamicTime
+        select * from dynamic where tipOffNum = #{tipOffNum} order by dynamicTime desc
     </select>
 
     <update id="updateDynamic">
-        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=DATE}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
+        update dynamic set dynamicIndex = #{dynamicIndex}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=TIMESTAMP}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
         language_ = #{language_}, code = #{code}, html = #{html}, css = #{css}, para = #{para}, url = #{url}, appState = #{appState}, text = #{text}
         where dynamicId = #{dynamicId}
     </update>
 
     <select id="selectDynamicAll" resultMap="dynamicMap">
-        select * from dynamic order by dynamicTime
+        select * from dynamic order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByState" resultMap="dynamicMap">
-        select * from dynamic where dynamicState = #{dynamicState} order by dynamicTime
+        select * from dynamic where dynamicState = #{dynamicState} order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByIndex" resultMap="dynamicMap">
         select * from dynamic where dynamicIndex like concat('%', #{dynamicIndex, jdbcType=VARCHAR}, '%')
-        order by dynamicTime
+        order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByType" resultMap="dynamicMap">
         select * from dynamic where dynamicType = #{dynamicType}
-        order by dynamicTime
+        order by dynamicTime desc
     </select>
 
     <select id="selectDynamicByUserIdAndDynamicIdLimitNUM" resultMap="dynamicMap">
-        select * from (SELECT * from dynamic WHERE userId = #{userId}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+        select * from (SELECT * from dynamic WHERE userId = #{userId}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
     <select id="selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM" resultMap="dynamicMap">
-        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicIndex like concat('%', #{dynamicIndex, jdbcType=VARCHAR}, '%')) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicIndex like concat('%', #{dynamicIndex, jdbcType=VARCHAR}, '%')) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
     <select id="selectDynamicByDynamicIdLimitNUM" resultMap="dynamicMap">
-        select * from dynamic where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+        select * from dynamic where dynamicId >= #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
     <select id="selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM" resultMap="dynamicMap">
-        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
     <select id="selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM" resultMap="dynamicMap">
-        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState} and dynamicType = #{dynamicType}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime LIMIT #{num}
+        select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState} and dynamicType = #{dynamicType}) as t where dynamicId >= #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
 
     <select id="selectDynamicByUserIdAndDynamicStateAndDynamicType" resultMap="dynamicMap">
         select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} and dynamicType = #{dynamicType}
-        order by dynamicTime
+        order by dynamicTime desc
     </select>
 
 </mapper>

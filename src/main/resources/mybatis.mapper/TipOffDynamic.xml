@@ -8,11 +8,11 @@
 
 
     <insert id="insertTipOff">
-        insert into tipOffDynamic value (#{dynamicId}, #{informerId}, #{tipOffTime, jdbcType=DATE}, #{tipOffContent}, #{isValid})
+        insert into tipOffDynamic value (#{dynamicId}, #{informerId}, #{tipOffTime, jdbcType=TIMESTAMP}, #{tipOffContent}, #{isValid})
     </insert>
 
     <update id="updateTipOff">
-        update tipOffdynamic set tipOffTime = #{tipOffTime}, tipOffContent = #{tipOffContent}, isValid = #{isValid}
+        update tipOffdynamic set tipOffTime = #{tipOffTime, jdbcType=TIMESTAMP}, tipOffContent = #{tipOffContent}, isValid = #{isValid}
         where dynamicId = #{dynamicId} and informerId = #{informerId}
     </update>
 

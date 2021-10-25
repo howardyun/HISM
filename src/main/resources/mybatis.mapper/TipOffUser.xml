@@ -8,11 +8,11 @@
 
 
     <insert id="insertTipOff">
-        insert into tipOffUser value (#{userId}, #{informerId}, #{tipOffTime, jdbcType=DATE}, #{tipOffContent}, #{isValid})
+        insert into tipOffUser value (#{userId}, #{informerId}, #{tipOffTime, jdbcType=TIMESTAMP}, #{tipOffContent}, #{isValid})
     </insert>
 
     <update id="updateTipOff">
-        update tipOffUser set tipOffTime = #{tipOffTime}, tipOffContent = #{tipOffContent}, isValid = #{isValid}
+        update tipOffUser set tipOffTime = #{tipOffTime, jdbcType=TIMESTAMP}, tipOffContent = #{tipOffContent}, isValid = #{isValid}
         where userId = #{userId} and informerId = #{informerId}
     </update>
 

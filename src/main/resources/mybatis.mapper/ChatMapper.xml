@@ -19,7 +19,7 @@
     </select>
 
     <insert id="insertChat">
-        insert into chat value (#{sendUserId}, #{receiveUserId}, #{chatTime, jdbcType=DATE}, #{chatContent})
+        insert into chat value (#{sendUserId}, #{receiveUserId}, #{chatTime, jdbcType=TIMESTAMP}, #{chatContent})
     </insert>
 
 

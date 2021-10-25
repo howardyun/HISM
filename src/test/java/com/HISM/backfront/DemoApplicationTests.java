@@ -49,7 +49,13 @@ class DemoApplicationTests {
     @Test
     void Test(){
         Date date = new Date();
-        Comment comment = new Comment(date, "年轻人不要太气盛", 311, "123");
+        Comment comment = new Comment(date, "不气盛能叫年轻人吗", 311, "9999");
+        Thumb thumb = new Thumb(347, "9999");
+
+
+
+
+
 
 
 
@@ -58,7 +64,8 @@ class DemoApplicationTests {
         // Dynamic dynamic = new Dynamic("小程序", 2,"金轮秀肌肉小程序", date, "程序", "123", "python", "空代码", "wu", "sdf", "fsd", "baidu.com", 1);
         // System.out.println(dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20("16888", 322, 13).size());
 
-        // commentSerive.insertComment(comment);
+        commentSerive.insertComment(comment);
+
 
 
     }
