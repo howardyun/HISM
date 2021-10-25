@@ -137,7 +137,7 @@ public class DynamicController {
                 if (thumbSerive.isThumb(userId, dynamicId)) {
                     thumbSerive.deleteThumb(dynamicId, userId);
                     dynamicSerive.updateDynamic(dynamic);
-                    int likedNum = dynamic.getThumbNum() - 1;
+                    int likedNum = dynamic.getThumbNum();
                     myResult.changeStatus(true);
                     map.put("isLiked", "已取消点赞");
                     map.put("likedNum", likedNum);
