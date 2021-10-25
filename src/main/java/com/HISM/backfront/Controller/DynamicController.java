@@ -253,6 +253,8 @@ public class DynamicController {
             Dynamic dynamic = new Dynamic();
             //可见性
             dynamic.setDynamicState(2);
+            //设置userid
+            dynamic.setUserId(userId);
             //设置内容
             dynamic.setText(text);
             //设置动态类型
@@ -907,6 +909,7 @@ public class DynamicController {
             } else {
                 //dynamic基本属性的设置
                 Dynamic dynamic = new Dynamic();
+                dynamic.setUserId(userId);
                 dynamic.setDynamicIndex(tag);
                 dynamic.setDynamicType("4");
                 dynamic.setDynamicState(2);
@@ -956,6 +959,7 @@ public class DynamicController {
             } else {
                 //dynamic基本属性的设置
                 Dynamic dynamic = new Dynamic();
+                dynamic.setUserId(userId);
                 dynamic.setDynamicIndex(tag);
                 dynamic.setDynamicType("3");
                 dynamic.setDynamicState(2);
