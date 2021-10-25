@@ -259,7 +259,7 @@ public class DynamicController {
             //设置内容
             dynamic.setText(text);
             //设置动态类型
-            dynamic.setDynamicType("1");
+            dynamic.setDynamicType("0");
             //设置时间
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
@@ -513,7 +513,9 @@ public class DynamicController {
                                 String dynamicType = dynamic.getDynamicType();
                                 map.put("appendixType", dynamic.getDynamicType());
                                 if (dynamicType.equals("1")) {
-                                    int imageLength = dynamic.getDynamicContent().split(";").length;
+
+                                    String [] s=dynamic.getDynamicContent().split(";");
+                                    int imageLength = s.length;
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态中不包含图片");
