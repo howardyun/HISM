@@ -209,7 +209,6 @@ public class DynamicController {
             myResult.add("message", "存在多个该用户信息");
         } else {
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            Map<String, Object> map = new HashMap<>(6);
             if (dynamic == null) {
                 myResult.changeStatus(true);
                 myResult.add("message", "该条动态不存在");
@@ -217,6 +216,7 @@ public class DynamicController {
                 List<Comment> commentList = commentSerive.selectCommentById(dynamicId);
                 List<Map<String, Object>> tmp = new ArrayList<>();
                 for (int i = 0; i < commentList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>(6);
                     map.put("commentId", commentList.get(i).getCommentId());
                     map.put("userId", userId);
                     map.put("userName", user.get(0).getUserName());
