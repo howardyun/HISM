@@ -493,7 +493,7 @@ public class DynamicController {
                             myResult.add("message", "");
                             return myResult;
                         }
-                        int beginDynamicId = allDynamics.get(0).getDynamicId();
+                        int beginDynamicId = allDynamics.get(allDynamics.size()-1).getDynamicId();
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
                         if (dynamics.size()==0) {
                             myResult.changeStatus(true);
@@ -744,7 +744,7 @@ public class DynamicController {
                     myResult.add("message", "该用户动态为空");
                     return myResult;
                 }
-                int beginDynamicId = allRequestedDynamics.get(0).getDynamicId();
+                int beginDynamicId = allRequestedDynamics.get(allRequestedDynamics.size()-1).getDynamicId();
                 //找到beginDynamicId以后，从此处开始挑动态，长度为length，放入list
                 List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
                         userId, beginDynamicId, 2, tag, length);
