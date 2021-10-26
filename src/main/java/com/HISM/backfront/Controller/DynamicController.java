@@ -136,14 +136,12 @@ public class DynamicController {
                 Map<String, Object> map = new HashMap<>(2);
                 if (thumbSerive.isThumb(userId, dynamicId)) {
                     thumbSerive.deleteThumb(dynamicId, userId);
-                    dynamicSerive.updateDynamic(dynamic);
                     int likedNum = dynamic.getThumbNum();
                     myResult.changeStatus(true);
                     map.put("isLiked", "已取消点赞");
                     map.put("likedNum", likedNum);
                 } else {
                     thumbSerive.insertThumb(new Thumb(dynamicId, userId));
-                    dynamicSerive.updateDynamic(dynamic);
                     int likedNum = dynamic.getThumbNum() + 1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "点赞成功");
