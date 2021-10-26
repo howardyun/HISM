@@ -216,10 +216,15 @@ public class DynamicController {
                 List<Comment> commentList = commentSerive.selectCommentById(dynamicId);
                 List<Map<String, Object>> tmp = new ArrayList<>();
                 for (int i = 0; i < commentList.size(); i++) {
+                    List<User> user_t =userService.selectUserbyId(commentList.get(i).getUserId());
+                    if(user_t==null){
+                        myResult.changeStatus(true);
+                        myResult.add("message", "该"+commentList.get(i).getUserId()+"用户不存在");
+                    }
                     Map<String, Object> map = new HashMap<>(6);
                     map.put("commentId", commentList.get(i).getCommentId());
                     map.put("userId", userId);
-                    map.put("userName", user.get(0).getUserName());
+                    map.put("userName", user_t.get(0).getUserName());
                     map.put("userAvatar", user.get(0).getAvatarURL());
                     map.put("time", commentList.get(i).getCommentTime());
                     map.put("text", commentList.get(i).getCommentContent());
