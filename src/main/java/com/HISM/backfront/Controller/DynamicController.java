@@ -136,7 +136,7 @@ public class DynamicController {
                 Map<String, Object> map = new HashMap<>(2);
                 if (thumbSerive.isThumb(userId, dynamicId)) {
                     thumbSerive.deleteThumb(dynamicId, userId);
-                    int likedNum = dynamic.getThumbNum();
+                    int likedNum = dynamic.getThumbNum()-1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "已取消点赞");
                     map.put("likedNum", likedNum);
@@ -795,8 +795,8 @@ public class DynamicController {
                 List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
                         userId, lastMomentId, 2, tag, length);
                 if (dynamics == null) {
-                    myResult.changeStatus(false);
-                    myResult.add("message", "该动态后面无动态");
+                    myResult.changeStatus(true);
+                    myResult.add("message", "");
                 } else {
                     List<Map<String, Object>> tmp = new ArrayList<>();
                     for (Dynamic dynamic : dynamics) {
