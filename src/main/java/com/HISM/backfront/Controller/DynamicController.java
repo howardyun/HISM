@@ -223,9 +223,9 @@ public class DynamicController {
                     }
                     Map<String, Object> map = new HashMap<>(6);
                     map.put("commentId", commentList.get(i).getCommentId());
-                    map.put("userId", userId);
+                    map.put("userId", user_t.get(0).getUserId());
                     map.put("userName", user_t.get(0).getUserName());
-                    map.put("userAvatar", user.get(0).getAvatarURL());
+                    map.put("userAvatar", user_t.get(0).getAvatarURL());
                     map.put("time", commentList.get(i).getCommentTime());
                     map.put("text", commentList.get(i).getCommentContent());
                     tmp.add(map);
