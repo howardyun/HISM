@@ -28,11 +28,11 @@
     </select>
 
     <select id="getSubscriberByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex from user where userId in (select userId from follower where followerId = #{followerId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
 
     <select id="getFanByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex from user where userId in (select followerId from follower where userId = #{userId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select followerId from follower where userId = #{userId})
     </select>
 
     <select id="selectUserByTipOffNum" resultMap="userMap">
