@@ -169,7 +169,7 @@ public class UserController {
         MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(userName) || "".equals(description)) {
             myResult.changeStatus(false);
-            myResult.add("message", "账号/密码不能为空");
+            myResult.add("message", "账号/密码/描述不能为空");
             return myResult;
         }
         List<User> users = userService.selectUserbyId(userId);
