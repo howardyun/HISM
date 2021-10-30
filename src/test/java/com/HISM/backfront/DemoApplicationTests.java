@@ -54,7 +54,7 @@ class DemoApplicationTests {
         Thumb thumb = new Thumb(366, "9999");
         thumbSerive.deleteThumb(366, "9999");
 
-        List<Dynamic> dynamicList = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20("16888", 1, 5);
+        List<Dynamic> dynamicList = dynamicSerive.selectDynamicByDynamicIdLimitNUM(1, 5);
         for(Dynamic dynamic : dynamicList){
             System.out.println(dynamic.getDynamicTime());
         }
