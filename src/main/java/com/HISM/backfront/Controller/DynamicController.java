@@ -281,9 +281,9 @@ public class DynamicController {
     @ApiOperation("用户上传图片+文本")
     public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") List<MultipartFile> multipartFile, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
+        if ("".equals(userId)  || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
-            myResult.add("message", "userId或text或tag为空");
+            myResult.add("message", "userId或tag为空");
             return myResult;
         }
         List<User> users = userService.selectUserbyId(userId);
@@ -659,7 +659,7 @@ public class DynamicController {
                         } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
                             for (Dynamic dynamic : dynamics) {
-                                if (dynamic.getDynamicId() <= lastMomentId) {
+                                if (dynamic.getDynamicId() >= lastMomentId) {
                                     continue;
                                 } else {
                                     if (length == 0) {
