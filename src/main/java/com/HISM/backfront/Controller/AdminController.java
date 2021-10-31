@@ -360,10 +360,59 @@ public class AdminController {
 
     @PostMapping("/aduitUser")
     @ApiOperation("审核被封动态")
-    public MyResult aduitUser(){
+    public MyResult aduitUser(@RequestParam String adminId, @RequestParam String userId, @RequestParam int dynamicState) {
         MyResult myResult = new MyResult();
-
-
+        Administrator administrator = administratorSerive.queryUserbyId(adminId);
+        if (administrator == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该管理员不存在");
+            return myResult;
+        }
+        List<User> user = userService.selectUserbyId(userId);
+        if (user == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+            return myResult;
+        } else if (user.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户冗余");
+            return myResult;
+        }else{
+            int userState =user.get(0).getUserState();
+            if(userState==-1){
+                myResult.changeStatus(false);
+                myResult.add("message", "该用户已经被封");
+                return myResult;
+            }
+            else if(userState==1){
+                myResult.changeStatus(false);
+                myResult.add("message", "该用户状态正常");
+                return myResult;
+            }else if (userState==0){
+                if(dynamicState==0){
+                    //封
+                    user.get(0).setUserState(-1);
+                }else if(dynamicState==1){
+                    //解封
+                    user.get(0).setUserState(-1);
+                }
+                else {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "输入的判断有误");
+                    return myResult;
+                }
+                userService.updateUser(user.get(0));
+                tipOffUserSerive.invalidateTipOff(user.get(0).getUserId());
+                myResult.changeStatus(true);
+                Map<String, Object> map = new HashMap<>(1);
+                map.put("status", dynamicState);
+                myResult.add("message",map);
+            }else{
+                myResult.changeStatus(false);
+                myResult.add("message", "用户状态有误");
+                return myResult;
+            }
+        }
         return myResult;
     }
 
