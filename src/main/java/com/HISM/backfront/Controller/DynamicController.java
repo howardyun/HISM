@@ -36,13 +36,357 @@ public class DynamicController {
     @Resource
     TipOffDynamicSerive tipOffDynamicSerive;
     @Resource
+    FollowerSerive followerSerive;
+    @Resource
     WebAppConfig webAppConfig;
 
     @PostMapping("/getMoments")
     //必填
     @ApiOperation("获取动态")
-    public MyResult getMoments() {
+    public MyResult getMoments(@RequestParam String userId, @RequestParam int type, @RequestParam int lastMomentId, @RequestParam int length) {
         MyResult myResult = new MyResult();
+        if ("".equals(userId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "源用户id，目标用户id不能为空");
+            return myResult;
+        }
+        List<User> userList = userService.selectUserbyId(userId);
+        if (userList == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "没有源用户");
+        } else if (userList.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "源用户信息多于一个");
+        } else {
+            //关注
+            if (type == 1) {
+                //如果是第一次拉取
+                List<User> follwers = userService.getSubscriberByUserId(userId);
+                //如果该用户没有关注
+                if (follwers.size() == 0) {
+                    myResult.changeStatus(true);
+                    myResult.add("message", "");
+                } else {
+                    //将取出的follwers的动态根据时间插在一起
+                    List<Dynamic> tmp = new ArrayList<Dynamic>();
+                    for (User user : follwers) {
+                        List<Dynamic> d = dynamicSerive.selectDynamicByUserIdAndState(user.getUserId(), 2);
+                        tmp.addAll(d);
+                    }
+                    tmp.sort(new Comparator<Dynamic>() {
+                        @Override
+                        public int compare(Dynamic o1, Dynamic o2) {
+                            return o1.getDynamicTime().compareTo(o2.getDynamicTime());
+                        }
+                    });
+                    //如果从第一个拉取
+                    if (lastMomentId == -1) {
+                        if (tmp.size() >= length) {
+                            //数据库中的数量大于所取长度
+                            myResult.changeStatus(true);
+                            List<Map<String, Object>> tmp1 = new ArrayList<>();
+                            for (int i = 0; i < length; ++i) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", tmp.get(i).getDynamicId());
+                                map.put("userId", tmp.get(i).getUserId());
+                                List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
+                                map.put("userName", t.get(0).getUserName());
+                                map.put("userAvatar", t.get(0).getAvatarURL());
+                                map.put("text", tmp.get(i).getText());
+                                map.put("appendixType", tmp.get(i).getDynamicType());
+                                String dynamicType = tmp.get(i).getDynamicType();
+                                if (dynamicType.equals("1")) {
+                                    int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", tmp.get(i).getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", tmp.get(i).getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", tmp.get(i).getDynamicId());
+                                } else if (dynamicType.equals("0")) {
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
+                                map.put("isDel", tmp.get(i).getDynamicState() == 3);
+                                map.put("tag", tmp.get(i).getDynamicIndex());
+                                tmp1.add(map);
+                            }
+                            myResult.add("message", tmp1);
+                        } else {
+                            myResult.changeStatus(true);
+                            List<Map<String, Object>> tmp1 = new ArrayList<>();
+                            for (Dynamic dynamic : tmp) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", dynamic.getDynamicId());
+                                map.put("userId", dynamic.getUserId());
+                                List<User> t = userService.selectUserbyId(dynamic.getUserId());
+                                map.put("userName", t.get(0).getUserName());
+                                map.put("userAvatar", t.get(0).getAvatarURL());
+                                map.put("text", dynamic.getText());
+                                map.put("appendixType", dynamic.getDynamicType());
+                                String dynamicType = dynamic.getDynamicType();
+                                if (dynamicType.equals("1")) {
+                                    int imageLength = dynamic.getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", dynamic.getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", dynamic.getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", dynamic.getDynamicId());
+                                } else if (dynamicType.equals("0")) {
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                map.put("likeNum", dynamic.getThumbNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                                map.put("isDel", dynamic.getDynamicState() == 3);
+                                map.put("tag", dynamic.getDynamicIndex());
+                                tmp1.add(map);
+                            }
+                            myResult.add("message", tmp1);
+                        }
+                    }
+                    //从第某个id拉取
+                    else {
+                        Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(lastMomentId);
+                        if (dynamic == null) {
+                            myResult.changeStatus(false);
+                            myResult.add("message", "该id对应动态不存在");
+                            return myResult;
+                        }
+                        int index = tmp.indexOf(dynamic);
+                        if ((tmp.size() - (index + 1)) >= length) {
+                            //数据库中的数量大于所取长度
+                            myResult.changeStatus(true);
+                            List<Map<String, Object>> tmp1 = new ArrayList<>();
+                            for (int i = index + 1; i < length; ++i) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", tmp.get(i).getDynamicId());
+                                map.put("userId", tmp.get(i).getUserId());
+                                List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
+                                map.put("userName", t.get(0).getUserName());
+                                map.put("userAvatar", t.get(0).getAvatarURL());
+                                map.put("text", tmp.get(i).getText());
+                                map.put("appendixType", tmp.get(i).getDynamicType());
+                                String dynamicType = tmp.get(i).getDynamicType();
+                                if (dynamicType.equals("1")) {
+                                    int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", tmp.get(i).getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", tmp.get(i).getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", tmp.get(i).getDynamicId());
+                                } else if (dynamicType.equals("0")) {
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
+                                map.put("isDel", tmp.get(i).getDynamicState() == 3);
+                                map.put("tag", tmp.get(i).getDynamicIndex());
+                                tmp1.add(map);
+                            }
+                            myResult.add("message", tmp1);
+                        } else {
+                            //数据库中的数量大于所取长度
+                            myResult.changeStatus(true);
+                            List<Map<String, Object>> tmp1 = new ArrayList<>();
+                            for (int i = index + 1; i < tmp.size(); ++i) {
+                                Map<String, Object> map = new HashMap<>(4);
+                                map.put("momentId", tmp.get(i).getDynamicId());
+                                map.put("userId", tmp.get(i).getUserId());
+                                List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
+                                map.put("userName", t.get(0).getUserName());
+                                map.put("userAvatar", t.get(0).getAvatarURL());
+                                map.put("text", tmp.get(i).getText());
+                                map.put("appendixType", tmp.get(i).getDynamicType());
+                                String dynamicType = tmp.get(i).getDynamicType();
+                                if (dynamicType.equals("1")) {
+                                    int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                    if (imageLength == 0) {
+                                        myResult.changeStatus(false);
+                                        myResult.add("message", "动态中不包含图片");
+                                        return myResult;
+                                    } else {
+                                        map.put("photos", tmp.get(i).getDynamicContent());
+                                    }
+                                } else if (dynamicType.equals("2")) {
+                                    map.put("video", tmp.get(i).getDynamicContent());
+                                } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                    map.put("momentId", tmp.get(i).getDynamicId());
+                                } else if (dynamicType.equals("0")) {
+                                } else {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态类型码错误");
+                                    return myResult;
+                                }
+                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
+                                map.put("isDel", tmp.get(i).getDynamicState() == 3);
+                                map.put("tag", tmp.get(i).getDynamicIndex());
+                                tmp1.add(map);
+                            }
+                            myResult.add("message", tmp1);
+                        }
+                    }
+                }
+            } else if (type == 0) {
+                //广场
+                //如果从第一个拉取
+                List<Dynamic> tmp=dynamicSerive.selectDynamicByState(2);
+                if (lastMomentId == -1) {
+                    if (tmp.size() >= length) {
+                        //数据库中的数量大于所取长度
+                        myResult.changeStatus(true);
+                        List<Map<String, Object>> tmp1 = new ArrayList<>();
+                        for (int i = 0; i < length; ++i) {
+                            Map<String, Object> map = new HashMap<>(4);
+                            map.put("momentId", tmp.get(i).getDynamicId());
+                            map.put("userId", tmp.get(i).getUserId());
+                            List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
+                            map.put("userName", t.get(0).getUserName());
+                            map.put("userAvatar", t.get(0).getAvatarURL());
+                            map.put("text", tmp.get(i).getText());
+                            map.put("appendixType", tmp.get(i).getDynamicType());
+                            String dynamicType = tmp.get(i).getDynamicType();
+                            if (dynamicType.equals("1")) {
+                                int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                if (imageLength == 0) {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态中不包含图片");
+                                    return myResult;
+                                } else {
+                                    map.put("photos", tmp.get(i).getDynamicContent());
+                                }
+                            } else if (dynamicType.equals("2")) {
+                                map.put("video", tmp.get(i).getDynamicContent());
+                            } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                map.put("momentId", tmp.get(i).getDynamicId());
+                            } else if (dynamicType.equals("0")) {
+                            } else {
+                                myResult.changeStatus(false);
+                                myResult.add("message", "动态类型码错误");
+                                return myResult;
+                            }
+                            map.put("likeNum", tmp.get(i).getThumbNum());
+                            map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
+                            map.put("isDel", tmp.get(i).getDynamicState() == 3);
+                            map.put("tag", tmp.get(i).getDynamicIndex());
+                            tmp1.add(map);
+                        }
+                        myResult.add("message", tmp1);
+                    }
+                    else {
+                        myResult.changeStatus(true);
+                        List<Map<String, Object>> tmp1 = new ArrayList<>();
+                        for (Dynamic dynamic : tmp) {
+                            Map<String, Object> map = new HashMap<>(4);
+                            map.put("momentId", dynamic.getDynamicId());
+                            map.put("userId", dynamic.getUserId());
+                            List<User> t = userService.selectUserbyId(dynamic.getUserId());
+                            map.put("userName", t.get(0).getUserName());
+                            map.put("userAvatar", t.get(0).getAvatarURL());
+                            map.put("text", dynamic.getText());
+                            map.put("appendixType", dynamic.getDynamicType());
+                            String dynamicType = dynamic.getDynamicType();
+                            if (dynamicType.equals("1")) {
+                                int imageLength = dynamic.getDynamicContent().split(";").length;
+                                if (imageLength == 0) {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态中不包含图片");
+                                    return myResult;
+                                } else {
+                                    map.put("photos", dynamic.getDynamicContent());
+                                }
+                            } else if (dynamicType.equals("2")) {
+                                map.put("video", dynamic.getDynamicContent());
+                            } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                map.put("momentId", dynamic.getDynamicId());
+                            } else if (dynamicType.equals("0")) {
+                            } else {
+                                myResult.changeStatus(false);
+                                myResult.add("message", "动态类型码错误");
+                                return myResult;
+                            }
+                            map.put("likeNum", dynamic.getThumbNum());
+                            map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
+                            map.put("isDel", dynamic.getDynamicState() == 3);
+                            map.put("tag", dynamic.getDynamicIndex());
+                            tmp1.add(map);
+                        }
+                        myResult.add("message", tmp1);
+                    }
+                }
+                //从第某个id拉取
+                else {
+                    List<Dynamic> dynamic= dynamicSerive.selectDynamicByDynamicIdLimitNUM(lastMomentId,length);
+                        //数据库中的数量大于所取长度
+                        myResult.changeStatus(true);
+                        List<Map<String, Object>> tmp1 = new ArrayList<>();
+                        for (Dynamic d:dynamic) {
+                            Map<String, Object> map = new HashMap<>(4);
+                            map.put("momentId", d.getDynamicId());
+                            map.put("userId", d.getUserId());
+                            List<User> t = userService.selectUserbyId(d.getUserId());
+                            map.put("userName", t.get(0).getUserName());
+                            map.put("userAvatar", t.get(0).getAvatarURL());
+                            map.put("text", d.getText());
+                            map.put("appendixType", d.getDynamicType());
+                            String dynamicType = d.getDynamicType();
+                            if (dynamicType.equals("1")) {
+                                int imageLength = d.getDynamicContent().split(";").length;
+                                if (imageLength == 0) {
+                                    myResult.changeStatus(false);
+                                    myResult.add("message", "动态中不包含图片");
+                                    return myResult;
+                                } else {
+                                    map.put("photos", d.getDynamicContent());
+                                }
+                            } else if (dynamicType.equals("2")) {
+                                map.put("video", d.getDynamicContent());
+                            } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                                map.put("momentId", d.getDynamicId());
+                            } else if (dynamicType.equals("0")) {
+                            } else {
+                                myResult.changeStatus(false);
+                                myResult.add("message", "动态类型码错误");
+                                return myResult;
+                            }
+                            map.put("likeNum", d.getThumbNum());
+                            map.put("isLiked", thumbSerive.isThumb(userId, d.getDynamicId()));
+                            map.put("isDel", d.getDynamicState() == 3);
+                            map.put("tag", d.getDynamicIndex());
+                            tmp1.add(map);
+                        }
+                        myResult.add("message", tmp1);
+                }
+
+            }
+        }
         return myResult;
     }
 
@@ -281,7 +625,7 @@ public class DynamicController {
     @ApiOperation("用户上传图片+文本")
     public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") List<MultipartFile> multipartFile, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId)  || "".equals(tag) || multipartFile == null) {
+        if ("".equals(userId) || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
             myResult.add("message", "userId或tag为空");
             return myResult;
@@ -501,7 +845,7 @@ public class DynamicController {
                         } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
                             for (Dynamic dynamic : dynamics) {
-                                if(dynamic.getDynamicType().equals("3")||dynamic.getDynamicType().equals("0")||dynamic.getDynamicType().equals("-1")){
+                                if (dynamic.getDynamicType().equals("3") || dynamic.getDynamicType().equals("0") || dynamic.getDynamicType().equals("-1")) {
                                     continue;
                                 }
                                 Map<String, Object> map = new HashMap<>(4);
@@ -544,8 +888,7 @@ public class DynamicController {
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
                         }
-                    }
-                    else {
+                    } else {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
                         if (dynamics.size() == 0) {
                             myResult.changeStatus(true);
@@ -554,7 +897,7 @@ public class DynamicController {
                         } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
                             for (Dynamic dynamic : dynamics) {
-                                if(dynamic.getDynamicType().equals("3")||dynamic.getDynamicType().equals("0")||dynamic.getDynamicType().equals("-1")){
+                                if (dynamic.getDynamicType().equals("3") || dynamic.getDynamicType().equals("0") || dynamic.getDynamicType().equals("-1")) {
                                     continue;
                                 }
                                 Map<String, Object> map = new HashMap<>(4);
@@ -597,8 +940,7 @@ public class DynamicController {
                             myResult.add("message", tmp);
                         }
                     }
-                }
-                else {
+                } else {
                     if (lastMomentId == -1) {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
                         if (dynamics.size() == 0) {
@@ -650,8 +992,7 @@ public class DynamicController {
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
                         }
-                    }
-                    else {
+                    } else {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
                         if (dynamics.size() == 0) {
                             myResult.changeStatus(false);

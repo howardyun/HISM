@@ -34,6 +34,8 @@ public class AdminController {
     TipOffDynamicSerive tipOffDynamicSerive;
     @Resource
     ThumbSerive thumbSerive;
+    @Resource
+    TipOffUserSerive tipOffUserSerive;
 
     public boolean verifyId(String Id, MyResult myResult) {
         if ("".equals(Id)) {
@@ -307,8 +309,8 @@ public class AdminController {
                 myResult.add("message", "该管理员不存在");
                 return myResult;
             } else {
-               List<Dynamic> dynamicList= dynamicSerive.selectDynamicByUserId(userId);
-               myResult.changeStatus(true);
+                List<Dynamic> dynamicList = dynamicSerive.selectDynamicByUserId(userId);
+                myResult.changeStatus(true);
                 List<Map<String, Object>> tmp = new ArrayList<>();
                 for (int i = 0; i < dynamicList.size(); i++) {
                     Map<String, Object> map = new HashMap<>(4);
@@ -355,4 +357,15 @@ public class AdminController {
 
         return myResult;
     }
+
+    @PostMapping("/aduitUser")
+    @ApiOperation("审核被封动态")
+    public MyResult aduitUser(){
+        MyResult myResult = new MyResult();
+
+
+        return myResult;
+    }
+
+
 }
