@@ -73,7 +73,7 @@ public class DynamicController {
                         List<Dynamic> d = dynamicSerive.selectDynamicByUserIdAndState(user.getUserId(), 2);
                         tmp.addAll(d);
                     }
-                    List<Dynamic> d=dynamicSerive.selectDynamicByUserIdAndState(userId,2);
+                    List<Dynamic> d=dynamicSerive.selectDynamicByUserIdAnd2State(userId,1,2);
                     tmp.addAll(d);
                     tmp.sort(new Comparator<Dynamic>() {
                         @Override
