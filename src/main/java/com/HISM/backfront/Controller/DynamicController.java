@@ -844,7 +844,7 @@ public class DynamicController {
             } else {
                 if (userId.equals(targetUserId)) {
                     if (lastMomentId == -1) {
-                        List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserId(targetUserId);
+                        List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserIdAnd2State(targetUserId,1,2);
                         if (allDynamics.size() == 0) {
                             myResult.changeStatus(true);
                             myResult.add("message", "");
