@@ -189,4 +189,25 @@ public class DynamicSerive {
         }
         return dynamicList;
     }
+
+
+    // 按照动态状态和动态类型选出动态，
+    public List<Dynamic> selectDynamicByDynamicStateAndDynamicType(int dynamicState, String dynamicType){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicStateAndDynamicType(dynamicState, dynamicType);
+        if(dynamicList.isEmpty()){
+            System.out.println("warning, 符合该条件的动态数量为0");
+        }
+        return dynamicList;
+    }
+
+    // 获取num条动态，要求num条动态的状态为dynamicState、类型为DynamicType
+    public List<Dynamic> selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(int dynamicId, int dynamicState, String dynamicType, int num){
+        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(dynamicId, dynamicState, dynamicType, num);
+        if(dynamicList.isEmpty()){
+            System.out.println("warning, 符合该条件的动态数量为0");
+        }else if(dynamicList.size() < num){
+            System.out.println("获取的动态数量不满足"+num+"条");
+        }
+        return dynamicList;
+    }
 }
