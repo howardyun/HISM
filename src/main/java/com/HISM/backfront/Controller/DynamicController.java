@@ -78,7 +78,7 @@ public class DynamicController {
                     tmp.sort(new Comparator<Dynamic>() {
                         @Override
                         public int compare(Dynamic o1, Dynamic o2) {
-                            return o1.getDynamicTime().compareTo(o2.getDynamicTime());
+                            return o2.getDynamicTime().compareTo(o1.getDynamicTime());
                         }
                     });
                     //如果从第一个拉取
