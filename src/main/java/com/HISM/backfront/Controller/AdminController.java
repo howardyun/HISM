@@ -4,6 +4,7 @@ import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
 import com.HISM.backfront.domain.Administrator;
 import com.HISM.backfront.domain.Dynamic;
+import com.HISM.backfront.domain.TipOffUser;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -416,5 +417,42 @@ public class AdminController {
         return myResult;
     }
 
-
+    @PostMapping("/banUser")
+    @ApiOperation("获取被封用户信息")
+    public MyResult banUser(@RequestParam String adminId, @RequestParam String userId){
+        MyResult myResult =new MyResult();
+        Administrator administrator = administratorSerive.queryUserbyId(adminId);
+        if (administrator == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该管理员不存在");
+            return myResult;
+        }
+        List<User> userList = userService.selectUserbyId(userId);
+        if(userList==null){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户不存在");
+        }else if (userList.size()>1){
+            myResult.changeStatus(false);
+            myResult.add("message", "该用户信息冗余");
+        }else {
+            List<TipOffUser> tipOffUsers = tipOffUserSerive.selectTipOffByUserId(userId);
+            myResult.changeStatus(true);
+            Map<String, Object> message = new HashMap<>(4);
+            List<Map<String, Object>> reportedNum = new ArrayList<>();
+            message.put("userID",userId);
+            message.put("userName",userList.get(0).getUserName());
+            message.put("reportedNum",tipOffUsers.size());
+            for (TipOffUser t:tipOffUsers) {
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("userId", t.getInformerId());
+                List<User> ioi=userService.selectUserbyId(t.getUserId());
+                map.put("userName", ioi.get(0).getUserName());
+                map.put("userBanMessage",t.getTipOffContent());
+                reportedNum.add(map);
+            }
+            message.put("reportedMessage",reportedNum);
+            myResult.add("message",message);
+        }
+        return myResult;
+    }
 }
