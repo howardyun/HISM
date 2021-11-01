@@ -114,10 +114,12 @@ public class DynamicController {
                                     myResult.add("message", "动态类型码错误");
                                     return myResult;
                                 }
-                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("likedNum", tmp.get(i).getThumbNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
                                 map.put("isDel", tmp.get(i).getDynamicState() == 3);
                                 map.put("tag", tmp.get(i).getDynamicIndex());
+                                map.put("commentNum", tmp.get(i).getCommentNum());
+                                map.put("time",tmp.get(i).getDynamicTime());
                                 tmp1.add(map);
                             }
                             myResult.add("message", tmp1);
@@ -153,10 +155,12 @@ public class DynamicController {
                                     myResult.add("message", "动态类型码错误");
                                     return myResult;
                                 }
-                                map.put("likeNum", dynamic.getThumbNum());
+                                map.put("likedNum", dynamic.getThumbNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                                 map.put("isDel", dynamic.getDynamicState() == 3);
                                 map.put("tag", dynamic.getDynamicIndex());
+                                map.put("commentNum", dynamic.getCommentNum());
+                                map.put("time",dynamic.getDynamicTime());
                                 tmp1.add(map);
                             }
                             myResult.add("message", tmp1);
@@ -204,10 +208,12 @@ public class DynamicController {
                                     myResult.add("message", "动态类型码错误");
                                     return myResult;
                                 }
-                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("likedNum", tmp.get(i).getThumbNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
                                 map.put("isDel", tmp.get(i).getDynamicState() == 3);
                                 map.put("tag", tmp.get(i).getDynamicIndex());
+                                map.put("commentNum", tmp.get(i).getCommentNum());
+                                map.put("time",tmp.get(i).getDynamicTime());
                                 tmp1.add(map);
                             }
                             myResult.add("message", tmp1);
@@ -244,10 +250,12 @@ public class DynamicController {
                                     myResult.add("message", "动态类型码错误");
                                     return myResult;
                                 }
-                                map.put("likeNum", tmp.get(i).getThumbNum());
+                                map.put("likedNum", tmp.get(i).getThumbNum());
                                 map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
                                 map.put("isDel", tmp.get(i).getDynamicState() == 3);
                                 map.put("tag", tmp.get(i).getDynamicIndex());
+                                map.put("commentNum", tmp.get(i).getCommentNum());
+                                map.put("time",tmp.get(i).getDynamicTime());
                                 tmp1.add(map);
                             }
                             myResult.add("message", tmp1);
@@ -292,10 +300,12 @@ public class DynamicController {
                                 myResult.add("message", "动态类型码错误");
                                 return myResult;
                             }
-                            map.put("likeNum", tmp.get(i).getThumbNum());
+                            map.put("likedNum", tmp.get(i).getThumbNum());
                             map.put("isLiked", thumbSerive.isThumb(userId, tmp.get(i).getDynamicId()));
                             map.put("isDel", tmp.get(i).getDynamicState() == 3);
-                            map.put("tag", tmp.get(i).getDynamicIndex());
+                            map.put("tag",tmp.get(i).getDynamicIndex());
+                            map.put("commentNum", tmp.get(i).getCommentNum());
+                            map.put("time",tmp.get(i).getDynamicTime());
                             tmp1.add(map);
                         }
                         myResult.add("message", tmp1);
@@ -332,10 +342,12 @@ public class DynamicController {
                                 myResult.add("message", "动态类型码错误");
                                 return myResult;
                             }
-                            map.put("likeNum", dynamic.getThumbNum());
+                            map.put("likedNum", dynamic.getThumbNum());
                             map.put("isLiked", thumbSerive.isThumb(userId, dynamic.getDynamicId()));
                             map.put("isDel", dynamic.getDynamicState() == 3);
                             map.put("tag", dynamic.getDynamicIndex());
+                            map.put("commentNum", dynamic.getCommentNum());
+                            map.put("time",dynamic.getDynamicTime());
                             tmp1.add(map);
                         }
                         myResult.add("message", tmp1);
@@ -376,10 +388,12 @@ public class DynamicController {
                                 myResult.add("message", "动态类型码错误");
                                 return myResult;
                             }
-                            map.put("likeNum", d.getThumbNum());
+                            map.put("likedNum", d.getThumbNum());
                             map.put("isLiked", thumbSerive.isThumb(userId, d.getDynamicId()));
                             map.put("isDel", d.getDynamicState() == 3);
                             map.put("tag", d.getDynamicIndex());
+                            map.put("commentNum",d.getCommentNum());
+                            map.put("time",d.getDynamicTime());
                             tmp1.add(map);
                         }
                         myResult.add("message", tmp1);
