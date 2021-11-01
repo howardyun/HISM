@@ -88,7 +88,7 @@ public class DynamicController {
                             for (int i = 0; i < length; ++i) {
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", tmp.get(i).getDynamicId());
-                                map.put("userId", tmp.get(i).getUserId());
+                                map.put("userID", tmp.get(i).getUserId());
                                 List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
                                 map.put("userName", t.get(0).getUserName());
                                 map.put("userAvatar", t.get(0).getAvatarURL());
@@ -129,7 +129,7 @@ public class DynamicController {
                             for (Dynamic dynamic : tmp) {
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", dynamic.getDynamicId());
-                                map.put("userId", dynamic.getUserId());
+                                map.put("userID", dynamic.getUserId());
                                 List<User> t = userService.selectUserbyId(dynamic.getUserId());
                                 map.put("userName", t.get(0).getUserName());
                                 map.put("userAvatar", t.get(0).getAvatarURL());
@@ -182,7 +182,7 @@ public class DynamicController {
                             for (int i = index + 1; i < length; ++i) {
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", tmp.get(i).getDynamicId());
-                                map.put("userId", tmp.get(i).getUserId());
+                                map.put("userID", tmp.get(i).getUserId());
                                 List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
                                 map.put("userName", t.get(0).getUserName());
                                 map.put("userAvatar", t.get(0).getAvatarURL());
@@ -224,7 +224,7 @@ public class DynamicController {
                             for (int i = index + 1; i < tmp.size(); ++i) {
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", tmp.get(i).getDynamicId());
-                                map.put("userId", tmp.get(i).getUserId());
+                                map.put("userID", tmp.get(i).getUserId());
                                 List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
                                 map.put("userName", t.get(0).getUserName());
                                 map.put("userAvatar", t.get(0).getAvatarURL());
@@ -274,7 +274,7 @@ public class DynamicController {
                         for (int i = 0; i < length; ++i) {
                             Map<String, Object> map = new HashMap<>(4);
                             map.put("momentId", tmp.get(i).getDynamicId());
-                            map.put("userId", tmp.get(i).getUserId());
+                            map.put("userID", tmp.get(i).getUserId());
                             List<User> t = userService.selectUserbyId(tmp.get(i).getUserId());
                             map.put("userName", t.get(0).getUserName());
                             map.put("userAvatar", t.get(0).getAvatarURL());
@@ -316,7 +316,7 @@ public class DynamicController {
                         for (Dynamic dynamic : tmp) {
                             Map<String, Object> map = new HashMap<>(4);
                             map.put("momentId", dynamic.getDynamicId());
-                            map.put("userId", dynamic.getUserId());
+                            map.put("userID", dynamic.getUserId());
                             List<User> t = userService.selectUserbyId(dynamic.getUserId());
                             map.put("userName", t.get(0).getUserName());
                             map.put("userAvatar", t.get(0).getAvatarURL());
@@ -362,7 +362,7 @@ public class DynamicController {
                         for (Dynamic d:dynamic) {
                             Map<String, Object> map = new HashMap<>(4);
                             map.put("momentId", d.getDynamicId());
-                            map.put("userId", d.getUserId());
+                            map.put("userID", d.getUserId());
                             List<User> t = userService.selectUserbyId(d.getUserId());
                             map.put("userName", t.get(0).getUserName());
                             map.put("userAvatar", t.get(0).getAvatarURL());
