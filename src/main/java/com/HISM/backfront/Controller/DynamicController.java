@@ -1079,11 +1079,11 @@ public class DynamicController {
             myResult.add("message", "长度异常");
             return myResult;
         }
-        if (dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "传入的lastMomentId有误，不存在该条动态");
-            return myResult;
-        }
+//        if (dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null) {
+//            myResult.changeStatus(false);
+//            myResult.add("message", "传入的lastMomentId有误，不存在该条动态");
+//            return myResult;
+//        }
         if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
@@ -1103,7 +1103,7 @@ public class DynamicController {
                         userId, 2, tag);
                 if (allRequestedDynamics.size() == 0) {
                     myResult.changeStatus(false);
-                    myResult.add("message", "该用户动态为空");
+                    myResult.add("message", "该类型动态为空");
                     return myResult;
                 }
                 int beginDynamicId = allRequestedDynamics.get(allRequestedDynamics.size() - 1).getDynamicId();
