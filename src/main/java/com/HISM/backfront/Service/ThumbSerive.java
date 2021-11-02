@@ -6,6 +6,7 @@ import com.HISM.backfront.mapper.DynamicMapper;
 import com.HISM.backfront.mapper.ThumbMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ThumbSerive {
@@ -49,4 +50,15 @@ public class ThumbSerive {
         // 如果点赞数量=1 则表名用户对该动态点了赞，返回true 否则返回false
         return thumbNum == 1;
     }
+
+    public List<Thumb> selectThumbInfoByDynamicId(int dynamicId){
+
+        List<Thumb> thumbs = thumbMapper.selectThumbInfoByDynamicId(dynamicId);
+
+        return thumbs;
+    }
+
+
+
+
 }

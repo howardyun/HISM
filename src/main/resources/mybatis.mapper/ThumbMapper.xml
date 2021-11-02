@@ -3,6 +3,7 @@
 
 <mapper namespace="com.HISM.backfront.mapper.ThumbMapper">
     <resultMap id="thumbMap" type="com.HISM.backfront.domain.Thumb">
+
     </resultMap>
 
 
@@ -17,4 +18,8 @@
     <select id="isThumb" resultType="java.lang.Integer">
         select count(*) from thumb where dynamicId = #{dynamicId} and userId = #{userId}
     </select>
+    <select id="selectThumbInfoByDynamicId" resultType="thumbMap">
+        select * from thumb where dynamicId = #{dynamicId}
+    </select>
+
 </mapper>

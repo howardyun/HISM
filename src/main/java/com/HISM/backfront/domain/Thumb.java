@@ -35,4 +35,6 @@ public class Thumb {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
 }

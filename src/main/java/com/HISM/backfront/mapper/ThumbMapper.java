@@ -18,4 +18,6 @@ public interface ThumbMapper {
     // 判断某个用户是否对某个动态进行点赞
     public int isThumb(int dynamicId, String userId);
 
+    public List<Thumb> selectThumbInfoByDynamicId(int dynamic);
+
 }
