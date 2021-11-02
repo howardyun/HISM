@@ -78,7 +78,7 @@
     </select>
 
     <select id="selectDynamicByDynamicIdLimitNUM" resultMap="dynamicMap">
-        select * from dynamic where dynamicId &gt; #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
+        select * from dynamic where #{dynamicId} > dynamicId ORDER BY dynamicTime desc LIMIT #{num}
     </select>
 
     <select id="selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM" resultMap="dynamicMap">
