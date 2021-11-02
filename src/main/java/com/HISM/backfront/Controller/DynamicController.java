@@ -852,17 +852,10 @@ public class DynamicController {
                             myResult.add("message", "");
                             return myResult;
                         }
-                        int beginDynamicId = allDynamics.get(0).getDynamicId();
-                        List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, beginDynamicId, length);
-                        if (dynamics.size() == 0) {
-                            myResult.changeStatus(true);
-                            myResult.add("message", "");
-                            return myResult;
-                        } else {
                             List<Map<String, Object>> tmp = new ArrayList<>();
-                            for (Dynamic dynamic : dynamics) {
-                                if (dynamic.getDynamicType().equals("3") || dynamic.getDynamicType().equals("0") || dynamic.getDynamicType().equals("-1")) {
-                                    continue;
+                            for (Dynamic dynamic : allDynamics) {
+                                if(length==0){
+                                    break;
                                 }
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", dynamic.getDynamicId());
@@ -900,11 +893,13 @@ public class DynamicController {
                                     return myResult;
                                 }
                                 tmp.add(map);
+                                --length;
                             }
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
-                        }
-                    } else {
+
+                    }
+                    else {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
                         if (dynamics.size() == 0) {
                             myResult.changeStatus(true);
@@ -968,7 +963,6 @@ public class DynamicController {
                                 if (length == 0) {
                                     break;
                                 }
-                                length--;
                                 Map<String, Object> map = new HashMap<>(4);
                                 map.put("momentId", dynamic.getDynamicId());
                                 map.put("userID", user1.get(0).getUserId());
@@ -1004,6 +998,7 @@ public class DynamicController {
                                     return myResult;
                                 }
                                 tmp.add(map);
+                                --length;
                             }
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
@@ -1022,7 +1017,7 @@ public class DynamicController {
                                     if (length == 0) {
                                         break;
                                     }
-                                    length--;
+
                                     Map<String, Object> map = new HashMap<>(4);
                                     map.put("momentId", dynamic.getDynamicId());
                                     map.put("userID", user1.get(0).getUserId());
@@ -1058,6 +1053,7 @@ public class DynamicController {
                                     }
                                     tmp.add(map);
                                 }
+                                --length;
                             }
                             myResult.changeStatus(true);
                             myResult.add("message", tmp);
