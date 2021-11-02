@@ -18,7 +18,9 @@
     <select id="isThumb" resultType="java.lang.Integer">
         select count(*) from thumb where dynamicId = #{dynamicId} and userId = #{userId}
     </select>
-    <select id="selectThumbInfoByDynamicId" resultType="thumbMap">
+
+
+    <select id="selectThumbInfoByDynamicId" resultMap="thumbMap">
         select * from thumb where dynamicId = #{dynamicId}
     </select>
 

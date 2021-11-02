@@ -51,18 +51,33 @@ class DemoApplicationTests {
 
     @Test
     void Test(){
-        Thumb thumb = new Thumb(366, "9999");
-        thumbSerive.deleteThumb(366, "9999");
+//        Thumb thumb = new Thumb(366, "9999");
+//        thumbSerive.deleteThumb(366, "9999");
 
-        List<Dynamic> dynamicList = dynamicSerive.selectDynamicByDynamicIdLimitNUM(1, 5);
-        for(Dynamic dynamic : dynamicList){
-            System.out.println(dynamic.getDynamicTime());
+        thumbSerive.selectThumbInfoByDynamicId(389);
+
+        for(Thumb thumb : thumbSerive.selectThumbInfoByDynamicId(389)){
+            System.out.println(thumb.toString());
         }
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+//        List<Dynamic> dynamicList = dynamicSerive.selectDynamicByDynamicIdLimitNUM(1, 5);
+//        for(Dynamic dynamic : dynamicList){
+//            System.out.println(dynamic.getDynamicTime());
+//        }
 
 
 

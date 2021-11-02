@@ -52,10 +52,7 @@ public class ThumbSerive {
     }
 
     public List<Thumb> selectThumbInfoByDynamicId(int dynamicId){
-
-        List<Thumb> thumbs = thumbMapper.selectThumbInfoByDynamicId(dynamicId);
-
-        return thumbs;
+        return thumbMapper.selectThumbInfoByDynamicId(dynamicId);
     }
 
 
