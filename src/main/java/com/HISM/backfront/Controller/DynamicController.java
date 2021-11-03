@@ -469,7 +469,7 @@ public class DynamicController {
         return myResult;
     }
 
-    @PostMapping("/likedMoment")
+    @PostMapping("/likeMoment")
     //必填
     @ApiOperation("点赞/取消点赞")
     public MyResult likeMoment(@RequestParam String userId, @RequestParam int dynamicId) {
