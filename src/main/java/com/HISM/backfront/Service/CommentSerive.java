@@ -33,7 +33,8 @@ public class CommentSerive {
     // 删除评论
     public boolean deleteComment(int commentId){
         try{
-            Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(commentId);
+
+            Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(commentMapper.getDynamicId(commentId));
             commentMapper.deleteComment(commentId);
             dynamic.setCommentNum(dynamic.getCommentNum() - 1);
             dynamicMapper.updateDynamic(dynamic);
