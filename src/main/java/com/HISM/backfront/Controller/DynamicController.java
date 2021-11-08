@@ -1140,9 +1140,8 @@ public class DynamicController {
             myResult.add("message", "存在多个该用户信息");
         } else {
             if (lastMomentId == -1) {
-                //选出所有符合userId、dynamicState、dynamicType的动态
-                List<Dynamic> allRequestedDynamics = dynamicSerive.selectDynamicByUserIdAndDynamicStateAndDynamicType(
-                        userId, 2, tag);
+                //选出所有符合dynamicState、dynamicType的动态
+                List<Dynamic> allRequestedDynamics = dynamicSerive.selectDynamicByDynamicStateAndDynamicType(2, tag);
                 if (allRequestedDynamics.size() == 0) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该类型动态为空");
@@ -1150,8 +1149,8 @@ public class DynamicController {
                 }
                 int beginDynamicId = allRequestedDynamics.get(allRequestedDynamics.size() - 1).getDynamicId();
                 //找到beginDynamicId以后，从此处开始挑动态，长度为length，放入list
-                List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
-                        userId, beginDynamicId, 2, tag, length);
+                List<Dynamic> dynamics = dynamicSerive.selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
+                        beginDynamicId, 2, tag, length);
                 if (dynamics.size() == 0) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该动态后面无动态");
@@ -1198,8 +1197,8 @@ public class DynamicController {
                 }
             } else {
                 //挑出lastMomentId后所有符合条件的动态，长度为length
-                List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
-                        userId, lastMomentId, 2, tag, length);
+                List<Dynamic> dynamics = dynamicSerive.selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
+                        lastMomentId, 2, tag, length);
                 if (dynamics == null) {
                     myResult.changeStatus(true);
                     myResult.add("message", "");
