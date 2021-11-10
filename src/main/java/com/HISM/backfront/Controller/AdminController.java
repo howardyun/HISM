@@ -2,19 +2,13 @@ package com.HISM.backfront.Controller;
 
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.*;
-import com.HISM.backfront.domain.Administrator;
-import com.HISM.backfront.domain.Dynamic;
-import com.HISM.backfront.domain.TipOffUser;
-import com.HISM.backfront.domain.User;
+import com.HISM.backfront.domain.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -378,26 +372,24 @@ public class AdminController {
             myResult.changeStatus(false);
             myResult.add("message", "该用户冗余");
             return myResult;
-        }else{
-            int userState =user.get(0).getUserState();
-            if(userState==-1){
+        } else {
+            int userState = user.get(0).getUserState();
+            if (userState == -1) {
                 myResult.changeStatus(false);
                 myResult.add("message", "该用户已经被封");
                 return myResult;
-            }
-            else if(userState==1){
+            } else if (userState == 1) {
                 myResult.changeStatus(false);
                 myResult.add("message", "该用户状态正常");
                 return myResult;
-            }else if (userState==0){
-                if(dynamicState==0){
+            } else if (userState == 0) {
+                if (dynamicState == 0) {
                     //封
                     user.get(0).setUserState(-1);
-                }else if(dynamicState==1){
+                } else if (dynamicState == 1) {
                     //解封
                     user.get(0).setUserState(-1);
-                }
-                else {
+                } else {
                     myResult.changeStatus(false);
                     myResult.add("message", "输入的判断有误");
                     return myResult;
@@ -407,8 +399,8 @@ public class AdminController {
                 myResult.changeStatus(true);
                 Map<String, Object> map = new HashMap<>(1);
                 map.put("status", dynamicState);
-                myResult.add("message",map);
-            }else{
+                myResult.add("message", map);
+            } else {
                 myResult.changeStatus(false);
                 myResult.add("message", "用户状态有误");
                 return myResult;
@@ -419,8 +411,8 @@ public class AdminController {
 
     @PostMapping("/banUser")
     @ApiOperation("获取被封用户信息")
-    public MyResult banUser(@RequestParam String adminId, @RequestParam String userId){
-        MyResult myResult =new MyResult();
+    public MyResult banUser(@RequestParam String adminId, @RequestParam String userId) {
+        MyResult myResult = new MyResult();
         Administrator administrator = administratorSerive.queryUserbyId(adminId);
         if (administrator == null) {
             myResult.changeStatus(false);
@@ -428,30 +420,69 @@ public class AdminController {
             return myResult;
         }
         List<User> userList = userService.selectUserbyId(userId);
-        if(userList==null){
+        if (userList == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该用户不存在");
-        }else if (userList.size()>1){
+        } else if (userList.size() > 1) {
             myResult.changeStatus(false);
             myResult.add("message", "该用户信息冗余");
-        }else {
+        } else {
             List<TipOffUser> tipOffUsers = tipOffUserSerive.selectTipOffByUserId(userId);
             myResult.changeStatus(true);
             Map<String, Object> message = new HashMap<>(4);
             List<Map<String, Object>> reportedNum = new ArrayList<>();
-            message.put("userID",userId);
-            message.put("userName",userList.get(0).getUserName());
-            message.put("reportedNum",tipOffUsers.size());
-            for (TipOffUser t:tipOffUsers) {
+            message.put("userID", userId);
+            message.put("userName", userList.get(0).getUserName());
+            message.put("reportedNum", tipOffUsers.size());
+            for (TipOffUser t : tipOffUsers) {
                 Map<String, Object> map = new HashMap<>(4);
                 map.put("userId", t.getInformerId());
-                List<User> ioi=userService.selectUserbyId(t.getUserId());
+                List<User> ioi = userService.selectUserbyId(t.getInformerId());
                 map.put("userName", ioi.get(0).getUserName());
-                map.put("userBanMessage",t.getTipOffContent());
+                map.put("userBanMessage", t.getTipOffContent());
+                map.put("userAvatar", ioi.get(0).getAvatarURL());
                 reportedNum.add(map);
             }
-            message.put("reportedMessage",reportedNum);
-            myResult.add("message",message);
+            message.put("reportedMessage", reportedNum);
+            myResult.add("message", message);
+        }
+        return myResult;
+    }
+
+    @PostMapping("/banDynamic")
+    @ApiOperation("获取被封动态信息")
+    public MyResult banDynamic(@RequestParam String adminId, @RequestParam int dynamicId) {
+        MyResult myResult = new MyResult();
+        Administrator administrator = administratorSerive.queryUserbyId(adminId);
+        if (administrator == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该管理员不存在");
+            return myResult;
+        }
+        Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
+        if (dynamic == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "该动态不存在");
+        } else {
+            List<TipOffDynamic> tipOffDynamics = tipOffDynamicSerive.selectTipOffByDynamicId(dynamicId);
+            myResult.changeStatus(true);
+            Map<String, Object> message = new HashMap<>(4);
+            List<Map<String, Object>> reportedNum = new ArrayList<>();
+            message.put("userID", dynamic.getUserId());
+            List<User> userList = userService.selectUserbyId(dynamic.getUserId());
+            message.put("userName", userList.get(0).getUserName());
+            message.put("reportedNum", tipOffDynamics.size());
+            for (TipOffDynamic t : tipOffDynamics) {
+                Map<String, Object> map = new HashMap<>(4);
+                map.put("userId", t.getInformerId());
+                List<User> ioi = userService.selectUserbyId(t.getInformerId());
+                map.put("userName", ioi.get(0).getUserName());
+                map.put("userBanMessage", t.getTipOffContent());
+                map.put("userAvatar", ioi.get(0).getAvatarURL());
+                reportedNum.add(map);
+            }
+            message.put("reportedMessage", reportedNum);
+            myResult.add("message", message);
         }
         return myResult;
     }
