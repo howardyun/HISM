@@ -11,11 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
-    int commentId;
-    Date commentTime;
-    String commentContent;
-    int dynamicId;
-    String userId;
+    private int commentId;
+    private Date commentTime;
+    private String commentContent;
+    private int dynamicId;
+    private String userId;
 
     public Comment(Date commentTime, String commentContent, int dynamicId, String userId){
         this.commentTime = commentTime;

@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.HISM.backfront.mapper.UserMapper">
     <resultMap id="userMap" type="com.HISM.backfront.domain.User">
-        <id property="userId" column="userId" />
-        <result property="password" column="password" />
-        <result property="userAddress" column="userAddress" />
-        <result property="userOld" column="userOld" />
-        <result property="userSex" column="userSex" />
-        <result property="userDescription" column="userDescription" />
     </resultMap>
 
     <insert id="insertUser">
-        insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum})
+        insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum}, #{favorIndex})
     </insert>
     
     <update id="updateUser">
-        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}, tipOffNum = #{tipOffNum}
+        update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}, tipOffNum = #{tipOffNum}, favorIndex = #{favorIndex}
         where userId = #{userId}
     </update>
 
 
     <select id="selectUserbyName" resultMap="userMap">
-        select * from user where username = #{userId}
+        select * from user where username like concat('%', #{userName, jdbcType=VARCHAR}, '%')
     </select>
 
     <select id="selectUserbyId" resultMap="userMap">
@@ -33,15 +28,15 @@
     </select>
 
     <select id="getSubscriberByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select userId from follower where followerId = #{followerId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
 
     <select id="getFanByUserId" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where userId in (select followerId from follower where userId = #{userId})
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select followerId from follower where userId = #{userId})
     </select>
 
     <select id="selectUserByTipOffNum" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState from user where tipOffNum = #{tipOffNum}
+        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex from user where tipOffNum = #{tipOffNum}
     </select>
 
     <select id="selectUserAll" resultMap="userMap">

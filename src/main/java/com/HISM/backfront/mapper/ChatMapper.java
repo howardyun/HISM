@@ -18,8 +18,4 @@ public interface ChatMapper {
     void insertChat(Chat chat);
     // 删除聊天记录
 
-
-
-
-
 }

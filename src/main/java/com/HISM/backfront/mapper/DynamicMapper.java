@@ -24,6 +24,12 @@ public interface DynamicMapper {
     // 通过动态发布者的id查找动态
     public List<Dynamic> selectDynamicByUserId(String userId);
 
+    // 通过动态发布者的id和动态的状态查找动态
+    public List<Dynamic> selectDynamicByUserIdAndState(String userId, int dynamicState);
+
+    // 通过动态发布者的id和动态的任意（or）两个状态查找动态
+    public List<Dynamic> selectDynamicByUserIdAnd2State(String userId, int dynamicState1, int dynamicState2);
+
     // 通过举报次数查询动态
     public List<Dynamic> selectDynamicByTipOffNum(int tipOffNum);
 
@@ -33,4 +39,39 @@ public interface DynamicMapper {
     // 获取所有指定状态的动态
     public List<Dynamic> selectDynamicByState(int dynamicState);
 
+    // 根据动态标签获取动态
+    public List<Dynamic> selectDynamicByIndex(String index);
+
+    // 根据动态类型查看动态
+    public List<Dynamic> selectDynamicByType(int appState);
+
+    // 获取该用户某一动态后的num条动态
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimitNUM(String userId, int dynamicId, int num);
+
+    // 获取该某一动态后的num条动态
+    public List<Dynamic> selectDynamicByDynamicIdLimitNUM(int dynamicId, int num);
+
+    // 获取该用户某一动态后的20条动态，要求这20条动态的标签为dynamicIndex
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(String userId, int dynamicId, String dynamicIndex, int num);
+
+
+    // 获取该用户某一动态后num条动态 要求num条动态的状态为dynamicState
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(String userId, int dynamicId, int dynamicState, int num);
+
+
+    // 获取该用户某一动态后的num条动态 要求num条动态的状态为dynamicState、类型为DynamicType
+    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(String userId, int dynamicId, int dynamicState, String dynamicType, int num);
+
+    // 挑出该用户的所有符合参数动态状态和动态类型的动态，
+    public List<Dynamic> selectDynamicByUserIdAndDynamicStateAndDynamicType(String userId, int dynamicState, String dynamicType);
+
+
+
+    // 按照动态状态和动态类型选出动态，
+    public List<Dynamic> selectDynamicByDynamicStateAndDynamicType(int dynamicState, String dynamicType);
+
+    // 获取num条动态，要求num条动态的状态为dynamicState、类型为DynamicType
+    public List<Dynamic> selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(int dynamicId, int dynamicState, String dynamicType, int num);
 }
+
+

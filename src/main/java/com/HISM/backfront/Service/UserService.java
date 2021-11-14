@@ -35,7 +35,7 @@ public class UserService {
     }
 
 
-    // 通过名字查询用户
+    // 通过用户名模糊查询用户
     public List<User> selectUserbyName(String name){
         List<User> userList = userMapper.selectUserbyName(name);
         if(userList.isEmpty()) {
@@ -55,12 +55,12 @@ public class UserService {
         return userList;
     }
 
-    // 通过用户(粉丝)id获取他的所关注的人
+    // 通过用户(粉丝)id获取他关注的所有人
     public List<User> getSubscriberByUserId(String followerId){
         List<User> userList = userMapper.getSubscriberByUserId(followerId);
         if(userList.isEmpty()) {
-            System.out.println("该粉丝id不存在");
-            return null;
+            System.out.println("该用户不关注任何人");
+            return userList;
         }
         return userList;
     }
@@ -70,8 +70,8 @@ public class UserService {
     public List<User> getFanByUserId(String userId){
         List<User> fanList = userMapper.getFanByUserId(userId);
         if(fanList.isEmpty()) {
-            System.out.println("该用户id不存在");
-            return null;
+            System.out.println("该用户没有粉丝");
+            return fanList;
         }
         return fanList;
     }
@@ -86,7 +86,7 @@ public class UserService {
         return userMapper.selectUserByTipOffNum(tipOffNum);
     }
 
-    // 获取所有用户
+    // 获取所有用户数据
     public List<User> selectUserAll(){
         return userMapper.selectUserAll();
     }

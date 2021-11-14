@@ -4,8 +4,10 @@ import com.HISM.backfront.Config.WebAppConfig;
 import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.FollowerSerive;
 import com.HISM.backfront.Service.GeneralService;
+import com.HISM.backfront.Service.TipOffUserSerive;
 import com.HISM.backfront.Service.UserService;
 import com.HISM.backfront.domain.Follower;
+import com.HISM.backfront.domain.TipOffUser;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
@@ -34,6 +37,9 @@ public class UserController {
     @Resource
     WebAppConfig webAppConfig;
 
+    @Resource
+    TipOffUserSerive tipOffUserSerive;
+
     @PostMapping("/logIn")
     //必填
     @ApiOperation("用户登陆")
@@ -47,7 +53,7 @@ public class UserController {
             return myResult;
         }
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList==null) {
+        if (userList == null) {
             myResult.changeStatus(false);
             myResult.add("message", "没有该用户信息");
         } else if (userList.size() == 1) {
@@ -84,12 +90,13 @@ public class UserController {
         }
         //判断userId是否已存在
         List<User> userList = userService.selectUserbyId(userId);
-        if (userList==null) {
+        if (userList == null) {
             User user = new User();
             user.setUserId(userId);
             user.setPassword(password);
             user.setUserName(userName);
             user.setUserSex(isMale);
+            user.setUserState(1);
             userService.insertUser(user);
             myResult.changeStatus(true);
             HashMap<String, Object> tmp = new HashMap<>();
@@ -136,7 +143,7 @@ public class UserController {
                 User user = userList.get(0);
                 myResult.changeStatus(true);
                 List<User> tmp_FansList = userService.getFanByUserId(targetUserId);
-                List<User> tmp_SubsList = userService.getFanByUserId(targetUserId);
+                List<User> tmp_SubsList = userService.getSubscriberByUserId(targetUserId);
                 Map<String, Object> map = new HashMap<>();
                 map.put("userId", user.getUserId());
                 map.put("userName", user.getUserName());
@@ -150,7 +157,6 @@ public class UserController {
             }
         }
 
-
         return myResult;
     }
 
@@ -163,7 +169,7 @@ public class UserController {
         MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(userName) || "".equals(description)) {
             myResult.changeStatus(false);
-            myResult.add("message", "账号/密码不能为空");
+            myResult.add("message", "账号/密码/描述不能为空");
             return myResult;
         }
         List<User> users = userService.selectUserbyId(userId);
@@ -188,7 +194,7 @@ public class UserController {
         return myResult;
     }
 
-    @PutMapping("/changeAvatar")
+    @PostMapping("/changeAvatar")
 
     @ApiOperation("修改头像")
 
@@ -206,7 +212,13 @@ public class UserController {
         } else {
             User user = users.get(0);
             //获取源文件名称
-            String root_fileName = "userAvatar.png";
+            System.out.println(multipartFile.getContentType());
+            String name = multipartFile.getOriginalFilename();
+            assert name != null;
+            String []s=name.split("\\.");
+            Date date = new Date(System.currentTimeMillis());
+            Timestamp timeStamp = new Timestamp(date.getTime());
+            String root_fileName = "userAvatar" + "-" + timeStamp + "."+s[s.length-1];
             //获取地址
             String filePath = webAppConfig.location + "/";
             filePath += user.getUserId();
@@ -214,7 +226,7 @@ public class UserController {
             String file_name = null;
             try {
                 file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                user.setAvatarURL(filePath + "/" + root_fileName);
+                user.setAvatarURL("/img/" + userId + "/Avatar/" + root_fileName);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
@@ -310,10 +322,10 @@ public class UserController {
 
     @PostMapping("/getFollowers")
 
-    @ApiOperation("获取粉丝列表")
+    @ApiOperation("获取关注列表")
 
-    public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId){
-        MyResult myResult=new MyResult();
+    public MyResult getFollowers(@RequestParam String userId, @RequestParam String targetUserId) {
+        MyResult myResult = new MyResult();
         if ("".equals(userId) || "".equals(targetUserId)) {
             myResult.changeStatus(false);
             myResult.add("message", "账号/密码不能为空");
@@ -359,12 +371,53 @@ public class UserController {
 
     public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam String message) {
         MyResult myResult = new MyResult();
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
 
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "举报者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "举报者id不唯一");
+            } else {
+                if (users.get(0).getUserState() != 1) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "当前被举报用户已经被封");
+                } else {
 
-
-
-
-
+                    List<TipOffUser> tipOffUsers = tipOffUserSerive.selectTipOffByUserId(targetUserId);
+                    if (tipOffUsers.size() >= 5) {
+                        users.get(0).setUserState(0);
+                        userService.updateUser(users.get(0));
+                        myResult.changeStatus(false);
+                        myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
+                    } else {
+                        TipOffUser tipOffUser = new TipOffUser();
+                        tipOffUser.setUserId(targetUserId);
+                        tipOffUser.setInformerId(userId);
+                        tipOffUser.setIsValid(1);
+                        tipOffUser.setTipOffContent(message);
+                        Date date = new Date(System.currentTimeMillis());
+                        Timestamp timeStamep = new Timestamp(date.getTime());
+                        tipOffUser.setTipOffTime(timeStamep);
+                        tipOffUserSerive.insertTipOff(tipOffUser);
+                        if (tipOffUsers.size() == 4) {
+                            users.get(0).setUserState(0);
+                            userService.updateUser(users.get(0));
+                        }
+                        myResult.changeStatus(true);
+                    }
+                }
+            }
+        }
         return myResult;
     }
 
@@ -397,20 +450,71 @@ public class UserController {
                 myResult.add("message", "查询者id不唯一");
             } else {
 
-                int i=followerSerive.getFollowState(userId,targetUserId);
-                if(i==1||i==3){
+                int i = followerSerive.getFollowState(userId, targetUserId);
+                if (i == 1 || i == 3) {
                     myResult.changeStatus(false);
                     myResult.add("message", "已经关注，无需重新关注");
-                }else {
+                } else {
                     Follower follower = new Follower();
-                    follower.setUserId(userId);
-                    follower.setFollowerId(targetUserId);
+                    follower.setUserId(targetUserId);
+                    follower.setFollowerId(userId);
+                    Date date = new Date(System.currentTimeMillis());
+                    Timestamp timeStamep = new Timestamp(date.getTime());
+                    follower.setFollowTime(timeStamep);
                     followerSerive.insertFollower(follower);
                     myResult.changeStatus(true);
                 }
             }
         }
         return myResult;
+
+    }
+
+    @PostMapping("/cancelFollowUser")
+    @ApiOperation("取消关注用户")
+    public MyResult cancelFollowUser(@RequestParam String userId, @RequestParam String targetUserId) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(targetUserId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/密码不能为空");
+            return myResult;
+        }
+        //这里需要加入查询
+        List<User> users = userService.selectUserbyId(targetUserId);
+        List<User> users1 = userService.selectUserbyId(userId);
+        if (users == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id为空");
+        } else if (users.size() > 1) {
+            myResult.changeStatus(false);
+            myResult.add("message", "目标id不唯一");
+        } else {
+            if (users1 == null) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id为空");
+            } else if (users1.size() > 1) {
+                myResult.changeStatus(false);
+                myResult.add("message", "查询者id不唯一");
+            } else {
+
+                int i = followerSerive.getFollowState(userId, targetUserId);
+                if (i == 0 || i == 2) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "没有关注，无需重复关注");
+                } else {
+                    Follower follower = new Follower();
+                    follower.setUserId(userId);
+                    follower.setFollowerId(targetUserId);
+                    Date date = new Date(System.currentTimeMillis());
+                    Timestamp timeStamep = new Timestamp(date.getTime());
+                    follower.setFollowTime(timeStamep);
+                    followerSerive.deleteFollower(userId, targetUserId);
+                    myResult.changeStatus(true);
+                }
+            }
+        }
+        return myResult;
+
 
     }
 

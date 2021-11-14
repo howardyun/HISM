@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Thumb {
     // 被点赞的id
     int dynamicId;
@@ -14,6 +12,13 @@ public class Thumb {
     // 点赞的用户id
     String userId;
 
+    public Thumb() {
+    }
+
+    public Thumb(int dynamicId, String userId) {
+        this.dynamicId = dynamicId;
+        this.userId = userId;
+    }
 
     public int getDynamicId() {
         return dynamicId;
@@ -30,4 +35,6 @@ public class Thumb {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
 }

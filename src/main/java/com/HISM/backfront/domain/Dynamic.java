@@ -14,37 +14,118 @@ public class Dynamic {
     // 动态Id
     int dynamicId;
     // 动态标签, ex: 美食, 金融
-    String dynamicIndex1;
-    String dynamicIndex2;
-    // 动态状态， 仅自己可看， 所有人都可看， 被拉入黑名单
+    String dynamicIndex;
+    // 动态状态，  -1--动态被封  0--动态暂时被封  1--仅自己可见  2--所有人可见  3--自己删除
     int dynamicState;
     // 动态内容
     String dynamicContent;
     // 发布动态时间
     Date dynamicTime;
     // 点赞数量
-    int thumbNum;
+    int thumbNum = 0;
     // 评论数量
-    int commentNum;
+    int commentNum = 0;
     // 举报数量
-    int tipOffNum;
-    // 动态类型: 图片, 小程序, 视频
+    int tipOffNum = 0;
+    // 动态类型: 0-文本  1-图⽚  2-视频  3-GUI程序代码段  4-CLI程序代码段
     String dynamicType;
-    // 该动态发出者的名字
+    // 该动态发出者的id
     String userId;
 
+    // App 数据信息。
+    private String language_;
+    private String code;
+    private String html;
+    private String css;
+    private String para;
+    private String url;
+    // 0-App被删， 1-App正常可访问
+    private int appState;
 
-    public Dynamic(String dynamicIndex1, String dynamicIndex2, int dynamicAccess, String dynamicContent, Date dynamicTime, int thumbNum, int commentNum, int tipOffNum, String dynamicType, String userName) {
-        this.dynamicIndex1 = dynamicIndex1;
-        this.dynamicIndex2 = dynamicIndex2;
-        this.dynamicState = dynamicAccess;
+
+    // text文本
+    private String text;
+
+
+    public Dynamic(String dynamicIndex, int dynamicState, String dynamicContent, Date dynamicTime, String dynamicType, String userId, String language_, String code, String html, String css, String para, String url, int appState, String text) {
+        this.dynamicIndex = dynamicIndex;
+        this.dynamicState = dynamicState;
         this.dynamicContent = dynamicContent;
         this.dynamicTime = dynamicTime;
-        this.thumbNum = thumbNum;
-        this.commentNum = commentNum;
-        this.tipOffNum = tipOffNum;
         this.dynamicType = dynamicType;
-        this.userId = userName;
+        this.userId = userId;
+        this.language_ = language_;
+        this.code = code;
+        this.html = html;
+        this.css = css;
+        this.para = para;
+        this.url = url;
+        this.appState = appState;
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getLanguage_() {
+        return language_;
+    }
+
+    public void setLanguage_(String language_) {
+        this.language_ = language_;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
+    }
+
+    public String getPara() {
+        return para;
+    }
+
+    public void setPara(String para) {
+        this.para = para;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getAppState() {
+        return appState;
+    }
+
+    public void setAppState(int appState) {
+        this.appState = appState;
     }
 
     public int getDynamicId() {
@@ -55,20 +136,12 @@ public class Dynamic {
         this.dynamicId = dynamicId;
     }
 
-    public String getDynamicIndex1() {
-        return dynamicIndex1;
+    public String getDynamicIndex() {
+        return dynamicIndex;
     }
 
-    public void setDynamicIndex1(String dynamicIndex1) {
-        this.dynamicIndex1 = dynamicIndex1;
-    }
-
-    public String getDynamicIndex2() {
-        return dynamicIndex2;
-    }
-
-    public void setDynamicIndex2(String dynamicIndex2) {
-        this.dynamicIndex2 = dynamicIndex2;
+    public void setDynamicIndex(String dynamicIndex) {
+        this.dynamicIndex = dynamicIndex;
     }
 
     public int getDynamicState() {
