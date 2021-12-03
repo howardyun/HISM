@@ -16,7 +16,14 @@ public class CommentSerive {
     @Resource
     DynamicMapper dynamicMapper;
 
-    // 添加评论
+    /**
+     * 添加评论
+     * @param comment 
+     * @return boolean
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:31 下午
+     */
     public boolean insertComment(Comment comment){
         try{
             commentMapper.insertComment(comment);
@@ -29,8 +36,15 @@ public class CommentSerive {
         }
         return true;
     }
-
-    // 删除评论
+    
+    /**
+     * 删除评论
+     * @param commentId
+     * @return boolean
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:31 下午
+     */
     public boolean deleteComment(int commentId){
         try{
 
@@ -45,7 +59,15 @@ public class CommentSerive {
         return true;
     }
 
-    // 查看某一动态评论
+
+    /**
+     * 查看某一动态评论
+     * @param dynamicId 
+     * @return java.util.List<com.HISM.backfront.domain.Comment>
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:32 下午
+     */
     public List<Comment> selectCommentById(int dynamicId){
         List<Comment> commentList = commentMapper.selectCommentById(dynamicId);
         if(commentList.isEmpty()){
@@ -54,19 +76,41 @@ public class CommentSerive {
         return commentList;
     }
 
-    // 判断某一用户是否对某一动态进行评论
+    /**
+     * 判断某一用户是否对某一动态进行评论
+     * @param userId
+	 * @param dynamicId
+     * @return java.lang.Boolean
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:33 下午
+     */
     public Boolean isComment(String userId, int dynamicId){
         int commentNum = commentMapper.isComment(userId, dynamicId);
         // 若用户对动态评论数量大于1 则返回true 否则返回false
         return commentNum >= 1;
     }
 
-    //通过评论id获取动态id
+    /**
+     * 通过评论id获取动态id
+     * @param commentId
+     * @return int
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:33 下午
+     */
     public int getDynamicId(int commentId){
         return commentMapper.getDynamicId(commentId);
     }
 
-    //通过评论id获取用户id
+    /**
+     * 通过评论id获取用户id
+     * @param commentId
+     * @return java.lang.String
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:33 下午
+     */
     public String getUserId(int commentId){
         return commentMapper.getUserId(commentId);
     }

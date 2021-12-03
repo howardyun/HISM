@@ -18,7 +18,16 @@ public class TipOffUserSerive {
     @Resource
     UserMapper userMapper;
 
-    // 功能：通过用户id插入一次举报记录， 举报次数加一，判断是否需要封锁动态
+
+    /**
+     * 通过用户id插入一次举报记录， 举报次数加一，判断是否需要封锁动态
+     *
+     * @param tipOffUser
+     * @return int
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:54 下午
+     */
     public int insertTipOff(TipOffUser tipOffUser) {
         User user = userMapper.selectUserbyId(tipOffUser.getUserId()).get(0);
         try {
@@ -41,7 +50,16 @@ public class TipOffUserSerive {
         return user.getUserState();
     }
 
-    // 通过被举报的用户id获取举报数据
+
+    /**
+     * 通过被举报的用户id获取举报数据
+     *
+     * @param userId
+     * @return java.util.List<com.HISM.backfront.domain.TipOffUser>
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:55 下午
+     */
     public List<TipOffUser> selectTipOffByUserId(String userId) {
         List<TipOffUser> tipOffUserList = tipOffUserMapper.selectTipOffByUserId(userId);
         if (tipOffUserList.isEmpty()) {
@@ -50,7 +68,13 @@ public class TipOffUserSerive {
         return tipOffUserList;
     }
 
-    // 使对该用户的举报无效  用户解封后使用
+
+    /**
+     * 使对该用户的举报无效  用户解封后使用
+     *
+     * @param userId
+     * @return
+     */
     public Boolean invalidateTipOff(String userId) {
         List<TipOffUser> tipOffUserList = selectTipOffByUserId(userId);
         try {

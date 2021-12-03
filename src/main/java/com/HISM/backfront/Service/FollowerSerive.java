@@ -13,11 +13,20 @@ public class FollowerSerive {
     @Resource
     FollowerMapper followerMapper;
 
-    // 关注某一用户
-    public boolean insertFollower(Follower follower){
-        try{
+
+    /**
+     * 关注某一用户
+     *
+     * @param follower
+     * @return boolean
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:51 下午
+     */
+    public boolean insertFollower(Follower follower) {
+        try {
             followerMapper.insertFollower(follower);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -25,43 +34,62 @@ public class FollowerSerive {
     }
 
 
-    // 某一follower(粉丝) 取消关注某一user
-    public boolean deleteFollower(String followerId, String userId){
-        try{
+    /**
+     * 某一follower(粉丝) 取消关注某一user
+     *
+     * @param followerId
+     * @param userId
+     * @return boolean
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:51 下午
+     */
+    public boolean deleteFollower(String followerId, String userId) {
+        try {
             followerMapper.deleteFollower(followerId, userId);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // 获取粉丝关注情况
-    public int getFollowState(String userId1, String userId2){
+
+    /**
+     * 获取粉丝关注情况
+     *
+     * @param userId1
+     * @param userId2
+     * @return int
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2021/12/3 10:51 下午
+     */
+    public int getFollowState(String userId1, String userId2) {
         Boolean user1FollowUser2 = false;
         Boolean user2FollowUser1 = false;
 
         List<Follower> followers = followerMapper.getSubscriber(userId1);
-        for(Follower follower: followers){
-            if(follower.getUserId().equals(userId2)){
+        for (Follower follower : followers) {
+            if (follower.getUserId().equals(userId2)) {
                 user1FollowUser2 = true;
             }
         }
 
         List<Follower> followerList = followerMapper.getSubscriber(userId2);
-        for(Follower follower: followerList){
-            if(follower.getUserId().equals(userId1)){
+        for (Follower follower : followerList) {
+            if (follower.getUserId().equals(userId1)) {
                 user2FollowUser1 = true;
             }
         }
 
-        if(user1FollowUser2 && user2FollowUser1){
+        if (user1FollowUser2 && user2FollowUser1) {
             //用户1与用户2相互关注
             return 3;
-        }else if(user1FollowUser2 && (!user2FollowUser1)){
+        } else if (user1FollowUser2 && (!user2FollowUser1)) {
             //"用户1仅关注用户2"
             return 1;
-        }else if (!user1FollowUser2 && user2FollowUser1){
+        } else if (!user1FollowUser2 && user2FollowUser1) {
             //"用户2仅关注用户1"
             return 2;
         }

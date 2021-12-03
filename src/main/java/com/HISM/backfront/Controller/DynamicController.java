@@ -50,6 +50,7 @@ public class DynamicController {
             myResult.add("message", "源用户id，目标用户id不能为空");
             return myResult;
         }
+        //查看当前发起用户请求用户是否存在
         List<User> userList = userService.selectUserbyId(userId);
         if (userList == null) {
             myResult.changeStatus(false);
@@ -415,6 +416,7 @@ public class DynamicController {
             myResult.add("message", "源用户id，目标用户id不能为空");
             return myResult;
         }
+        //查看当前发起用户请求用户是否存在
         List<User> user = userService.selectUserbyId(userId);
         if (user == null) {
             myResult.changeStatus(false);
@@ -423,11 +425,13 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "源用户信息多于一个");
         } else {
+            //查看当前被请求的动态是否存在
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(momentId);
             if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "没有该动态");
             } else {
+                //添加返回值
                 Map<String, Object> map = new HashMap<>(4);
                 map.put("momentId", momentId);
                 map.put("userID", user.get(0).getUserId());
@@ -444,6 +448,7 @@ public class DynamicController {
                 map.put("dynamicType", dynamicType);
                 map.put("appendixType", dynamicType);
                 myResult.changeStatus(true);
+                //如果当前动态为照片+文字
                 if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
                     if (length == 0) {
@@ -454,8 +459,10 @@ public class DynamicController {
                         map.put("photos", dynamic.getDynamicContent());
                     }
                 } else if (dynamicType.equals("2")) {
+                    //如果当前动态为视频
                     map.put("video", dynamic.getDynamicContent());
                 } else if (dynamicType.equals("3") || dynamicType.equals("4")) {
+                    //如果为程序段
                     map.put("momentId", dynamic.getDynamicId());
                 } else if (dynamicType.equals("0")) {
                 } else {
@@ -494,12 +501,14 @@ public class DynamicController {
             } else {
                 Map<String, Object> map = new HashMap<>(2);
                 if (thumbSerive.isThumb(userId, dynamicId)) {
+                    //如果已经点赞那么取消
                     thumbSerive.deleteThumb(dynamicId, userId);
                     int likedNum = dynamic.getThumbNum() - 1;
                     myResult.changeStatus(true);
                     map.put("isLiked", "已取消点赞");
                     map.put("likedNum", likedNum);
                 } else {
+                    //如果没有点赞就去点赞
                     thumbSerive.insertThumb(new Thumb(dynamicId, userId));
                     int likedNum = dynamic.getThumbNum() + 1;
                     myResult.changeStatus(true);
@@ -719,8 +728,17 @@ public class DynamicController {
                 filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
                 String file_name = null;
                 try {
-                    file_name = generalService.saveImg(multipartFile.get(i), filePath, root_fileName);
-                    ttt += ("/img/" + userId + "/Dynamic/" + timeStamp + "/" + root_fileName + ";");
+                    Map<String, String> t = new HashMap<String, String>();
+                    t.put("path", filePath);
+                    t.put("token", "123");
+                    t.put("fileName", root_fileName);
+                    file_name = generalService.saveImg(multipartFile.get(i), t);
+                    if (file_name == null) {
+                        myResult.changeStatus(false);
+                        myResult.add("message", "文件存储失败");
+                        return myResult;
+                    }
+                    ttt += (file_name + ";");
                 } catch (IOException e) {
                     myResult.changeStatus(false);
                     myResult.add("message", "test");
@@ -771,8 +789,17 @@ public class DynamicController {
             filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
             String file_name = null;
             try {
-                file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                dynamic.setDynamicContent("/img/" + userId + "/Dynamic/" + timeStamp + "/" + root_fileName);
+                Map<String, String> t = new HashMap<String, String>();
+                t.put("path", filePath);
+                t.put("token", "123");
+                t.put("fileName", root_fileName);
+                file_name = generalService.saveImg(multipartFile, t);
+                if (file_name == null) {
+                    myResult.changeStatus(false);
+                    myResult.add("message", "文件存储失败");
+                    return myResult;
+                }
+                dynamic.setDynamicContent(file_name);
             } catch (IOException e) {
                 myResult.changeStatus(false);
                 myResult.add("message", "test");

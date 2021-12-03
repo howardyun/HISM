@@ -26,32 +26,32 @@ public class HelloController {
     @Resource
     GeneralService generalService;
 
-    @PutMapping("/article/img/upload")
-    public MyResult uploadImg(@RequestParam("editormd-image-file") MultipartFile multipartFile) {
-        MyResult myResult = new MyResult();
-        String contentType = multipartFile.getContentType();
-        String root_fileName = multipartFile.getOriginalFilename();
-        //获取路径
-        String filePath = webAppConfig.location;
-        String file_name = null;
-        try {
-            file_name = saveImg(multipartFile, filePath);
-        } catch (IOException e) {
+//    @PutMapping("/article/img/upload")
+//    public MyResult uploadImg(@RequestParam("editormd-image-file") MultipartFile multipartFile) {
+//        MyResult myResult = new MyResult();
+//        String contentType = multipartFile.getContentType();
+//        String root_fileName = multipartFile.getOriginalFilename();
+//        //获取路径
+//        String filePath = webAppConfig.location;
+//        String file_name = null;
+//        try {
+//            file_name = saveImg(multipartFile, filePath);
+//        } catch (IOException e) {
+//
+//        }
+//        return myResult;
+//    }
 
-        }
-        return myResult;
-    }
-
-    @PostMapping("/test/saveImg")
-    public String saveImg(MultipartFile multipartFile, String path) throws IOException {
-        Map<String,String> t=new HashMap<String, String>();
-        t.put("path","test");
-        t.put("token","123");
-        t.put("fileName","test.jpeg");
-       String s = generalService.doPostFormData(multipartFile,t);
-       System.out.print(s);
-        return "test";
-    }
+//    @PostMapping("/test/saveImg")
+//    public String saveImg(MultipartFile multipartFile, String path) throws IOException {
+//        Map<String,String> t=new HashMap<String, String>();
+//        t.put("path","test");
+//        t.put("token","123");
+//        t.put("fileName","test.jpeg");
+//       String s = generalService.doPostFormData(multipartFile,t);
+//       System.out.print(s);
+//        return "test";
+//    }
 
 
 }

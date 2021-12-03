@@ -225,8 +225,17 @@ public class UserController {
             filePath += ("/" + "Avatar");
             String file_name = null;
             try {
-                file_name = generalService.saveImg(multipartFile, filePath, root_fileName);
-                user.setAvatarURL("/img/" + userId + "/Avatar/" + root_fileName);
+                Map<String,String> t=new HashMap<String, String>();
+                t.put("path",filePath);
+                t.put("token","123");
+                t.put("fileName",root_fileName);
+                file_name = generalService.saveImg(multipartFile, t);
+                if(file_name==null){
+                    myResult.changeStatus(false);
+                    myResult.add("message", "文件存储失败");
+                    return myResult;
+                }
+                user.setAvatarURL(file_name);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);

@@ -59,6 +59,7 @@ public class AdminController {
     @ApiOperation("管理员登陆")
     public MyResult adminLogin(@RequestParam String adminId, @RequestParam String adminPassword) {
         MyResult myResult = new MyResult();
+        //如果adminId或者adminPassword为空就返回
         if ("".equals(adminId) || "".equals(adminPassword)) {
             myResult.changeStatus(false);
             myResult.add("message", "userId或为空");
@@ -66,11 +67,12 @@ public class AdminController {
         }
 
         Administrator administrator = administratorSerive.queryUserbyId(adminId);
+        //如果数据库中找不到Administer就返回
         if (administrator == null) {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
         } else {
-
+            //验证密码
             if (adminPassword.equals(administrator.getPassword())) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("adminId", adminId);
@@ -95,9 +97,13 @@ public class AdminController {
             myResult.changeStatus(false);
             myResult.add("message", "该管理员不存在");
         } else {
+            //获取用户数量
             List<User> userNumber = userService.selectUserAll();
+            //获取被举报够五次用户数量
             List<User> userReportedNumber = userService.selectUserByState(0);
+            //获取当前动态数量
             List<Dynamic> momentNumber = dynamicSerive.selectDynamicAll();
+            //获取被举报够五次动态数量
             List<Dynamic> momentReportedNumber = dynamicSerive.selectDynamicByState(0);
             myResult.changeStatus(true);
             Map<String, Object> map = new HashMap<>(4);
