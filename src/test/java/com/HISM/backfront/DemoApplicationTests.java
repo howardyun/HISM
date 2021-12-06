@@ -91,11 +91,11 @@ class DemoApplicationTests {
 
     }
 
-    @Test
-    void Testresult(){
-
-        WebAppConfig webAppConfig =new WebAppConfig();
-        System.out.print(webAppConfig.location);
-    }
+//    @Test
+//    void Testresult(){
+//
+//        WebAppConfig webAppConfig =new WebAppConfig();
+//        System.out.print(webAppConfig.location);
+//    }
 
 }

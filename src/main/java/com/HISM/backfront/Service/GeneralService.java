@@ -1,6 +1,7 @@
 package com.HISM.backfront.Service;
 
 
+import com.HISM.backfront.Config.WebAppConfig;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,12 +18,15 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.util.Map;
 
 @Service
 public class GeneralService {
 
+    @Resource
+    WebAppConfig webAppConfig;
 //    public String saveImg(MultipartFile multipartFile, String path, String fileName) throws IOException {
 //        File file = new File(path);
 //        if (!file.exists()) {
@@ -49,7 +53,7 @@ public class GeneralService {
      */
     public String saveImg(MultipartFile multipartFile, Map<String, String> paramMap) throws IOException {
 
-        String url = "http://39.106.25.203:1480/fileServer/saveImg";
+        String url = webAppConfig.fileServer;
 
         // 创建Http实例
         CloseableHttpClient httpClient = HttpClients.createDefault();
