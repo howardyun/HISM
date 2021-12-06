@@ -724,8 +724,7 @@ public class DynamicController {
                 String[] s = name.split("\\.");
                 String root_fileName = i + "-" + timeStamp + "." + s[s.length - 1];
                 //获取地址
-                String filePath = webAppConfig.location + "/";
-                filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
+                String  filePath = (userId + "/" + "Dynamic" + "/" + timeStamp);
                 String file_name = null;
                 try {
                     Map<String, String> t = new HashMap<String, String>();
@@ -785,8 +784,7 @@ public class DynamicController {
             String[] s = name.split("\\.");
             String root_fileName = timeStamp + "." + s[s.length - 1];
             //获取地址
-            String filePath = webAppConfig.location + "/";
-            filePath += (userId + "/" + "Dynamic" + "/" + timeStamp);
+            String filePath = (userId + "/" + "Dynamic" + "/" + timeStamp);
             String file_name = null;
             try {
                 Map<String, String> t = new HashMap<String, String>();

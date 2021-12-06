@@ -220,8 +220,8 @@ public class UserController {
             Timestamp timeStamp = new Timestamp(date.getTime());
             String root_fileName = "userAvatar" + "-" + timeStamp + "."+s[s.length-1];
             //获取地址
-            String filePath = webAppConfig.location + "/";
-            filePath += user.getUserId();
+
+            String filePath = user.getUserId();
             filePath += ("/" + "Avatar");
             String file_name = null;
             try {
