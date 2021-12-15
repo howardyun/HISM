@@ -91,11 +91,10 @@ class DemoApplicationTests {
 
     }
 
-//    @Test
-//    void Testresult(){
-//
-//        WebAppConfig webAppConfig =new WebAppConfig();
-//        System.out.print(webAppConfig.location);
-//    }
+    @Test
+    void insertUser(){
+        User user=new User("testtest","1","tytyty","dfs",12,"male","测试",1,null,"howard.yun@outlook.com");
+        userService.insertUser(user);
+    }
 
 }

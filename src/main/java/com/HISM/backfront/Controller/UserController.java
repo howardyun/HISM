@@ -80,7 +80,7 @@ public class UserController {
     @ApiOperation("用户注册")
 
     public MyResult register(@RequestParam String userId, @RequestParam String password,
-                             @RequestParam String isMale, @RequestParam String userName) {
+                             @RequestParam String isMale, @RequestParam String userName,@RequestParam String email) {
         MyResult myResult = new MyResult();
 
         if ("".equals(userId) || "".equals(password)) {
@@ -97,6 +97,7 @@ public class UserController {
             user.setUserName(userName);
             user.setUserSex(isMale);
             user.setUserState(1);
+            user.setEmail(email);
             userService.insertUser(user);
             myResult.changeStatus(true);
             HashMap<String, Object> tmp = new HashMap<>();

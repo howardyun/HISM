@@ -6,7 +6,7 @@
     </resultMap>
 
     <insert id="insertUser">
-        insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum}, #{favorIndex})
+        insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum}, #{favorIndex},#{email})
     </insert>
     
     <update id="updateUser">

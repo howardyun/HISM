@@ -31,6 +31,8 @@ public class User {
     private Integer tipOffNum = 0;
     //用户感兴趣的动态index
     private String favorIndex;
+    //用户邮箱
+    private String email;
 
     public String getFavorIndex() {
         return favorIndex;
@@ -49,8 +51,7 @@ public class User {
     }
 
 
-
-    public User(String userId, String password, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex) {
+    public User(String userId, String password, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex, String email) {
         this.userId = userId;
         this.password = password;
         this.userName = userName;
@@ -60,8 +61,8 @@ public class User {
         this.userDescription = userDescription;
         this.userState = userState;
         this.favorIndex = favorIndex;
+        this.email = email;
     }
-
 
 
     public String getUserId() {
@@ -128,7 +129,19 @@ public class User {
         this.userState = userState;
     }
 
-    public String getAvatarURL() { return avatarURL; }
+    public String getAvatarURL() {
+        return avatarURL;
+    }
 
-    public void setAvatarURL(String avatarURL) { this.avatarURL = avatarURL; }
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
