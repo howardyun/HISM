@@ -80,7 +80,7 @@ public class UserController {
     @ApiOperation("用户注册")
 
     public MyResult register(@RequestParam String userId, @RequestParam String password,
-                             @RequestParam String isMale, @RequestParam String userName,@RequestParam String email) {
+                             @RequestParam String isMale, @RequestParam String userName, @RequestParam String email) {
         MyResult myResult = new MyResult();
 
         if ("".equals(userId) || "".equals(password)) {
@@ -108,6 +108,38 @@ public class UserController {
             myResult.add("message", "账户已经存在");
         }
         return myResult;
+    }
+
+    @PostMapping("/retrievePassword")
+    //必填
+    @ApiOperation("找回密码")
+    public MyResult retrievePassword(@RequestParam String userId, @RequestParam String email) {
+        MyResult myResult = new MyResult();
+        if ("".equals(userId) || "".equals(email)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "账号/邮箱不能为空");
+            return myResult;
+        }
+        List<User> userList = userService.selectUserbyId(userId);
+        if (userList == null) {
+            myResult.changeStatus(false);
+            myResult.add("message", "没有该用户信息");
+        } else if (userList.size() == 1) {
+            if (userList.get(0).getEmail().equals(email)) {
+                myResult.changeStatus(true);
+                myResult.add("message", userList.get(0).getPassword());
+            } else {
+                myResult.changeStatus(false);
+                myResult.add("message", "邮箱信息错误");
+            }
+
+        } else {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户信息冗余");
+        }
+
+        return myResult;
+
     }
 
     //to be done
@@ -216,22 +248,22 @@ public class UserController {
             System.out.println(multipartFile.getContentType());
             String name = multipartFile.getOriginalFilename();
             assert name != null;
-            String []s=name.split("\\.");
+            String[] s = name.split("\\.");
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
-            String root_fileName = "userAvatar" + "-" + timeStamp + "."+s[s.length-1];
+            String root_fileName = "userAvatar" + "-" + timeStamp + "." + s[s.length - 1];
             //获取地址
 
             String filePath = user.getUserId();
             filePath += ("/" + "Avatar");
             String file_name = null;
             try {
-                Map<String,String> t=new HashMap<String, String>();
-                t.put("path",filePath);
-                t.put("token","123");
-                t.put("fileName",root_fileName);
+                Map<String, String> t = new HashMap<String, String>();
+                t.put("path", filePath);
+                t.put("token", "123");
+                t.put("fileName", root_fileName);
                 file_name = generalService.saveImg(multipartFile, t);
-                if(file_name==null){
+                if (file_name == null) {
                     myResult.changeStatus(false);
                     myResult.add("message", "文件存储失败");
                     return myResult;
