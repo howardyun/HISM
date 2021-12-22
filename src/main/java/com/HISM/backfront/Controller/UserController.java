@@ -292,6 +292,11 @@ public class UserController {
             myResult.add("message", "账号/密码不能为空");
             return myResult;
         }
+        if(passwordOld.equals(passwordNew)){
+            myResult.changeStatus(false);
+            myResult.add("message", "新旧密码相同");
+            return myResult;
+        }
         List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
