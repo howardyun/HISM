@@ -737,7 +737,7 @@ public class DynamicController {
                         myResult.add("message", "文件存储失败");
                         return myResult;
                     }
-                    ttt += (file_name + ";");
+                    ttt += ("http://39.106.25.203"+file_name + ";");
                 } catch (IOException e) {
                     myResult.changeStatus(false);
                     myResult.add("message", "test");
@@ -797,7 +797,7 @@ public class DynamicController {
                     myResult.add("message", "文件存储失败");
                     return myResult;
                 }
-                dynamic.setDynamicContent(file_name);
+                dynamic.setDynamicContent("http://39.106.25.203"+file_name);
             } catch (IOException e) {
                 myResult.changeStatus(false);
                 myResult.add("message", "test");

@@ -19,7 +19,8 @@ public class Chat {
     private Date chatTime;
     // 聊天内容
     private String chatContent;
-
+    // 聊天内容
+    private int flag;
 
     public String getSendUserId() {
         return sendUserId;

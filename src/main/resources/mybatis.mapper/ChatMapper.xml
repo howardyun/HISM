@@ -7,6 +7,7 @@
         <result column="receiveUserId" property="receiveUserId"></result>
         <result column="chatTime" jdbcType="TIMESTAMP" property="chatTime" javaType="java.util.Date" />
         <result column="chatContent" property="chatContent"></result>
+        <result column="flag" property="flag"></result>
     </resultMap>
 
 

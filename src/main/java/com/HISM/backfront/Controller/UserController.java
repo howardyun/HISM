@@ -268,7 +268,7 @@ public class UserController {
                     myResult.add("message", "文件存储失败");
                     return myResult;
                 }
-                user.setAvatarURL(file_name);
+                user.setAvatarURL("http://39.106.25.203"+file_name);
                 userService.updateUser(user);
             } catch (IOException e) {
                 myResult.changeStatus(false);
