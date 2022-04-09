@@ -34,12 +34,6 @@ public class UserController {
     @Resource
     GeneralService generalService;
 
-    @Resource
-    WebAppConfig webAppConfig;
-
-    @Resource
-    TipOffUserSerive tipOffUserSerive;
-
     @PostMapping("/logIn")
     //必填
     @ApiOperation("用户登陆")
@@ -407,62 +401,6 @@ public class UserController {
                     tmp.add(map);
                 }
                 myResult.add("message", tmp);
-            }
-        }
-        return myResult;
-    }
-
-    @PostMapping("/reportUser")
-
-    @ApiOperation("举报用户")
-
-    public MyResult reportUser(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam String message) {
-        MyResult myResult = new MyResult();
-        List<User> users = userService.selectUserbyId(targetUserId);
-        List<User> users1 = userService.selectUserbyId(userId);
-        if (users == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "目标id为空");
-        } else if (users.size() > 1) {
-            myResult.changeStatus(false);
-            myResult.add("message", "目标id不唯一");
-
-        } else {
-            if (users1 == null) {
-                myResult.changeStatus(false);
-                myResult.add("message", "举报者id为空");
-            } else if (users1.size() > 1) {
-                myResult.changeStatus(false);
-                myResult.add("message", "举报者id不唯一");
-            } else {
-                if (users.get(0).getUserState() != 1) {
-                    myResult.changeStatus(false);
-                    myResult.add("message", "当前被举报用户已经被封");
-                } else {
-
-                    List<TipOffUser> tipOffUsers = tipOffUserSerive.selectTipOffByUserId(targetUserId);
-                    if (tipOffUsers.size() >= 5) {
-                        users.get(0).setUserState(0);
-                        userService.updateUser(users.get(0));
-                        myResult.changeStatus(false);
-                        myResult.add("message", "举报数大于等于5但是没有封禁，目前已经封禁但是本次举报无效");
-                    } else {
-                        TipOffUser tipOffUser = new TipOffUser();
-                        tipOffUser.setUserId(targetUserId);
-                        tipOffUser.setInformerId(userId);
-                        tipOffUser.setIsValid(1);
-                        tipOffUser.setTipOffContent(message);
-                        Date date = new Date(System.currentTimeMillis());
-                        Timestamp timeStamep = new Timestamp(date.getTime());
-                        tipOffUser.setTipOffTime(timeStamep);
-                        tipOffUserSerive.insertTipOff(tipOffUser);
-                        if (tipOffUsers.size() == 4) {
-                            users.get(0).setUserState(0);
-                            userService.updateUser(users.get(0));
-                        }
-                        myResult.changeStatus(true);
-                    }
-                }
             }
         }
         return myResult;

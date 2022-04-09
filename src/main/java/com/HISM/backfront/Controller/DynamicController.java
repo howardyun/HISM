@@ -33,12 +33,6 @@ public class DynamicController {
     ThumbSerive thumbSerive;
     @Resource
     CommentSerive commentSerive;
-    @Resource
-    TipOffDynamicSerive tipOffDynamicSerive;
-    @Resource
-    FollowerSerive followerSerive;
-    @Resource
-    WebAppConfig webAppConfig;
 
     @PostMapping("/getMoments")
     //必填
@@ -1273,63 +1267,6 @@ public class DynamicController {
         return myResult;
     }
 
-    @PostMapping("reportMoment")
-    @ApiOperation("举报动态")
-    public MyResult reportMoment(@RequestParam String userId, @RequestParam int dynamicId, @RequestParam String message) {
-        MyResult myResult = new MyResult();
-        if ("".equals(userId)) {
-            myResult.changeStatus(false);
-            myResult.add("message", "用户id不能为空");
-            return myResult;
-        }
-        List<User> user = userService.selectUserbyId(userId);
-        if (user == null) {
-            myResult.changeStatus(false);
-            myResult.add("message", "该用户不存在");
-        } else if (user.size() > 1) {
-            myResult.changeStatus(false);
-            myResult.add("message", "存在多个该用户信息");
-        } else {
-            Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
-            if (dynamic == null) {
-                myResult.changeStatus(false);
-                myResult.add("message", "要举报的动态不存在");
-            } else if (userId.equals(dynamic.getUserId())) {
-                myResult.changeStatus(false);
-                myResult.add("message", "不能举报自己的动态");
-            } else {
-                TipOffDynamic tipOffDynamic = new TipOffDynamic();
-                tipOffDynamic.setDynamicId(dynamicId);
-                tipOffDynamic.setInformerId(userId);
-                Date date = new Date(System.currentTimeMillis());
-                Timestamp timeStamp = new Timestamp(date.getTime());
-                tipOffDynamic.setTipOffTime(timeStamp);
-                tipOffDynamic.setTipOffContent(message);
-                boolean userIsTipOff = false;
-                List<TipOffDynamic> tipOffDynamicList = tipOffDynamicSerive.selectTipOffByDynamicId(tipOffDynamic.getDynamicId());
-                if (tipOffDynamicList.size() == 0) {
-                    tipOffDynamicSerive.insertTipOff(tipOffDynamic);
-                    myResult.changeStatus(true);
-                    myResult.add("message", "");
-                } else {
-                    for (int i = 0; i < tipOffDynamicList.size(); i++) {
-                        if (tipOffDynamicList.get(i).getInformerId().equals(tipOffDynamic.getInformerId())) {
-                            userIsTipOff = true;
-                        }
-                    }
-                    if (!userIsTipOff) {
-                        tipOffDynamicSerive.insertTipOff(tipOffDynamic);
-                        myResult.changeStatus(true);
-                        myResult.add("message", "");
-                    } else {
-                        myResult.changeStatus(false);
-                        myResult.add("message", "不能重复举报动态");
-                    }
-                }
-            }
-        }
-        return myResult;
-    }
 
 
     @PostMapping("/createMomentWithCodeCLI")
