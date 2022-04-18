@@ -25,7 +25,7 @@ public class User {
     private String userSex;
     //用户描述
     private String userDescription;
-    //用户状态 -1用户账号被封；0用户账号暂时被封；1用户账号正常
+    //用户状态  ---- 1用户账号正常
     private Integer userState;
     //举报次数
     private Integer tipOffNum = 0;
@@ -33,23 +33,6 @@ public class User {
     private String favorIndex;
     //用户邮箱
     private String email;
-
-    public String getFavorIndex() {
-        return favorIndex;
-    }
-
-    public void setFavorIndex(String favorIndex) {
-        this.favorIndex = favorIndex;
-    }
-
-    public Integer getTipOffNum() {
-        return tipOffNum;
-    }
-
-    public void setTipOffNum(Integer tipOffNum) {
-        this.tipOffNum = tipOffNum;
-    }
-
 
     public User(String userId, String password, String userName, String userAddress, Integer userOld, String userSex, String userDescription, Integer userState, String favorIndex, String email) {
         this.userId = userId;
@@ -64,7 +47,7 @@ public class User {
         this.email = email;
     }
 
-
+    //Getter and Setter
     public String getUserId() {
         return userId;
     }
@@ -143,5 +126,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFavorIndex() {
+        return favorIndex;
+    }
+
+    public void setFavorIndex(String favorIndex) {
+        this.favorIndex = favorIndex;
+    }
+
+    public Integer getTipOffNum() {
+        return tipOffNum;
+    }
+
+    public void setTipOffNum(Integer tipOffNum) {
+        this.tipOffNum = tipOffNum;
     }
 }

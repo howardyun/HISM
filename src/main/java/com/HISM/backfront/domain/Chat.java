@@ -19,9 +19,10 @@ public class Chat {
     private Date chatTime;
     // 聊天内容
     private String chatContent;
-    // 聊天内容
+    // 该聊天是否已经被接收,我们在数据库做持久化
     private int flag;
 
+    //Getter and Setter
     public String getSendUserId() {
         return sendUserId;
     }

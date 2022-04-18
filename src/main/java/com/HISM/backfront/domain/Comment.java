@@ -11,10 +11,16 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
+
+    //评论id
     private int commentId;
+    //评论时间
     private Date commentTime;
+    //评论内容
     private String commentContent;
+    //评论id
     private int dynamicId;
+    //发出评论的用户id
     private String userId;
 
     public Comment(Date commentTime, String commentContent, int dynamicId, String userId){
@@ -24,7 +30,7 @@ public class Comment {
         this.userId = userId;
     }
 
-
+    //Getter and Setter
     public int getCommentId() {
         return commentId;
     }

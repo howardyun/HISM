@@ -4,8 +4,8 @@
 
 <mapper namespace="com.HISM.backfront.mapper.CommentMapper">
     <resultMap id="commentMap" type="com.HISM.backfront.domain.Comment">
-        <id property="commentId" column="commentId" />
-        <result column="commentTime" jdbcType="TIMESTAMP" property="commentTime" javaType="java.util.Date" />
+        <id property="commentId" column="commentId" ></id>
+        <result column="commentTime" jdbcType="TIMESTAMP" property="commentTime" javaType="java.util.Date" ></result>
         <result column="commentContent" property="commentContent"></result>
         <result column="dynamicId" property="dynamicId"></result>
         <result column="userId" property="userId"></result>

@@ -5,7 +5,7 @@
     <resultMap id="chatMap" type="com.HISM.backfront.domain.Chat">
         <result column="sendUserId" property="sendUserId"></result>
         <result column="receiveUserId" property="receiveUserId"></result>
-        <result column="chatTime" jdbcType="TIMESTAMP" property="chatTime" javaType="java.util.Date" />
+        <result column="chatTime" jdbcType="TIMESTAMP" property="chatTime" javaType="java.util.Date"></result>
         <result column="chatContent" property="chatContent"></result>
         <result column="flag" property="flag"></result>
     </resultMap>

@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 @RestController
 //必填
@@ -32,7 +31,7 @@ public class AdminController {
             myResult.changeStatus(false);
             myResult.add("message", "id不能为空");
             return false;
-        }else {
+        } else {
             return true;
         }
     }

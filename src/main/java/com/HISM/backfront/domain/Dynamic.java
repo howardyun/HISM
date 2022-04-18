@@ -15,7 +15,7 @@ public class Dynamic {
     int dynamicId;
     // 动态标签, ex: 美食, 金融
     String dynamicIndex;
-    // 动态状态，  -1--动态被封  0--动态暂时被封  1--仅自己可见  2--所有人可见  3--自己删除
+    // 动态状态，    2--所有人可见  3--自己删除
     int dynamicState;
     // 动态内容
     String dynamicContent;
@@ -32,18 +32,19 @@ public class Dynamic {
     // 该动态发出者的id
     String userId;
 
-    // App 数据信息。
+    // 应用数据----保留未来使用
     private String language_;
     private String code;
     private String html;
     private String css;
     private String para;
     private String url;
-    // 0-App被删， 1-App正常可访问
+
+    // 0-App被删， 1-App正常可访问 --- 提出找回机制，即对于动态不真实删除而是选择将动态block对用户不可见
     private int appState;
 
 
-    // text文本
+    // text文本，目前被用于动态
     private String text;
 
 
@@ -64,6 +65,7 @@ public class Dynamic {
         this.text = text;
     }
 
+    //Getter and Setter
     public String getText() {
         return text;
     }

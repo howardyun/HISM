@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 public class Thumb {
     // 被点赞的id
     int dynamicId;
-
     // 点赞的用户id
     String userId;
 

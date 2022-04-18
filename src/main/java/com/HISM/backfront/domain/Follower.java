@@ -14,7 +14,10 @@ public class Follower {
     String followerId;
     // 被粉用户Id
     String userId;
+    // 关注时间
+    Date followTime;
 
+    //Getter and Setter
     public Date getFollowTime() {
         return followTime;
     }
@@ -22,9 +25,6 @@ public class Follower {
     public void setFollowTime(Date followTime) {
         this.followTime = followTime;
     }
-
-    // 关注时间
-    Date followTime;
 
     public String getFollowerId() {
         return followerId;

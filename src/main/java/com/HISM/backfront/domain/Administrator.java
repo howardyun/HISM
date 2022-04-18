@@ -9,9 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Administrator {
+    //管理员id
     private String adminId;
+    //管理员密码
     private String password;
 
+
+
+    //Getter and Setter
     public String getAdminId() {
         return adminId;
     }
