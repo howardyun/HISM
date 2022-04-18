@@ -149,25 +149,6 @@ public class DynamicSerive {
         return true;
     }
 
-
-    /**
-     * 通过举报次数查询动态
-     *
-     * @param tipOffNum
-     * @return java.util.List<com.HISM.backfront.domain.Dynamic>
-     * @author ysx
-     * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:47 下午
-     */
-    public List<Dynamic> selectDynamicByTipOffNum(int tipOffNum) {
-        if (0 > tipOffNum) {
-            System.out.println("err, 被举报次数为负数");
-            return null;
-        }
-        return dynamicMapper.selectDynamicByTipOffNum(tipOffNum);
-    }
-
-
     /**
      * 获取所有动态
      *
@@ -273,19 +254,6 @@ public class DynamicSerive {
     }
 
 
-    // 获取该用户某一动态后的num条为的动态，要求num条动态的标签为dynamicIndex
-    // 这个函数有bug 别用。。。
-//    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(String userId, int dynamicId, String dynamicIndex, int num) {
-//        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdAndDynamicIndexLimitNUM(userId, dynamicId, dynamicIndex, num);
-//        if (dynamicList.isEmpty()) {
-//            System.out.println("warning, 符合该条件的动态数量为0");
-//        } else if (dynamicList.size() < num) {
-//            System.out.println("获取的动态数量不满足" + num + "条");
-//        }
-//        return dynamicList;
-//    }
-
-
     /**
      * 获取该某一动态后的num条动态
      *
@@ -302,54 +270,6 @@ public class DynamicSerive {
             System.out.println("warning, 符合该条件的动态数量为0");
         } else if (dynamicList.size() < num) {
             System.out.println("获取的动态数量不满足" + num + "条");
-        }
-        return dynamicList;
-    }
-
-
-    /**
-     * 获取该用户某一动态后的num条动态 要求num条动态的状态为dynamicState、类型为DynamicType
-     *
-     * @param userId
-     * @param dynamicId
-     * @param dynamicState
-     * @param dynamicType
-     * @param num
-     * @return java.util.List<com.HISM.backfront.domain.Dynamic>
-     * @author ysx
-     * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:50 下午
-     */
-
-
-    public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(String userId, int dynamicId, int dynamicState, String dynamicType, int num) {
-        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(userId, dynamicId, dynamicState, dynamicType, num);
-        if (dynamicList.isEmpty()) {
-            System.out.println("warning, 符合该条件的动态数量为0");
-        } else if (dynamicList.size() < num) {
-            System.out.println("获取的动态数量不满足" + num + "条");
-        }
-        return dynamicList;
-    }
-
-
-    /**
-     * 挑出该用户的所有符合参数动态状态和动态类型的动态
-     *
-     * @param userId
-     * @param dynamicState
-     * @param dynamicType
-     * @return java.util.List<com.HISM.backfront.domain.Dynamic>
-     * @author ysx
-     * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:50 下午
-     */
-
-
-    public List<Dynamic> selectDynamicByUserIdAndDynamicStateAndDynamicType(String userId, int dynamicState, String dynamicType) {
-        List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicStateAndDynamicType(userId, dynamicState, dynamicType);
-        if (dynamicList.isEmpty()) {
-            System.out.println("warning, 符合该条件的动态数量为0");
         }
         return dynamicList;
     }

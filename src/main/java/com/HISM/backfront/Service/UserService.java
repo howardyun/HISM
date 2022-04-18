@@ -127,25 +127,6 @@ public class UserService {
         return fanList;
     }
 
-
-    /**
-     * 获取被举报指定次数的用户信息
-     *
-     * @param tipOffNum
-     * @return java.util.List<com.HISM.backfront.domain.User>
-     * @author ysx
-     * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:57 下午
-     */
-    public List<User> selectUserByTipOffNum(int tipOffNum) {
-        if (0 > tipOffNum) {
-            System.out.println("err, 被举报次数为负数");
-            return null;
-        }
-        return userMapper.selectUserByTipOffNum(tipOffNum);
-    }
-
-
     /**
      * 获取所有用户数据
      *

@@ -17,9 +17,6 @@ public class ChatSerive {
     @Resource
     private ChatMapper chatMapper;
 
-
-
-
     /**
      * 通过发送方和接收方的id查询聊天记录
      *

@@ -35,10 +35,6 @@
         select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select followerId from follower where userId = #{userId})
     </select>
 
-    <select id="selectUserByTipOffNum" resultMap="userMap">
-        select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex from user where tipOffNum = #{tipOffNum}
-    </select>
-
     <select id="selectUserAll" resultMap="userMap">
         select * from user
     </select>
