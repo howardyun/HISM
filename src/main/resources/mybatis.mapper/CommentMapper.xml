@@ -10,28 +10,28 @@
         <result column="dynamicId" property="dynamicId"></result>
         <result column="userId" property="userId"></result>
     </resultMap>
-
+    <!--    插入评论-->
     <insert id="insertComment">
         insert into comment (commentTime, commentContent, dynamicId, userId) values (#{commentTime, jdbcType=TIMESTAMP}, #{commentContent}, #{dynamicId}, #{userId})
     </insert>
-
+    <!--   根据CommentID（主键）删除评论 -->
     <delete id="deleteComment">
         delete from comment where commentId = #{commentId}
     </delete>
-
+<!--   根据CommentID（主键）拉取评论 -->
     <select id="selectCommentById" resultMap="commentMap">
         select * from comment where dynamicId = #{dynamicId}
     </select>
-
+<!--    查看根据动态id和userid查看该user是否评论来这个动态-->
     <select id="isComment" resultType="java.lang.Integer">
         select count(*) from comment where dynamicId = #{dynamicId} and userId = #{userId}
     </select>
 
-    <!-- -->
+<!--    根据评论获取动态id-->
     <select id="getDynamicId" resultType="java.lang.Integer">
         select dynamicId from comment where commentId = #{commentId}
     </select>
-
+<!-- 根据评论id获取该评论的用户id-->
     <select id="getUserId" resultType="java.lang.String">
         select userId from comment where commentId = #{commentId}
     </select>

@@ -6,19 +6,19 @@
         <result column="followTime" jdbcType="TIMESTAMP" property="followTime" javaType="java.util.Date" />
     </resultMap>
 
-
+<!--插入follower-->
     <insert id="insertFollower">
         insert into follower value (#{followerId}, #{userId}, #{followTime})
     </insert>
-
+<!--删除了follower-->
     <delete id="deleteFollower">
         delete from follower where followerId = #{followerId} and userId = #{userId}
     </delete>
-
+<!--获取粉丝id-->
     <select id="getFan" resultMap="followerMap">
         select followerId from follower where userId = #{userId1}
     </select>
-
+<!--获取关注者id-->
     <select id="getSubscriber" resultMap="followerMap">
         select userId from follower where followerId = #{userId2}
     </select>

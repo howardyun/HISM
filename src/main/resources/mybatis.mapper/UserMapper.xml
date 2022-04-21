@@ -4,41 +4,40 @@
 <mapper namespace="com.HISM.backfront.mapper.UserMapper">
     <resultMap id="userMap" type="com.HISM.backfront.domain.User">
     </resultMap>
-
+<!--插入用户-->
     <insert id="insertUser">
         insert into user value (#{userId},#{password},#{userName}, #{avatarURL}, #{userAddress},#{userOld}, #{userSex}, #{userDescription}, #{userState}, #{tipOffNum}, #{favorIndex},#{email})
     </insert>
-    
+<!--  更新用户  -->
     <update id="updateUser">
         update user set username = #{userName}, password = #{password}, useraddress = #{userAddress}, userold = #{userOld}, usersex = #{userSex}, userdescription = #{userDescription}, userState = #{userState}, avatarURL = #{avatarURL}, tipOffNum = #{tipOffNum}, favorIndex = #{favorIndex}
         where userId = #{userId}
     </update>
-
-
+<!--    根据名字查找用户，模糊查找-->
     <select id="selectUserbyName" resultMap="userMap">
         select * from user where username like concat('%', #{userName, jdbcType=VARCHAR}, '%')
     </select>
-
+<!--根据用户id选择用户-->
     <select id="selectUserbyId" resultMap="userMap">
         select * from user where userId = #{userId}
     </select>
-
+<!--找出所有用户数量-->
     <select id="getUserNum" resultType="java.lang.Integer">
         select count(*) from user
     </select>
-
+<!--根据用户id选择其关注的人-->
     <select id="getSubscriberByUserId" resultMap="userMap">
         select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select userId from follower where followerId = #{followerId})
     </select>
-
+<!--根据用户id选择其粉丝-->
     <select id="getFanByUserId" resultMap="userMap">
         select userId, userName, userAddress, userOld, userSex, userDescription, userState, favorIndex,avatarURL from user where userId in (select followerId from follower where userId = #{userId})
     </select>
-
+<!--选择所有的用户-->
     <select id="selectUserAll" resultMap="userMap">
         select * from user
     </select>
-
+<!--根据用户状态选择用户-->
     <select id="selectUserByState" resultMap="userMap">
         select * from user where userState = #{userState}
     </select>

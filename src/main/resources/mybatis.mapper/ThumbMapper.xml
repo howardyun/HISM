@@ -6,20 +6,20 @@
 
     </resultMap>
 
-
+<!--插入点赞信息-->
     <insert id="insertThumb">
         insert into Thumb value (#{dynamicId}, #{userId})
     </insert>
-
+<!--删除用户点赞-->
     <delete id="deleteThumb">
         delete from Thumb where dynamicId = #{dynamicId} and userId = #{userId}
     </delete>
-
+<!--查看该用户是否点赞该动态-->
     <select id="isThumb" resultType="java.lang.Integer">
         select count(*) from thumb where dynamicId = #{dynamicId} and userId = #{userId}
     </select>
 
-
+<!--选出该动态的所有点赞-->
     <select id="selectThumbInfoByDynamicId" resultMap="thumbMap">
         select * from thumb where dynamicId = #{dynamicId}
     </select>

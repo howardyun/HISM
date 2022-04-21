@@ -9,8 +9,6 @@
         <result column="chatContent" property="chatContent"></result>
         <result column="flag" property="flag"></result>
     </resultMap>
-
-
     <select id="queryChatRecording" resultMap="chatMap">
         select * from chat where sendUserId = #{sendUserId} and receiveUserId = #{receiveUserId}
     </select>

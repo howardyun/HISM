@@ -6,74 +6,74 @@
     <resultMap id="dynamicMap" type="com.HISM.backfront.domain.Dynamic">
         <result column="dynamicTime" jdbcType="TIMESTAMP" property="dynamicTime" javaType="java.util.Date" />
     </resultMap>
-
+<!--<! 插入动态 -->
     <insert id="insertDynamic">
         insert into dynamic (dynamicIndex,  dynamicState, dynamicContent, dynamicTime, dynamicType, userId, language_, code, html, css, para, url, appState, text)
         values (#{dynamicIndex}, #{dynamicState}, #{dynamicContent}, #{dynamicTime, jdbcType=TIMESTAMP}, #{dynamicType}, #{userId}, #{language_}, #{code}, #{html}, #{css}, #{para}, #{url}, #{appState}, #{text})
     </insert>
-
+<!--删除动态-->
     <delete id="deleteDynamic">
         delete from dynamic where dynamicId = #{dynamicId}
     </delete>
-
+<!--根据userId选择该用户的所有动态，并且时间是降序排列-->
     <select id="selectDynamicByUserId" resultMap="dynamicMap">
         select * from dynamic where userId = #{userId} order by dynamicTime desc
     </select>
-
+<!--    根据动态id选择动态-->
     <select id="selectDynamicByDynamicId" resultMap="dynamicMap">
         select * from dynamic where dynamicId = #{dynamicId}
     </select>
-
+<!-- 根据用户id和动态状态选择所有的该用户的动态并且时间是降序排列-->
     <select id="selectDynamicByUserIdAndState" resultMap="dynamicMap">
         select * from dynamic where userId = #{userId} and dynamicState = #{dynamicState} order by dynamicTime desc
     </select>
-
+<!--根据用户id和两个动态状态选择所有的该用户的动态并且时间是降序排列-->
     <select id="selectDynamicByUserIdAnd2State" resultMap="dynamicMap">
         select * from dynamic where userId = #{userId} and (dynamicState = #{dynamicState1} or dynamicState = #{dynamicState2}) order by dynamicTime desc
     </select>
-
+<!--更新动态-->
     <update id="updateDynamic">
         update dynamic set dynamicIndex = #{dynamicIndex}, dynamicState = #{dynamicState}, dynamicContent = #{dynamicContent}, dynamicTime = #{dynamicTime, jdbcType=TIMESTAMP}, thumbNum = #{thumbNum}, commentNum = #{commentNum}, tipOffNum = #{tipOffNum}, dynamicType = #{dynamicType}, userId = #{userId},
         language_ = #{language_}, code = #{code}, html = #{html}, css = #{css}, para = #{para}, url = #{url}, appState = #{appState}, text = #{text}
         where dynamicId = #{dynamicId}
     </update>
-
+<!--选择所有的动态，时间为降序-->
     <select id="selectDynamicAll" resultMap="dynamicMap">
         select * from dynamic order by dynamicTime desc
     </select>
-
+<!--根据动态状态选择动态，时间为降序-->
     <select id="selectDynamicByState" resultMap="dynamicMap">
         select * from dynamic where dynamicState = #{dynamicState} order by dynamicTime desc
     </select>
-
+<!--根据动态标签选择动态，标签模糊查找，时间降序-->
     <select id="selectDynamicByIndex" resultMap="dynamicMap">
         select * from dynamic where dynamicIndex like concat('%', #{dynamicIndex, jdbcType=VARCHAR}, '%')
         order by dynamicTime desc
     </select>
-
+<!--根据动态标签选择动态种类选择动态，时间降序-->
     <select id="selectDynamicByType" resultMap="dynamicMap">
         select * from dynamic where dynamicType = #{dynamicType}
         order by dynamicTime desc
     </select>
-
+<!--根据动态类型和状态选择动态-->
     <select id="selectDynamicByDynamicStateAndDynamicType" resultMap="dynamicMap">
         select * from dynamic where dynamicState = #{dynamicState} and dynamicType = #{dynamicType}
         order by dynamicTime desc
     </select>
 
-
+<!--选择比当前动态id大num个数量的动态-->
     <select id="selectDynamicByDynamicIdLimitNUM" resultMap="dynamicMap">
         select * from dynamic where #{dynamicId} > dynamicId ORDER BY dynamicTime desc LIMIT #{num}
     </select>
-
+<!--选择该用户当前动态id之后的num个dynamicState动态-->
     <select id="selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM" resultMap="dynamicMap">
         select * from (SELECT * from dynamic WHERE userId = #{userId} and dynamicState = #{dynamicState}) as t where dynamicId &lt; #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
-
+<!--选择从传入的dynamicid和动态状态之后找num个动态-->
     <select id="selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM" resultMap="dynamicMap">
         select * from (SELECT * from dynamic WHERE dynamicState = #{dynamicState} and dynamicType = #{dynamicType}) as t where dynamicId &lt; #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
-
+<!--从选择该用户当前动态id之后的num个动态-->
     <select id="selectDynamicByUserIdAndDynamicIdLimitNUM" resultMap="dynamicMap">
         select * from (SELECT * from dynamic WHERE userId = #{userId}) as t where dynamicId &lt; #{dynamicId} ORDER BY dynamicTime desc LIMIT #{num}
     </select>
