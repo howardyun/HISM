@@ -38,7 +38,9 @@ public class DynamicController {
     //必填
     @ApiOperation("获取动态")
     public MyResult getMoments(@RequestParam String userId, @RequestParam int type, @RequestParam int lastMomentId, @RequestParam int length) {
+        //先确定本次是广场还是关注，再看lastmomentId是否为-1，之后在看是请求动态长度否大于已有的数据库中的长度
         MyResult myResult = new MyResult();
+        //确保传入的userid不为空
         if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "源用户id，目标用户id不能为空");
@@ -50,10 +52,11 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "没有源用户");
         } else if (userList.size() > 1) {
+            //数据库错误
             myResult.changeStatus(false);
             myResult.add("message", "源用户信息多于一个");
         } else {
-            //关注
+            //关注列表拉取
             if (type == 1) {
                 //如果是第一次拉取
                 List<User> follwers = userService.getSubscriberByUserId(userId);
@@ -64,22 +67,29 @@ public class DynamicController {
                 } else {
                     //将取出的follwers的动态根据时间插在一起
                     List<Dynamic> tmp = new ArrayList<Dynamic>();
+                    //找到所有userid关注者的动态添加到tmp中
                     for (User user : follwers) {
                         List<Dynamic> d = dynamicSerive.selectDynamicByUserIdAndState(user.getUserId(), 2);
                         tmp.addAll(d);
                     }
+
+                    //再找到自己的所有动态
                     List<Dynamic> d = dynamicSerive.selectDynamicByUserIdAnd2State(userId, 1, 2);
                     tmp.addAll(d);
+
+                    //把选出的动态按照时间降序排列
                     tmp.sort(new Comparator<Dynamic>() {
                         @Override
                         public int compare(Dynamic o1, Dynamic o2) {
                             return o2.getDynamicTime().compareTo(o1.getDynamicTime());
                         }
-                    });
-                    //如果从第一个拉取
+                    }
+                    )
+                    ;
+                    //如果从第一个拉取，-1代表第一次拉取
                     if (lastMomentId == -1) {
+                        //数据库中的数量大于所取长度
                         if (tmp.size() >= length) {
-                            //数据库中的数量大于所取长度
                             myResult.changeStatus(true);
                             List<Map<String, Object>> tmp1 = new ArrayList<>();
                             for (int i = 0; i < length; ++i) {
@@ -94,6 +104,7 @@ public class DynamicController {
                                 String dynamicType = tmp.get(i).getDynamicType();
                                 if (dynamicType.equals("1")) {
                                     int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                    //确保img是存在的
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态中不包含图片");
@@ -135,6 +146,7 @@ public class DynamicController {
                                 String dynamicType = dynamic.getDynamicType();
                                 if (dynamicType.equals("1")) {
                                     int imageLength = dynamic.getDynamicContent().split(";").length;
+                                    //确保img是存在的
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态中不包含图片");
@@ -171,9 +183,10 @@ public class DynamicController {
                             myResult.add("message", "该id对应动态不存在");
                             return myResult;
                         }
+                        //找到上一次动态的索引
                         int index = tmp.indexOf(dynamic);
+                        //数据库中的数量大于所取长度
                         if ((tmp.size() - (index + 1)) >= length) {
-                            //数据库中的数量大于所取长度
                             myResult.changeStatus(true);
                             List<Map<String, Object>> tmp1 = new ArrayList<>();
                             for (int i = index + 1; i < length; ++i) {
@@ -188,6 +201,7 @@ public class DynamicController {
                                 String dynamicType = tmp.get(i).getDynamicType();
                                 if (dynamicType.equals("1")) {
                                     int imageLength = tmp.get(i).getDynamicContent().split(";").length;
+                                    //确保img存在
                                     if (imageLength == 0) {
                                         myResult.changeStatus(false);
                                         myResult.add("message", "动态中不包含图片");
@@ -214,8 +228,9 @@ public class DynamicController {
                                 tmp1.add(map);
                             }
                             myResult.add("message", tmp1);
-                        } else {
-                            //数据库中的数量大于所取长度
+                        }
+                        //数据库中的数量大于所取长度
+                        else {
                             myResult.changeStatus(true);
                             List<Map<String, Object>> tmp1 = new ArrayList<>();
                             for (int i = index + 1; i < tmp.size(); ++i) {
@@ -259,7 +274,8 @@ public class DynamicController {
                         }
                     }
                 }
-            } else if (type == 0) {
+            }
+            else if (type == 0) {
                 //广场
                 //如果从第一个拉取
                 List<Dynamic> tmp = dynamicSerive.selectDynamicByState(2);
@@ -405,6 +421,7 @@ public class DynamicController {
     @ApiOperation("获取单个动态")
     public MyResult getMomentByID(@RequestParam String userId, @RequestParam int momentId) {
         MyResult myResult = new MyResult();
+        //确保传入的userID，和momentID不为空
         if ("".equals(userId) || "".equals(momentId)) {
             myResult.changeStatus(false);
             myResult.add("message", "源用户id，目标用户id不能为空");
@@ -416,6 +433,7 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "没有源用户");
         } else if (user.size() > 1) {
+            //数据库错误
             myResult.changeStatus(false);
             myResult.add("message", "源用户信息多于一个");
         } else {
@@ -445,6 +463,7 @@ public class DynamicController {
                 //如果当前动态为照片+文字
                 if (dynamicType.equals("1")) {
                     int length = dynamic.getDynamicContent().split(";").length;
+                    //确保img不为空
                     if (length == 0) {
                         myResult.changeStatus(false);
                         myResult.add("message", "动态中不包含图片");
@@ -475,7 +494,8 @@ public class DynamicController {
     @ApiOperation("点赞/取消点赞")
     public MyResult likeMoment(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId)) {
+        //确保传来的动态id和用户id不为空
+        if ("".equals(userId)||"".equals(dynamicId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
             return myResult;
@@ -485,6 +505,7 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "不存在该用户");
         } else if (user.size() > 1) {
+            //数据库错误
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
@@ -494,6 +515,7 @@ public class DynamicController {
                 myResult.add("message", "不存在该条动态");
             } else {
                 Map<String, Object> map = new HashMap<>(2);
+                //查看是否已经点过赞
                 if (thumbSerive.isThumb(userId, dynamicId)) {
                     //如果已经点赞那么取消
                     thumbSerive.deleteThumb(dynamicId, userId);
@@ -557,7 +579,8 @@ public class DynamicController {
     @ApiOperation("获取评论")
     public MyResult getComment(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId)) {
+        //确保userId和动态id不为空
+        if ("".equals(userId)||"".equals(dynamicId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
             return myResult;
@@ -567,6 +590,7 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "不存在该用户");
         } else if (user.size() > 1) {
+            //数据库错误
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
@@ -603,15 +627,21 @@ public class DynamicController {
     @ApiOperation("获取点赞用户列表")
     public MyResult getLikedMomentUsers(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
+        //确保userId和动态id不为空
+        if ("".equals(userId)||"".equals(dynamicId)) {
+            myResult.changeStatus(false);
+            myResult.add("message", "用户id不能为空");
+            return myResult;
+        }
         List<User> userList = userService.selectUserbyId(userId);
         if (userList == null) {
             myResult.changeStatus(false);
             myResult.add("message", "不存在该用户");
         } else if (userList.size() > 1) {
+            //数据库错误
             myResult.changeStatus(false);
             myResult.add("message", "该用户信息冗余");
         } else {
-
             Dynamic d = dynamicSerive.selectDynamicByDynamicId(dynamicId);
             if (d == null) {
                 myResult.changeStatus(false);
@@ -622,6 +652,7 @@ public class DynamicController {
             for (Thumb t : thumbs) {
                 Map<String, Object> map = new HashMap<>(4);
                 List<User> user = userService.selectUserbyId(t.getUserId());
+                //确保用户还存在
                 if (user == null) {
                     myResult.changeStatus(false);
                     myResult.add("message", "不存在该用户");
@@ -631,6 +662,7 @@ public class DynamicController {
                     myResult.add("message", "该用户信息冗余");
                     return myResult;
                 } else {
+                    //录入信息
                     map.put("userID", user.get(0).getUserId());
                     map.put("userName", user.get(0).getUserName());
                     map.put("userAvatar", user.get(0).getAvatarURL());
@@ -650,11 +682,13 @@ public class DynamicController {
     @ApiOperation("用户上传文本")
     public MyResult createMomentOnlyText(@RequestParam String userId, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
+        //确保userId和传入的text不为空
         if ("".equals(userId) || "".equals(text)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id或text为空或tag为空");
             return myResult;
         }
+        //确保用户存在
         List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
@@ -691,11 +725,13 @@ public class DynamicController {
     @ApiOperation("用户上传图片+文本")
     public MyResult createMomentWithPhotos(@RequestParam String userId, @RequestParam("editormd-image-file") List<MultipartFile> multipartFile, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
+        //确保传入的信息不为空，除了text可以为空串但是不能为null
         if ("".equals(userId) || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
             myResult.add("message", "userId或tag为空");
             return myResult;
         }
+        //确保用户存在
         List<User> users = userService.selectUserbyId(userId);
         if (users == null) {
             myResult.changeStatus(false);
@@ -704,6 +740,7 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "用户信息");
         } else {
+            //设置基本信息
             Dynamic dynamic = new Dynamic();
             dynamic.setText(text);
             dynamic.setDynamicState(2);
@@ -712,6 +749,7 @@ public class DynamicController {
             String ttt = "";
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
+            //处理文件名，我们对于每一个文件的命名规则为/userid/dynamic/图片No-时间戳.文件类型
             for (int i = 0; i < multipartFile.size(); ++i) {
                 String name = multipartFile.get(i).getOriginalFilename();
                 assert name != null;
@@ -753,6 +791,7 @@ public class DynamicController {
     @ApiOperation("用户上传视频")
     public MyResult createMomentWithVideo(@RequestParam String userId, @RequestParam("editormd-image-file") MultipartFile multipartFile, @RequestParam String text, @RequestParam String tag) {
         MyResult myResult = new MyResult();
+        //确保传入的信息不为空，除了text
         if ("".equals(userId) || "".equals(text) || "".equals(tag) || multipartFile == null) {
             myResult.changeStatus(false);
             myResult.add("message", "userId或text或tag为空");
@@ -773,6 +812,7 @@ public class DynamicController {
             dynamic.setDynamicIndex(tag);
             Date date = new Date(System.currentTimeMillis());
             Timestamp timeStamp = new Timestamp(date.getTime());
+            //处理文件名，我们对于每一个文件的命名规则为/userid/dynamic/图片No-时间戳.文件类型
             String name = multipartFile.getOriginalFilename();
             assert name != null;
             String[] s = name.split("\\.");
@@ -810,7 +850,8 @@ public class DynamicController {
     @ApiOperation("删除评论")
     public MyResult delComment(@RequestParam String userId, @RequestParam int commentId) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId)) {
+        //确保传入的信息不为空
+        if ("".equals(userId)||"".equals(commentId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
             return myResult;
@@ -823,12 +864,14 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
+            //查找是否存在动态
             int dynamicId = commentSerive.getDynamicId(commentId);
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
             if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "该评论所属的动态不存在");
             } else {
+                //查看是否真的评论了动态
                 if (!commentSerive.isComment(userId, dynamicId)) {
                     myResult.changeStatus(false);
                     myResult.add("message", "该用户未对该条动态评论，不能删除别人的评论");
@@ -852,11 +895,13 @@ public class DynamicController {
     @ApiOperation("删除动态")
     public MyResult delMoment(@RequestParam String userId, @RequestParam int dynamicId) {
         MyResult myResult = new MyResult();
-        if ("".equals(userId)) {
+        //确保和传入的信息不为空
+        if ("".equals(userId)||"".equals(dynamicId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
             return myResult;
         }
+        //确保有该用户
         List<User> user = userService.selectUserbyId(userId);
         if (user == null) {
             myResult.changeStatus(false);
@@ -865,11 +910,13 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
+            //确保有该动态
             Dynamic dynamic = dynamicSerive.selectDynamicByDynamicId(dynamicId);
             if (dynamic == null) {
                 myResult.changeStatus(false);
                 myResult.add("message", "要删除的动态不存在");
             } else {
+                //确保该动态是自己发的
                 if (userId.equals(dynamic.getUserId())) {
                     dynamic.setDynamicState(3);
                     dynamicSerive.updateDynamic(dynamic);
@@ -889,6 +936,7 @@ public class DynamicController {
     @ApiOperation("获取用户动态")
     public MyResult getUsersMoments(@RequestParam String userId, @RequestParam String targetUserId, @RequestParam int lastMomentId, @RequestParam int length) {
         MyResult myResult = new MyResult();
+        //确保传入信息不为空
         if ("".equals(userId) || "".equals(targetUserId)) {
             myResult.changeStatus(false);
             myResult.add("message", "源用户id，目标用户id不能为空");
@@ -910,7 +958,9 @@ public class DynamicController {
                 myResult.changeStatus(false);
                 myResult.add("message", "目标用户多于一个");
             } else {
+                //如果查看的是自己的主页
                 if (userId.equals(targetUserId)) {
+                    //如果是第一次
                     if (lastMomentId == -1) {
                         List<Dynamic> allDynamics = dynamicSerive.selectDynamicByUserIdAnd2State(targetUserId, 1, 2);
                         if (allDynamics.size() == 0) {
@@ -965,6 +1015,7 @@ public class DynamicController {
                         myResult.add("message", tmp);
 
                     } else {
+                        //从索引处开始选择
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndDynamicIdLimit20(targetUserId, lastMomentId, length);
                         if (dynamics.size() == 0) {
                             myResult.changeStatus(true);
@@ -1016,7 +1067,9 @@ public class DynamicController {
                             myResult.add("message", tmp);
                         }
                     }
-                } else {
+                }
+                //如果查看的是别人的主页
+                else {
                     if (lastMomentId == -1) {
                         List<Dynamic> dynamics = dynamicSerive.selectDynamicByUserIdAndState(targetUserId, 2);
                         if (dynamics.size() == 0) {
@@ -1140,11 +1193,6 @@ public class DynamicController {
             myResult.add("message", "长度异常");
             return myResult;
         }
-//        if (dynamicSerive.selectDynamicByDynamicId(lastMomentId) == null) {
-//            myResult.changeStatus(false);
-//            myResult.add("message", "传入的lastMomentId有误，不存在该条动态");
-//            return myResult;
-//        }
         if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
@@ -1158,6 +1206,7 @@ public class DynamicController {
             myResult.changeStatus(false);
             myResult.add("message", "存在多个该用户信息");
         } else {
+            //如果是第一次
             if (lastMomentId == -1) {
                 //选出所有符合dynamicState、dynamicType的动态
                 List<Dynamic> allRequestedDynamics = dynamicSerive.selectDynamicByDynamicStateAndDynamicType(2, tag);
@@ -1214,7 +1263,9 @@ public class DynamicController {
                     myResult.changeStatus(true);
                     myResult.add("message", tmp);
                 }
-            } else {
+            }
+            //如果不是，从索引开始挑选
+            else {
                 //挑出lastMomentId后所有符合条件的动态，长度为length
                 List<Dynamic> dynamics = dynamicSerive.selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(
                         lastMomentId, 2, tag, length);
@@ -1275,6 +1326,7 @@ public class DynamicController {
     public MyResult createMomentWithCodeCLI(@RequestParam String userId, @RequestParam String text, @RequestParam String tag,
                                             @RequestParam String language, @RequestParam String code, @RequestParam String para) {
         MyResult myResult = new MyResult();
+        //确保传入的参数不为空
         if ("".equals(userId)) {
             myResult.changeStatus(false);
             myResult.add("message", "用户id不能为空");
