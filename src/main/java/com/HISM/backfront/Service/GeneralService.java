@@ -27,32 +27,18 @@ public class GeneralService {
 
     @Resource
     WebAppConfig webAppConfig;
-//    public String saveImg(MultipartFile multipartFile, String path, String fileName) throws IOException {
-//        File file = new File(path);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-//        FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-//        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path + File.separator + fileName));
-//        byte[] bs = new byte[1024];
-//        int len;
-//        while ((len = fileInputStream.read(bs)) != -1) {
-//            bos.write(bs, 0, len);
-//        }
-//        bos.flush();
-//        bos.close();
-//        return fileName;
-//    }
+
     /**
-     * 保存文件接口,传入文件multipartFile，已经paramMap
-     *
+     *保存文件接口,传入文件multipartFile，已经paramMap
      * @param multipartFile
-     * @param paramMap 存储http请求的参数Map 本服务为filepath，filename，token(default=123).
-     * @return 返回文件名
-     * @throws IOException
+	 * @param paramMap 存储http请求的参数Map 本服务为filepath，filename，token(default=123).
+     * @return java.lang.String
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2022/4/27 6:55 下午
      */
     public String saveImg(MultipartFile multipartFile, Map<String, String> paramMap) throws IOException {
-
+        //地址
         String url = webAppConfig.fileServer;
 
         // 创建Http实例

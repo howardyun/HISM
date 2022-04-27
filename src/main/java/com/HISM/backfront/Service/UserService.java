@@ -20,7 +20,7 @@ public class UserService {
      * @return java.lang.String
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:55 下午
+     * @date 2022/4/27 7:05 下午
      */
     public String insertUser(User user) {
         try {
@@ -39,7 +39,7 @@ public class UserService {
      * @return java.lang.String
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:55 下午
+     * @date 2022/4/27 7:06 下午
      */
     public String updateUser(User user) {
         try {
@@ -59,9 +59,10 @@ public class UserService {
      * @return java.util.List<com.HISM.backfront.domain.User>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:56 下午
+     * @date 2022/4/27 7:06 下午
      */
     public List<User> selectUserbyName(String name) {
+        //sql层面支持模糊查找
         List<User> userList = userMapper.selectUserbyName(name);
         if (userList.isEmpty()) {
             System.out.println("该用户不存在");
@@ -70,7 +71,6 @@ public class UserService {
         return userList;
     }
 
-
     /**
      * 通过Id查询用户
      *
@@ -78,7 +78,7 @@ public class UserService {
      * @return java.util.List<com.HISM.backfront.domain.User>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:56 下午
+     * @date 2022/4/27 7:07 下午
      */
     public List<User> selectUserbyId(String userId) {
         List<User> userList = userMapper.selectUserbyId(userId);
@@ -91,13 +91,13 @@ public class UserService {
 
 
     /**
-     * 通过用户(粉丝)id获取他关注的所有人
+     * 通过用户id获取他关注的所有人
      *
      * @param followerId
      * @return java.util.List<com.HISM.backfront.domain.User>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:56 下午
+     * @date 2022/4/27 7:08 下午
      */
     public List<User> getSubscriberByUserId(String followerId) {
         List<User> userList = userMapper.getSubscriberByUserId(followerId);
@@ -116,7 +116,7 @@ public class UserService {
      * @return java.util.List<com.HISM.backfront.domain.User>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:56 下午
+     * @date 2022/4/27 7:11 下午
      */
     public List<User> getFanByUserId(String userId) {
         List<User> fanList = userMapper.getFanByUserId(userId);
@@ -130,7 +130,11 @@ public class UserService {
     /**
      * 获取所有用户数据
      *
-     * @return
+     * @param
+     * @return java.util.List<com.HISM.backfront.domain.User>
+     * @author ysx
+     * @creed: Talk is cheap,show me the code
+     * @date 2022/4/27 7:12 下午
      */
     public List<User> selectUserAll() {
         return userMapper.selectUserAll();
@@ -144,9 +148,8 @@ public class UserService {
      * @return java.util.List<com.HISM.backfront.domain.User>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:57 下午
+     * @date 2022/4/27 7:12 下午
      */
-
     public List<User> selectUserByState(int userState) {
         return userMapper.selectUserByState(userState);
     }

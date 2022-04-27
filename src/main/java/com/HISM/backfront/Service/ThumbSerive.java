@@ -24,13 +24,15 @@ public class ThumbSerive {
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:52 下午
+     * @date 2022/4/27 7:01 下午
      */
     public boolean insertThumb(Thumb thumb) {
         try {
             thumbMapper.insertThumb(thumb);
             Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(thumb.getDynamicId());
+            //将点赞数量+1
             dynamic.setThumbNum(dynamic.getThumbNum() + 1);
+            //更新
             dynamicMapper.updateDynamic(dynamic);
             return true;
         } catch (Exception e) {
@@ -48,10 +50,8 @@ public class ThumbSerive {
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:52 下午
+     * @date 2022/4/27 7:02 下午
      */
-
-
     public boolean deleteThumb(int dynamicId, String userId) {
         try {
             thumbMapper.deleteThumb(dynamicId, userId);
@@ -74,21 +74,23 @@ public class ThumbSerive {
      * @return java.lang.Boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:52 下午
+     * @date 2022/4/27 7:03 下午
      */
     public Boolean isThumb(String userId, int dynamicId) {
         int thumbNum = thumbMapper.isThumb(dynamicId, userId);
         // 如果点赞数量=1 则表名用户对该动态点了赞，返回true 否则返回false
         return thumbNum == 1;
     }
+
+
     /**
-     *
      * 通过动态id选取点赞信息
-     * @param dynamicId 
+     *
+     * @param dynamicId
      * @return java.util.List<com.HISM.backfront.domain.Thumb>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:53 下午
+     * @date 2022/4/27 7:04 下午
      */
     public List<Thumb> selectThumbInfoByDynamicId(int dynamicId) {
         return thumbMapper.selectThumbInfoByDynamicId(dynamicId);

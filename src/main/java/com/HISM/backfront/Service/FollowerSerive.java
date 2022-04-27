@@ -14,15 +14,14 @@ public class FollowerSerive {
     FollowerMapper followerMapper;
 
 
-    /**
-     * 关注某一用户
-     *
-     * @param follower
-     * @return boolean
-     * @author ysx
-     * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:51 下午
-     */
+   /**
+    * 关注某一用户
+    * @param follower 
+    * @return boolean
+    * @author ysx
+    * @creed: Talk is cheap,show me the code
+    * @date 2022/4/27 6:43 下午
+    */
     public boolean insertFollower(Follower follower) {
         try {
             followerMapper.insertFollower(follower);
@@ -36,13 +35,12 @@ public class FollowerSerive {
 
     /**
      * 某一follower(粉丝) 取消关注某一user
-     *
      * @param followerId
      * @param userId
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:51 下午
+     * @date 2022/4/27 6:43 下午
      */
     public boolean deleteFollower(String followerId, String userId) {
         try {
@@ -66,11 +64,13 @@ public class FollowerSerive {
      * @date 2021/12/3 10:51 下午
      */
     public int getFollowState(String userId1, String userId2) {
+        //四个状态，12互为粉丝，12互相不关注，只有1关注2，只有2关注1
         Boolean user1FollowUser2 = false;
         Boolean user2FollowUser1 = false;
 
         List<Follower> followers = followerMapper.getSubscriber(userId1);
         for (Follower follower : followers) {
+            //查看1是否关注2，是true，不是false
             if (follower.getUserId().equals(userId2)) {
                 user1FollowUser2 = true;
             }
@@ -78,6 +78,7 @@ public class FollowerSerive {
 
         List<Follower> followerList = followerMapper.getSubscriber(userId2);
         for (Follower follower : followerList) {
+            //查看2是否关注1，是true，不是false
             if (follower.getUserId().equals(userId1)) {
                 user2FollowUser1 = true;
             }
