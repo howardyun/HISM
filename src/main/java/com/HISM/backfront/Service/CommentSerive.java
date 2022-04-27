@@ -18,41 +18,48 @@ public class CommentSerive {
 
     /**
      * 添加评论
-     * @param comment 
+     *
+     * @param comment
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:31 下午
+     * @date 2022/4/27 6:14 下午
      */
-    public boolean insertComment(Comment comment){
-        try{
+    public boolean insertComment(Comment comment) {
+        try {
+            //首先插入评论
             commentMapper.insertComment(comment);
+            //从动态表中选出该评论的动态
             Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(comment.getDynamicId());
+            //将评论的数量+1
             dynamic.setCommentNum(dynamic.getCommentNum() + 1);
             dynamicMapper.updateDynamic(dynamic);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
-    
+
     /**
      * 删除评论
+     *
      * @param commentId
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:31 下午
+     * @date 2022/4/27 6:14 下午
      */
-    public boolean deleteComment(int commentId){
-        try{
-
+    public boolean deleteComment(int commentId) {
+        try {
+            //选出该评论对应的动态
             Dynamic dynamic = dynamicMapper.selectDynamicByDynamicId(commentMapper.getDynamicId(commentId));
+            //将评论删除
             commentMapper.deleteComment(commentId);
+            //将该动态的数量-1
             dynamic.setCommentNum(dynamic.getCommentNum() - 1);
             dynamicMapper.updateDynamic(dynamic);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -62,44 +69,50 @@ public class CommentSerive {
 
     /**
      * 查看某一动态评论
-     * @param dynamicId 
+     *
+     * @param dynamicId
      * @return java.util.List<com.HISM.backfront.domain.Comment>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:32 下午
+     * @date 2022/4/27 6:15 下午
      */
-    public List<Comment> selectCommentById(int dynamicId){
+    public List<Comment> selectCommentById(int dynamicId) {
+        //选出所有的评论
         List<Comment> commentList = commentMapper.selectCommentById(dynamicId);
-        if(commentList.isEmpty()){
-            System.out.println("error, 无法查到此动态的评论");
+        if (commentList.isEmpty()) {
+            System.out.println("error, 无法查到此动态的评论或者没有评论");
         }
         return commentList;
     }
 
     /**
      * 判断某一用户是否对某一动态进行评论
+     *
      * @param userId
-	 * @param dynamicId
+     * @param dynamicId
      * @return java.lang.Boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:33 下午
+     * @date 2022/4/27 6:16 下午
      */
-    public Boolean isComment(String userId, int dynamicId){
+    public Boolean isComment(String userId, int dynamicId) {
+        //从评论表中查看有没有记录
         int commentNum = commentMapper.isComment(userId, dynamicId);
         // 若用户对动态评论数量大于1 则返回true 否则返回false
         return commentNum >= 1;
     }
 
+
     /**
      * 通过评论id获取动态id
+     *
      * @param commentId
      * @return int
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:33 下午
+     * @date 2022/4/27 6:17 下午
      */
-    public int getDynamicId(int commentId){
+    public int getDynamicId(int commentId) {
         return commentMapper.getDynamicId(commentId);
     }
 
@@ -109,9 +122,9 @@ public class CommentSerive {
      * @return java.lang.String
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:33 下午
+     * @date 2022/4/27 6:19 下午
      */
-    public String getUserId(int commentId){
+    public String getUserId(int commentId) {
         return commentMapper.getUserId(commentId);
     }
 }

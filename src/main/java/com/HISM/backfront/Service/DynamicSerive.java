@@ -20,7 +20,7 @@ public class DynamicSerive {
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:45 下午
+     * @date 2022/4/27 6:19 下午
      */
     public boolean insertDynamic(Dynamic dynamic) {
         try {
@@ -32,15 +32,14 @@ public class DynamicSerive {
         return true;
     }
 
-
     /**
-     * 删除动态
+     * 删除动态--真实从数据库中删除，但是实际上我们是将动态的状态改变，所以该服务暂时不实用
      *
      * @param dynamicId
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:45 下午
+     * @date 2022/4/27 6:20 下午
      */
     public boolean deleteDynamic(int dynamicId) {
         try {
@@ -52,7 +51,6 @@ public class DynamicSerive {
         return true;
     }
 
-
     /**
      * 通过发送者id查看动态
      *
@@ -60,12 +58,13 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:46 下午
+     * @date 2022/4/27 6:21 下午
      */
     public List<Dynamic> selectDynamicByUserId(String userId) {
+        //根据用户id选出其所有动态
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserId(userId);
         if (dynamicList.isEmpty()) {
-            System.out.println("error, 无法查到该用户的动态");
+            System.out.println("error, 无法查到该用户的动态或者没有动态");
         }
         return dynamicList;
     }
@@ -79,9 +78,10 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:46 下午
+     * @date 2022/4/27 6:21 下午
      */
     public List<Dynamic> selectDynamicByUserIdAndState(String userId, int dynamicState) {
+        //根基用户id和状态来选择动态
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndState(userId, dynamicState);
         if (dynamicList.isEmpty()) {
             System.out.println("error, 符合该条件的动态数量为0");
@@ -99,15 +99,17 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:46 下午
+     * @date 2022/4/27 6:22 下午
      */
     public List<Dynamic> selectDynamicByUserIdAnd2State(String userId, int dynamicState1, int dynamicState2) {
+        //根据用户id以及两个状态选择动态，但是这两个状态是或的关系
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAnd2State(userId, dynamicState1, dynamicState2);
         if (dynamicList.isEmpty()) {
             System.out.println("error, 符合该条件的动态数量为0");
         }
         return dynamicList;
     }
+
 
     /**
      * 通过动态Id查看动态
@@ -116,7 +118,7 @@ public class DynamicSerive {
      * @return com.HISM.backfront.domain.Dynamic
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:46 下午
+     * @date 2022/4/27 6:24 下午
      */
     public Dynamic selectDynamicByDynamicId(int DynamicId) {
         try {
@@ -137,7 +139,7 @@ public class DynamicSerive {
      * @return boolean
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:47 下午
+     * @date 2022/4/27 6:25 下午
      */
     public boolean updateDynamic(Dynamic dynamic) {
         try {
@@ -149,6 +151,7 @@ public class DynamicSerive {
         return true;
     }
 
+
     /**
      * 获取所有动态
      *
@@ -156,7 +159,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:47 下午
+     * @date 2022/4/27 6:27 下午
      */
     public List<Dynamic> selectDynamicAll() {
         return dynamicMapper.selectDynamicAll();
@@ -170,7 +173,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:47 下午
+     * @date 2022/4/27 6:28 下午
      */
     public List<Dynamic> selectDynamicByState(int dynamicState) {
         return dynamicMapper.selectDynamicByState(dynamicState);
@@ -184,7 +187,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:48 下午
+     * @date 2022/4/27 6:33 下午
      */
     public List<Dynamic> selectDynamicByIndex(List<String> indexList) {
         List<Dynamic> dynamicList = new ArrayList<>();
@@ -202,7 +205,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:48 下午
+     * @date 2022/4/27 6:34 下午
      */
     public List<Dynamic> selectDynamicByType(int appState) {
         return dynamicMapper.selectDynamicByType(appState);
@@ -218,7 +221,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:49 下午
+     * @date 2022/4/27 6:34 下午
      */
     public List<Dynamic> selectDynamicByUserIdAndDynamicIdLimit20(String userId, int dynamicId, int num) {
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdLimitNUM(userId, dynamicId, num);
@@ -241,7 +244,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:49 下午
+     * @date 2022/4/27 6:38 下午
      */
     public List<Dynamic> selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(String userId, int dynamicId, int dynamicState, int num) {
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByUserIdAndDynamicIdAndDynamicStateLimitNUM(userId, dynamicId, dynamicState, num);
@@ -262,7 +265,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:50 下午
+     * @date 2022/4/27 6:39 下午
      */
     public List<Dynamic> selectDynamicByDynamicIdLimitNUM(int dynamicId, int num) {
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdLimitNUM(dynamicId, num);
@@ -277,13 +280,12 @@ public class DynamicSerive {
 
     /**
      * 按照动态状态和动态类型选出动态
-     *
      * @param dynamicState
-     * @param dynamicType
+	 * @param dynamicType 
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:50 下午
+     * @date 2022/4/27 6:40 下午
      */
     public List<Dynamic> selectDynamicByDynamicStateAndDynamicType(int dynamicState, String dynamicType) {
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicStateAndDynamicType(dynamicState, dynamicType);
@@ -294,10 +296,8 @@ public class DynamicSerive {
     }
 
 
-
     /**
      * 获取num条动态，要求num条动态的状态为dynamicState、类型为DynamicType
-     *
      * @param dynamicId
      * @param dynamicState
      * @param dynamicType
@@ -305,7 +305,7 @@ public class DynamicSerive {
      * @return java.util.List<com.HISM.backfront.domain.Dynamic>
      * @author ysx
      * @creed: Talk is cheap,show me the code
-     * @date 2021/12/3 10:51 下午
+     * @date 2022/4/27 6:42 下午
      */
     public List<Dynamic> selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(int dynamicId, int dynamicState, String dynamicType, int num) {
         List<Dynamic> dynamicList = dynamicMapper.selectDynamicByDynamicIdAndDynamicStateAndDynamicTypeLimitNUM(dynamicId, dynamicState, dynamicType, num);
