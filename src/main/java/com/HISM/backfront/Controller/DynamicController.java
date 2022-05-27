@@ -712,6 +712,7 @@ public class DynamicController {
             dynamic.setDynamicTime(timeStamp);
             //设置标签
             dynamic.setDynamicIndex(tag);
+            //插入动态
             dynamicSerive.insertDynamic(dynamic);
             myResult.changeStatus(true);
             myResult.add("message", "");
