@@ -5,6 +5,7 @@ import com.HISM.backfront.Result.MyResult;
 import com.HISM.backfront.Service.FollowerSerive;
 import com.HISM.backfront.Service.GeneralService;
 import com.HISM.backfront.Service.UserService;
+import com.HISM.backfront.Tools.RsaTool;
 import com.HISM.backfront.domain.Follower;
 import com.HISM.backfront.domain.User;
 import io.swagger.annotations.Api;
@@ -36,7 +37,8 @@ public class UserController {
     @PostMapping("/logIn")
     //必填
     @ApiOperation("用户登陆")
-    public MyResult logIn(@RequestParam String userId, @RequestParam String password) {
+    public MyResult logIn(@RequestParam String userId, @RequestParam String password) throws Exception {
+        password=password.replace(" ","+");
         //注册Result对象
         MyResult myResult = new MyResult();
         //判断用户id或者密码是否为空
@@ -54,7 +56,7 @@ public class UserController {
         } else if (userList.size() == 1) {
             User user = userList.get(0);
             //验证密码
-            if (password.equals(user.getPassword())) {
+            if (RsaTool.decryptByPrivateKey(RsaTool.privateKey,password).equals(user.getPassword())) {
                 myResult.changeStatus(true);
                 HashMap<String, Object> tmp = new HashMap<>();
                 tmp.put("userID", userId);
@@ -276,7 +278,7 @@ public class UserController {
                     myResult.add("message", "文件存储失败");
                     return myResult;
                 }
-                user.setAvatarURL("http://39.106.25.203"+file_name);
+                user.setAvatarURL("http://39.106.25.203" + file_name);
                 //更新用户信息
                 userService.updateUser(user);
             } catch (IOException e) {
@@ -303,7 +305,7 @@ public class UserController {
             return myResult;
         }
         //确保新老密码不相同
-        if(passwordOld.equals(passwordNew)){
+        if (passwordOld.equals(passwordNew)) {
             myResult.changeStatus(false);
             myResult.add("message", "新旧密码相同");
             return myResult;
@@ -537,9 +539,7 @@ public class UserController {
     }
 
     @PostMapping("/searchUser")
-
     @ApiOperation("搜索用户")
-
     public MyResult searchUser(@RequestParam String userId, @RequestParam String queryUserName) {
         MyResult myResult = new MyResult();
         //确保传入的用户id以及查询的名字都是非空
@@ -569,4 +569,17 @@ public class UserController {
         return myResult;
     }
 
+    @PostMapping("/getPublicKey")
+    @ApiOperation("获取公钥")
+    public MyResult getPublicKey(@RequestParam String userId) {
+        MyResult myResult = new MyResult();
+        if (RsaTool.publicKey != null && RsaTool.publicKey != "") {
+            myResult.changeStatus(true);
+            myResult.add("message", RsaTool.publicKey);
+        }else {
+            myResult.changeStatus(false);
+            myResult.add("message", "error");
+        }
+        return myResult;
+    }
 }
