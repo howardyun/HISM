@@ -297,8 +297,12 @@ public class UserController {
 
     @ApiOperation("修改密码")
 
-    public MyResult changePassword(@RequestParam String userId, @RequestParam String passwordOld, @RequestParam String passwordNew) {
+    public MyResult changePassword(@RequestParam String userId, @RequestParam String passwordOld, @RequestParam String passwordNew) throws Exception {
         MyResult myResult = new MyResult();
+        passwordNew=passwordNew.replace(" ","+");
+        passwordOld=passwordOld.replace(" ","+");
+        passwordNew=RsaTool.decryptByPrivateKey(RsaTool.privateKey,passwordNew);
+        passwordOld=RsaTool.decryptByPrivateKey(RsaTool.privateKey,passwordOld);
         //确保传入的账号/密码不为空
         if ("".equals(userId) || "".equals(passwordNew) || "".equals(passwordOld)) {
             myResult.changeStatus(false);
