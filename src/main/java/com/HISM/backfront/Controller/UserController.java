@@ -80,8 +80,9 @@ public class UserController {
     @ApiOperation("用户注册")
 
     public MyResult register(@RequestParam String userId, @RequestParam String password,
-                             @RequestParam String isMale, @RequestParam String userName, @RequestParam String email) {
+                             @RequestParam String isMale, @RequestParam String userName, @RequestParam String email) throws Exception {
         MyResult myResult = new MyResult();
+        password=password.replace(" ","+");
         //查看输入进来的用户id或者密码是否为空
         if ("".equals(userId) || "".equals(password)) {
             myResult.changeStatus(false);
@@ -94,7 +95,7 @@ public class UserController {
             //注册对象，填入信息
             User user = new User();
             user.setUserId(userId);
-            user.setPassword(password);
+            user.setPassword(RsaTool.decryptByPrivateKey(RsaTool.privateKey,password));
             user.setUserName(userName);
             user.setUserSex(isMale);
             user.setUserState(1);
